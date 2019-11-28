@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,7 @@ public abstract class ProductDetailsFragment extends Fragment {
     private EditText mEtProductPoints;
     private Button mBtnCancel;
     private Button mBtnSubmit;
+    private Switch mSwEnabled;
     private ProgressBar mPbLoading;
 
     protected LoadingScreenHelper mLoadingScreenHelper;
@@ -68,6 +70,7 @@ public abstract class ProductDetailsFragment extends Fragment {
         mEtProductPoints = getView().findViewById(R.id.etProductPoints);
         mBtnCancel = getView().findViewById(R.id.btnCancel);
         mBtnSubmit = getView().findViewById(R.id.btnSubmit);
+        mSwEnabled = getView().findViewById(R.id.swEnabled);
         mPbLoading = getView().findViewById(R.id.pbLoading);
 
         mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
@@ -161,7 +164,7 @@ public abstract class ProductDetailsFragment extends Fragment {
         product.setPrice(Float.parseFloat(mEtProductPrice.getText().toString()));
         product.setInventoryQuantity(Integer.parseInt(mEtProductInventoryQuantity.getText().toString()));
         product.setPointPerItem(Integer.parseInt(mEtProductPoints.getText().toString()));
-        product.setDisabled(false);
+        product.setDisabled(!mSwEnabled.isChecked());
         product.setTotalSales(0);
 
         return product;
