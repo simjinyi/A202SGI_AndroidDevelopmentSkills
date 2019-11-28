@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/CardView.Light"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="5dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/ivProductImage"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/white"
+            android:contentDescription="@string/ivProductImage"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add_photo_alternate_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/etProductInventoryQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/product_inventory_quantity_background"
+            android:minHeight="@dimen/min_clickable"
+            android:minWidth="@dimen/min_clickable"
+            android:gravity="top|end"
+            android:paddingTop="@dimen/product_inventory_quantity_padding_dimen"
+            android:paddingStart="@dimen/none_dimen"
+            android:paddingEnd="@dimen/product_inventory_quantity_padding_dimen"
+            android:text="@string/tvProductInventoryQuantity"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/etProductName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/tvProductName"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivProductImage" />
+
+        <TextView
+            android:id="@+id/etProductPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tvProductPrice"
+            android:textColor="@color/secondaryTextColor"
+            app:layout_constraintBottom_toTopOf="@+id/clProductQuantityControl"
+            app:layout_constraintEnd_toEndOf="@+id/etProductName"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/etProductName"
+            app:layout_constraintTop_toBottomOf="@+id/etProductName" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clProductQuantityControl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/product_quantity_control_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/etProductName"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/etProductName"
+            app:layout_constraintTop_toBottomOf="@+id/etProductPrice">
+
+            <Button
+                android:id="@+id/btnMinusProductQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_ripple_transparent"
+                android:foregroundTint="@color/primaryColor50"
+                android:minHeight="@dimen/min_clickable"
+                android:text="@string/btnMinusProductQuantity"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvProductQuantity"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvProductQuantity"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/tvProductQuantity"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMinusProductQuantity"
+                app:layout_constraintEnd_toStartOf="@+id/btnAddProductQuantity"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnMinusProductQuantity"
+                app:layout_constraintTop_toTopOf="@+id/btnMinusProductQuantity" />
+
+            <Button
+                android:id="@+id/btnAddProductQuantity"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/button_ripple_transparent"
+                android:minHeight="@dimen/min_clickable"
+                android:text="@string/btnAddProductQuantity"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMinusProductQuantity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tvProductQuantity"
+                app:layout_constraintTop_toTopOf="@+id/btnMinusProductQuantity" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/ibEditProductImage"
+        android:layout_width="@dimen/min_clickable"
+        android:layout_height="@dimen/min_clickable"
+        android:background="@drawable/button_ripple_transparent"
+        android:src="@drawable/ic_edit_24dp"
+        android:contentDescription="@string/ibEditProduct" />
+
+</androidx.cardview.widget.CardView>

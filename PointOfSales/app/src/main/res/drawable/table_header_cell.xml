@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="@dimen/negative_table_border">
+
+    <shape>
+        <stroke
+            android:width="@dimen/table_border"
+            android:color="@android:color/transparent" />
+
+        <corners
+            android:radius="@dimen/cardview_dimen" />
+
+        <solid
+            android:color="@color/primaryDarkColor" />
+    </shape>
+
+</inset>

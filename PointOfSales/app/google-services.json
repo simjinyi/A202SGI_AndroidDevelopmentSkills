@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1049254002048",
+    "firebase_url": "https://a202sgi-project-1.firebaseio.com",
+    "project_id": "a202sgi-project-1",
+    "storage_bucket": "a202sgi-project-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049254002048:android:b2c00be36a61b8fea21565",
+        "android_client_info": {
+          "package_name": "com.example.pointofsales"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049254002048-tp0c1h55likkos0msc9r49q5kmlh1tlu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pointofsales",
+            "certificate_hash": "de458690d60fbadc89e258bd369491ca8bbac956"
+          }
+        },
+        {
+          "client_id": "1049254002048-nicg8gs64992cj3jhfnqv0j4v9be32fc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBps075IC8n4waljNkJdSdaCp9A91uDjWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049254002048-nicg8gs64992cj3jhfnqv0j4v9be32fc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

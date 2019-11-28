@@ -1,0 +1,16 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="product_list_item_margin">16dp</dimen>
+    <dimen name="default_dimen">16dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="product_inventory_quantity_padding_dimen">10dp</dimen>
+    <dimen name="button_ripple_effect">5dp</dimen>
+    <dimen name="min_clickable">48dp</dimen>
+    <dimen name="none_dimen">0dp</dimen>
+    <dimen name="cardview_dimen">5dp</dimen>
+    <dimen name="appbar_dimen">180dp</dimen>
+    <dimen name="table_border">1dp</dimen>
+    <dimen name="negative_table_border">-1dp</dimen>
+</resources>
