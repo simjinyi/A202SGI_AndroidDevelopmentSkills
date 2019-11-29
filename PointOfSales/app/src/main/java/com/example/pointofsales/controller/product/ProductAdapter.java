@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.controller.ProductViewModel;
 import com.example.pointofsales.model.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> {
@@ -59,7 +61,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 @Override
                 public void onClick(View v) {
 
-                    Product pointedProduct = mProductViewModel.getProducts().getValue().get(position);
+                    Product pointedProduct = mProductViewModel.getProducts().getValue().getProductByIndex(position);
 
                     if (pointedProduct.getCartQuantity() + 1 <= pointedProduct.getInventoryQuantity()) {
                         pointedProduct.setCartQuantity(pointedProduct.getCartQuantity() + 1);
@@ -73,7 +75,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 @Override
                 public void onClick(View v) {
 
-                    Product pointedProduct = mProductViewModel.getProducts().getValue().get(position);
+                    Product pointedProduct = mProductViewModel.getProducts().getValue().getProductByIndex(position);
 
                     if (pointedProduct.getCartQuantity() > 0) {
                         pointedProduct.setCartQuantity(pointedProduct.getCartQuantity() - 1);
@@ -85,7 +87,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         }
     }
 
-    public ProductAdapter(Context context, ProductViewModel productViewModel) {
+    public ProductAdapter(Context context, View view, ProductViewModel productViewModel) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mProductViewModel = productViewModel;
@@ -99,16 +101,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     @Override
     public void onBindViewHolder(@NonNull ProductItemViewHolder holder, int position) {
-        holder.bindProduct(mProductViewModel.getProducts().getValue().get(position), position);
+        holder.bindProduct(mProductViewModel.getProducts().getValue().getProductByIndex(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return mProductViewModel.getProducts().getValue().size();
+        return mProductViewModel.getProducts().getValue().getProductListSize();
     }
 
     @Override
     public long getItemId(int position) {
-        return mProductViewModel.getProducts().getValue().get(position).hashCode();
+        return mProductViewModel.getProducts().getValue().getProductByIndex(position).hashCode();
     }
 }

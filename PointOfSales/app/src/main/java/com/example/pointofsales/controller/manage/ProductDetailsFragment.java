@@ -1,5 +1,6 @@
 package com.example.pointofsales.controller.manage;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,12 +21,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
-import com.example.pointofsales.controller.manage.add.AddProductViewModel;
 import com.example.pointofsales.model.Product;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -34,8 +33,6 @@ public abstract class ProductDetailsFragment extends Fragment {
 
     private static final int SELECT_IMAGE = 1;
     private static final int IMAGE_HEIGHT_SCALE = 300;
-
-    private AddProductViewModel mAddProductViewModel;
 
     private Bitmap mBitmap;
     private ImageView mIvProductImage;
@@ -79,8 +76,6 @@ public abstract class ProductDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mAddProductViewModel = ViewModelProviders.of(this).get(AddProductViewModel.class);
 
         mIbEditProductImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +163,15 @@ public abstract class ProductDetailsFragment extends Fragment {
         product.setTotalSales(0);
 
         return product;
+    }
+
+    public void setData(Product product) {
+        mIvProductImage.setImageBitmap(product.getImage());
+        mEtProductName.setText(product.getName());
+        mEtProductPrice.setText(String.format("%.2f", product.getPrice()));
+        mEtProductInventoryQuantity.setText(String.valueOf(product.getInventoryQuantity()));
+        mEtProductPoints.setText(String.valueOf(product.getPointPerItem()));
+        mSwEnabled.setEnabled(!product.isDisabled());
     }
 
     public abstract void submit();

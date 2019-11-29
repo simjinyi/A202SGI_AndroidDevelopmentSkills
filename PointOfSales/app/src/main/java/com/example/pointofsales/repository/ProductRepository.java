@@ -86,7 +86,7 @@ public class ProductRepository {
         return hashMap;
     }
 
-    public static Product mapToProduct(Map<String, Object> map) {
+    public static Product mapToProduct(String id, Map<String, Object> map) {
 
         Product product = new Product();
 
@@ -98,6 +98,7 @@ public class ProductRepository {
             product.setImage(null);
         }
 
+        product.setId(id);
         product.setName(map.get("name").toString());
         product.setPrice(Float.parseFloat(map.get("price").toString()));
         product.setInventoryQuantity(Integer.parseInt(map.get("inventoryQuantity").toString()));

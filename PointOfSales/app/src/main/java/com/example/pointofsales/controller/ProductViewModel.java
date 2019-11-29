@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller.product;
+package com.example.pointofsales.controller;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.ProductList;
 import com.example.pointofsales.repository.ProductRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,13 +17,13 @@ import java.util.Map;
 
 public class ProductViewModel extends ViewModel implements ValueEventListener {
 
-    private MutableLiveData<ArrayList<Product>> mProducts;
+    private MutableLiveData<ProductList> mProductList;
     private MutableLiveData<Float> mTotalPrice;
     private MutableLiveData<Integer> mCartQuantity;
 
     public ProductViewModel() {
-        mProducts = new MutableLiveData<>();
-        mProducts.setValue(new ArrayList<Product>());
+        mProductList = new MutableLiveData<>();
+        mProductList.setValue(new ProductList());
 
         mTotalPrice = new MutableLiveData<>();
         mTotalPrice.setValue(0.0f);
@@ -32,8 +33,8 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
     }
 
     public void setProductCartQuantity(int quantity, int position) {
-        mProducts.getValue().get(position).setCartQuantity(quantity);
-        mProducts.setValue(mProducts.getValue());
+        mProductList.getValue().getProductByIndex(position).setCartQuantity(quantity);
+        mProductList.setValue(mProductList.getValue());
 
         calculateTotalPrice();
         calculateCartQuantity();
@@ -42,7 +43,7 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
     public void calculateTotalPrice() {
         float total = 0.0f;
 
-        for (Product product : mProducts.getValue())
+        for (Product product : mProductList.getValue().getProducts())
             total += product.getCartQuantity() * product.getPrice();
 
         mTotalPrice.setValue(total);
@@ -51,7 +52,7 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
     public void calculateCartQuantity() {
         int quantity = 0;
 
-        for (Product product : mProducts.getValue())
+        for (Product product : mProductList.getValue().getProducts())
             if (product.getCartQuantity() > 0)
                 quantity += 1;
 
@@ -59,7 +60,7 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
     }
 
     public void resetProductCartQuantity() {
-        for (int i = 0; i < mProducts.getValue().size(); i++)
+        for (int i = 0; i < mProductList.getValue().getProductListSize(); i++)
             setProductCartQuantity(0, i);
     }
 
@@ -67,10 +68,10 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
         ProductRepository.getInstance().addValueEventListener("0", this);
     }
 
-    public LiveData<ArrayList<Product>> getProducts() {
-        if (mProducts.getValue().size() == 0)
+    public LiveData<ProductList> getProducts() {
+        if (mProductList.getValue().getProductListSize() == 0)
             refresh();
-        return mProducts;
+        return mProductList;
     }
 
     public LiveData<Float> getTotalPrice() {
@@ -88,13 +89,14 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
 
         if (dataSnapshot.exists())
             for (DataSnapshot child : dataSnapshot.getChildren())
-                productsArrayList.add(ProductRepository.mapToProduct((Map<String, Object>) child.getValue()));
+                productsArrayList.add(ProductRepository.mapToProduct(child.getKey(), (Map<String, Object>) child.getValue()));
 
-        mProducts.setValue(productsArrayList);
+        mProductList.getValue().setProducts(productsArrayList);
+        mProductList.setValue(mProductList.getValue());
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-        mProducts.setValue(mProducts.getValue());
+        mProductList.setValue(mProductList.getValue());
     }
 }

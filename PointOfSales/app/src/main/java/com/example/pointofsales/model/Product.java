@@ -4,81 +4,91 @@ import android.graphics.Bitmap;
 
 public class Product {
 
-    private Bitmap image;
-    private String name;
-    private float price;
-    private int pointPerItem;
-    private int inventoryQuantity;
+    private String mId;
+    private Bitmap mImage;
+    private String mName;
+    private float mPrice;
+    private int mPointPerItem;
+    private int mInventoryQuantity;
 
-    private int totalSales;
-    private boolean isDisabled;
-    private int cartQuantity;
+    private int mTotalSales;
+    private boolean mIsDisabled;
+    private int mCartQuantity;
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        if (id != null)
+            mId = id;
+    }
 
     public Bitmap getImage() {
-        return image;
+        return mImage;
     }
 
     public void setImage(Bitmap image) {
-        this.image = image;
+        mImage = image;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public float getPrice() {
-        return price;
+        return mPrice;
     }
 
     public void setPrice(float price) {
         if (price > 0)
-            this.price = price;
+            mPrice = price;
     }
 
     public int getPointPerItem() {
-        return pointPerItem;
+        return mPointPerItem;
     }
 
     public void setPointPerItem(int pointPerItem) {
         if (pointPerItem >= 0)
-            this.pointPerItem = pointPerItem;
+            mPointPerItem = pointPerItem;
     }
 
     public int getInventoryQuantity() {
-        return inventoryQuantity;
+        return mInventoryQuantity;
     }
 
     public void setInventoryQuantity(int inventoryQuantity) {
         if (inventoryQuantity >= 0)
-            this.inventoryQuantity = inventoryQuantity;
+            mInventoryQuantity = inventoryQuantity;
     }
 
     public int getTotalSales() {
-        return totalSales;
+        return mTotalSales;
     }
 
     public void setTotalSales(int totalSales) {
-        this.totalSales = totalSales;
+        mTotalSales = totalSales;
     }
 
     public boolean isDisabled() {
-        return isDisabled;
+        return mIsDisabled;
     }
 
     public void setDisabled(boolean disabled) {
-        isDisabled = disabled;
+        mIsDisabled = disabled;
     }
 
     public int getCartQuantity() {
-        return cartQuantity;
+        return mCartQuantity;
     }
 
     public void setCartQuantity(int cartQuantity) {
         if (cartQuantity >= 0)
-            this.cartQuantity = cartQuantity;
+            mCartQuantity = cartQuantity;
     }
 }

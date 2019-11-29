@@ -20,9 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.controller.ProductViewModel;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.ProductList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -73,14 +75,14 @@ public class ProductFragment extends Fragment {
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
 
-        mProductViewModel.getProducts().observe(this, new Observer<ArrayList<Product>>() {
+        mProductViewModel.getProducts().observe(this, new Observer<ProductList>() {
             @Override
-            public void onChanged(ArrayList<Product> products) {
+            public void onChanged(ProductList productList) {
 
                 mProductAdapter.notifyDataSetChanged();
                 mSrlProduct.setRefreshing(false);
 
-                if (products.size() > 0)
+                if (productList.getProductListSize() > 0)
                     mLoadingScreenHelper.end();
             }
         });
