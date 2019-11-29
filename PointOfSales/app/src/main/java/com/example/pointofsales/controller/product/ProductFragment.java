@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavArgument;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -142,7 +143,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     @Override
     public void onEditButtonClick(int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("product_id", mProductViewModel.getProducts().getValue().getProductByIndex(position).getId());
+        bundle.putInt("product_index", position);
         Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_edit_product, bundle);
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,7 +31,7 @@ import com.example.pointofsales.model.Product;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-public abstract class ProductDetailsFragment extends Fragment {
+public abstract class ProductFormFragment extends Fragment {
 
     private static final int SELECT_IMAGE = 1;
     private static final int IMAGE_HEIGHT_SCALE = 300;
@@ -91,15 +92,17 @@ public abstract class ProductDetailsFragment extends Fragment {
         mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
-                        getResources().getString(R.string.quit_manage_confirmation),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-//                                Navigation.findNavController(getView()).navigateUp();
-                                getActivity().onBackPressed();
-                            }
-                        }).show();
+//                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
+//                        getResources().getString(R.string.quit_manage_confirmation),
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+////                                Navigation.findNavController(getView()).navigateUp();
+//                                getActivity().onBackPressed();
+//                            }
+//                        }).show();
+
+                getActivity().onBackPressed();
             }
         });
 
@@ -169,8 +172,10 @@ public abstract class ProductDetailsFragment extends Fragment {
 
     public void setData(Product product) {
 
-        if (product.getImage() != null)
-            mIvProductImage.setImageBitmap(product.getImage());
+        if (product.getImage() != null) {
+            mBitmap = product.getImage();
+            mIvProductImage.setImageBitmap(mBitmap);
+        }
 
         mEtProductName.setText(product.getName());
         mEtProductPrice.setText(String.format("%.2f", product.getPrice()));

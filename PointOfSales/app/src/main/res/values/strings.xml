@@ -45,4 +45,5 @@
     <string name="quit_manage_confirmation">Are you sure you want to quit now? No changes will be made.</string>
     <string name="confirmation_dialog">Confirmation</string>
     <string name="title_edit_product">Edit Product</string>
+    <string name="product_updated_successfully">Product updated successfully</string>
 </resources>

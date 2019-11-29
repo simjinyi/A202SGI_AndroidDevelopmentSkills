@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class ProductViewModel extends ViewModel implements ValueEventListener {
 
+    public static final int DUPLICATED_NAME = 1;
+
     private MutableLiveData<ProductList> mProductList;
     private MutableLiveData<Float> mTotalPrice;
     private MutableLiveData<Integer> mCartQuantity;
@@ -30,6 +32,13 @@ public class ProductViewModel extends ViewModel implements ValueEventListener {
 
         mCartQuantity = new MutableLiveData<>();
         mCartQuantity.setValue(0);
+    }
+
+    public boolean checkIfNameExists(String name) {
+        for (Product product : mProductList.getValue().getProducts())
+            if (product.getName().equalsIgnoreCase(name))
+                return true;
+        return false;
     }
 
     public void setProductCartQuantity(int quantity, int position) {

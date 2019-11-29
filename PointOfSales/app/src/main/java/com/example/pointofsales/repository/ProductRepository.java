@@ -20,9 +20,6 @@ import java.util.Map;
 
 public class ProductRepository {
 
-    public static final int DUPLICATED_NAME = 1;
-    public static final int UNKNOWN_ERROR = 2;
-
     private static ProductRepository productRepository;
     private FirebaseDatabase database;
     private DatabaseReference ref;
@@ -43,24 +40,11 @@ public class ProductRepository {
     }
 
     public void insertIntoDatabase(final Map<String, Object> product, final String storeId, final OnSuccessListener onSuccessListener) {
-        ref.child(storeId)
-                .orderByChild("nameValidate")
-                .equalTo(product.get("name").toString().toLowerCase())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child(storeId).push().setValue(product).addOnSuccessListener(onSuccessListener);
+    }
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists())
-                    ref.child(storeId).push().setValue(product).addOnSuccessListener(onSuccessListener);
-                else
-                    onSuccessListener.onSuccess(DUPLICATED_NAME);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                onSuccessListener.onSuccess(UNKNOWN_ERROR);
-            }
-        });
+    public void updateDatabase(final Map<String, Object> product, final String storeId, final OnSuccessListener onSuccessListener) {
+        ref.child(storeId).child(product.get("id").toString()).setValue(product).addOnSuccessListener(onSuccessListener);
     }
 
     public static Map<String, Object> productToMap(Product product) {
@@ -75,6 +59,7 @@ public class ProductRepository {
             hashMap.put("image", Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
         }
 
+        hashMap.put("id", product.getId());
         hashMap.put("name", product.getName());
         hashMap.put("nameValidate", product.getName().toLowerCase());
         hashMap.put("price", product.getPrice());
