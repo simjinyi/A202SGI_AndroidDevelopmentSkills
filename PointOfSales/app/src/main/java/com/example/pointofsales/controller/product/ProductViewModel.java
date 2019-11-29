@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller;
+package com.example.pointofsales.controller.product;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

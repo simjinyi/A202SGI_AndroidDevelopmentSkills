@@ -44,4 +44,5 @@
     <string name="clear_cart_confirmation">Are you sure you want to clear the cart?</string>
     <string name="quit_manage_confirmation">Are you sure you want to quit now? No changes will be made.</string>
     <string name="confirmation_dialog">Confirmation</string>
+    <string name="title_edit_product">Edit Product</string>
 </resources>

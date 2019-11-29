@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller.manage.add;
+package com.example.pointofsales.controller.manage;
 
 import android.widget.Toast;
 

@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.controller.ProductViewModel;
 import com.example.pointofsales.model.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> {
@@ -22,6 +20,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
     private Context mContext;
     private ProductViewModel mProductViewModel;
     private LayoutInflater mLayoutInflater;
+    private EditButtonClick mEditButtonClick;
 
     public class ProductItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -84,11 +83,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                     }
                 }
             });
+
+            mIbEditProduct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mEditButtonClick.onEditButtonClick(position);
+                }
+            });
         }
     }
 
-    public ProductAdapter(Context context, View view, ProductViewModel productViewModel) {
+    public ProductAdapter(Context context, EditButtonClick editButtonClick, ProductViewModel productViewModel) {
         mContext = context;
+        mEditButtonClick = editButtonClick;
         mLayoutInflater = LayoutInflater.from(context);
         mProductViewModel = productViewModel;
     }

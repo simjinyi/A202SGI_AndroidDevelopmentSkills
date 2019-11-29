@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
@@ -95,6 +96,7 @@ public abstract class ProductDetailsFragment extends Fragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+//                                Navigation.findNavController(getView()).navigateUp();
                                 getActivity().onBackPressed();
                             }
                         }).show();
@@ -166,7 +168,10 @@ public abstract class ProductDetailsFragment extends Fragment {
     }
 
     public void setData(Product product) {
-        mIvProductImage.setImageBitmap(product.getImage());
+
+        if (product.getImage() != null)
+            mIvProductImage.setImageBitmap(product.getImage());
+
         mEtProductName.setText(product.getName());
         mEtProductPrice.setText(String.format("%.2f", product.getPrice()));
         mEtProductInventoryQuantity.setText(String.valueOf(product.getInventoryQuantity()));

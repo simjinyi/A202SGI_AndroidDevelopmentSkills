@@ -20,16 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.controller.ProductViewModel;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
-import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.ProductList;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements EditButtonClick {
 
     private ProductViewModel mProductViewModel;
     private ProductAdapter mProductAdapter;
@@ -70,8 +66,8 @@ public class ProductFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
-        mProductAdapter = new ProductAdapter(getActivity(), mProductViewModel);
+        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel);
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
 
@@ -141,5 +137,12 @@ public class ProductFragment extends Fragment {
                 Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_checkout);
             }
         });
+    }
+
+    @Override
+    public void onEditButtonClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("product_id", mProductViewModel.getProducts().getValue().getProductByIndex(position).getId());
+        Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_edit_product, bundle);
     }
 }
