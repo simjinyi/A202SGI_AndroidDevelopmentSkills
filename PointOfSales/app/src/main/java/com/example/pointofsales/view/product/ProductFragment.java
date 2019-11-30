@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller.product;
+package com.example.pointofsales.view.product;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavArgument;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -23,8 +22,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
-import com.example.pointofsales.model.ProductList;
+import com.example.pointofsales.model.Product;
+import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class ProductFragment extends Fragment implements EditButtonClick {
 
@@ -72,14 +74,14 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
 
-        mProductViewModel.getProducts().observe(this, new Observer<ProductList>() {
-            @Override
-            public void onChanged(ProductList productList) {
+        mProductViewModel.getProductList().observe(this, new Observer<ArrayList<Product>>() {
 
+            @Override
+            public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
                 mSrlProduct.setRefreshing(false);
 
-                if (productList.getProductListSize() > 0)
+                if (products.size() > 0)
                     mLoadingScreenHelper.end();
             }
         });

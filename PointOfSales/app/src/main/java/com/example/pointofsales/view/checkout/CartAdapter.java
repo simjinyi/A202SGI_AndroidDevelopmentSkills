@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller.checkout;
+package com.example.pointofsales.view.checkout;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller.product;
+package com.example.pointofsales.view.product;
 
 import android.graphics.Rect;
 import android.view.View;

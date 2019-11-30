@@ -1,4 +1,4 @@
-package com.example.pointofsales.controller.product;
+package com.example.pointofsales.view.product;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.viewmodel.ProductViewModel;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> {
 
@@ -59,28 +60,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Product pointedProduct = mProductViewModel.getProducts().getValue().getProductByIndex(position);
-
-                    if (pointedProduct.getCartQuantity() + 1 <= pointedProduct.getInventoryQuantity()) {
-                        pointedProduct.setCartQuantity(pointedProduct.getCartQuantity() + 1);
-                        mProductViewModel.setProductCartQuantity(pointedProduct.getCartQuantity(), position);
-                        mTvProductQuantity.setText(String.valueOf(pointedProduct.getCartQuantity()));
-                    }
+                    mProductViewModel.setProductCartQuantity(mProductViewModel.getProductList().getValue().get(position).getCartQuantity() + 1, position);
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Product pointedProduct = mProductViewModel.getProducts().getValue().getProductByIndex(position);
-
-                    if (pointedProduct.getCartQuantity() > 0) {
-                        pointedProduct.setCartQuantity(pointedProduct.getCartQuantity() - 1);
-                        mProductViewModel.setProductCartQuantity(pointedProduct.getCartQuantity(), position);
-                        mTvProductQuantity.setText(String.valueOf(pointedProduct.getCartQuantity()));
-                    }
+                    mProductViewModel.setProductCartQuantity(mProductViewModel.getProductList().getValue().get(position).getCartQuantity() - 1, position);
                 }
             });
 
@@ -108,16 +95,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     @Override
     public void onBindViewHolder(@NonNull ProductItemViewHolder holder, int position) {
-        holder.bindProduct(mProductViewModel.getProducts().getValue().getProductByIndex(position), position);
+        holder.bindProduct(mProductViewModel.getProductList().getValue().get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return mProductViewModel.getProducts().getValue().getProductListSize();
+        return mProductViewModel.getProductList().getValue().size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mProductViewModel.getProducts().getValue().getProductByIndex(position).hashCode();
+        return mProductViewModel.getProductList().getValue().get(position).hashCode();
     }
 }

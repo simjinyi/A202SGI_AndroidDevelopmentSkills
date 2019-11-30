@@ -10,15 +10,18 @@ public class Product {
     private float mPrice;
     private int mPointPerItem;
     private int mInventoryQuantity;
-
     private int mTotalSales;
     private boolean mIsDisabled;
+
     private int mCartQuantity;
+
+    public Product() {
+        mCartQuantity = 0;
+    }
 
     public String getId() {
         return mId;
     }
-
     public void setId(String id) {
         if (id != null)
             mId = id;
@@ -27,7 +30,6 @@ public class Product {
     public Bitmap getImage() {
         return mImage;
     }
-
     public void setImage(Bitmap image) {
         mImage = image;
     }
@@ -35,7 +37,6 @@ public class Product {
     public String getName() {
         return mName;
     }
-
     public void setName(String name) {
         mName = name;
     }
@@ -43,7 +44,6 @@ public class Product {
     public float getPrice() {
         return mPrice;
     }
-
     public void setPrice(float price) {
         if (price > 0)
             mPrice = price;
@@ -52,7 +52,6 @@ public class Product {
     public int getPointPerItem() {
         return mPointPerItem;
     }
-
     public void setPointPerItem(int pointPerItem) {
         if (pointPerItem >= 0)
             mPointPerItem = pointPerItem;
@@ -61,7 +60,6 @@ public class Product {
     public int getInventoryQuantity() {
         return mInventoryQuantity;
     }
-
     public void setInventoryQuantity(int inventoryQuantity) {
         if (inventoryQuantity >= 0)
             mInventoryQuantity = inventoryQuantity;
@@ -70,7 +68,6 @@ public class Product {
     public int getTotalSales() {
         return mTotalSales;
     }
-
     public void setTotalSales(int totalSales) {
         mTotalSales = totalSales;
     }
@@ -78,7 +75,6 @@ public class Product {
     public boolean isDisabled() {
         return mIsDisabled;
     }
-
     public void setDisabled(boolean disabled) {
         mIsDisabled = disabled;
     }
@@ -86,7 +82,6 @@ public class Product {
     public int getCartQuantity() {
         return mCartQuantity;
     }
-
     public void setCartQuantity(int cartQuantity) {
         if (cartQuantity >= 0)
             mCartQuantity = cartQuantity;

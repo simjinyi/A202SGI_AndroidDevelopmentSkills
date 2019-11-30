@@ -1,6 +1,4 @@
-package com.example.pointofsales.controller.checkout;
-
-import androidx.lifecycle.ViewModelProviders;
+package com.example.pointofsales.view.checkout;
 
 import android.os.Bundle;
 
@@ -18,7 +16,7 @@ import com.example.pointofsales.R;
 
 public class CheckoutFragment extends Fragment {
 
-    private CheckoutViewModel mCheckoutViewModel;
+//    private CheckoutViewModel mCheckoutViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -30,7 +28,7 @@ public class CheckoutFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mCheckoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel.class);
+//        mCheckoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel.class);
 
         final RecyclerView rvCart = getActivity().findViewById(R.id.rvCart);
         rvCart.setLayoutManager(new LinearLayoutManager(getActivity()));

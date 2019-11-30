@@ -1,96 +1,102 @@
 package com.example.pointofsales.repository;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.pointofsales.database.ProductDatabase;
 import com.example.pointofsales.model.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
-public class ProductRepository {
+public class ProductRepository implements ChildEventListener {
 
-    private static ProductRepository productRepository;
-    private FirebaseDatabase database;
-    private DatabaseReference ref;
+    private String mStoreId;
+    private MutableLiveData<ArrayList<Product>> mProducts;
 
-    private ProductRepository() {
-        database = FirebaseDatabase.getInstance();
-        ref = database.getReference("product");
+    private static ProductRepository sProductRepository;
+
+    private ProductRepository(String storeId) {
+        mStoreId = storeId;
+        mProducts = new MutableLiveData<>();
+        mProducts.setValue(new ArrayList<Product>());
+        ProductDatabase.getInstance(mStoreId).get(this);
     }
 
-    public static ProductRepository getInstance() {
-        if (productRepository == null)
-            productRepository = new ProductRepository();
-        return productRepository;
+    public static ProductRepository getInstance(String storeId) {
+        if (sProductRepository == null)
+            sProductRepository = new ProductRepository(storeId);
+        return sProductRepository;
     }
 
-    public void addValueEventListener(String storeId, ValueEventListener valueEventListener) {
-        ref.child(storeId).addValueEventListener(valueEventListener);
+    // DATABASE OPERATIONS
+    public void insert(Product product, OnSuccessListener onSuccessListener) {
+        ProductDatabase.getInstance(mStoreId).insert(ProductDatabase.Converter.productToMap(product), onSuccessListener);
     }
 
-    public void insertIntoDatabase(final Map<String, Object> product, final String storeId, final OnSuccessListener onSuccessListener) {
-        ref.child(storeId).push().setValue(product).addOnSuccessListener(onSuccessListener);
+    public void update(Product product, OnSuccessListener onSuccessListener) {
+        Map<String, Object> map = ProductDatabase.Converter.productToMap(product);
+        ProductDatabase.getInstance(mStoreId).update(ProductDatabase.Converter.productToMap(product), onSuccessListener);
     }
+    // END DATABASE OPERATIONS
 
-    public void updateDatabase(final Map<String, Object> product, final String storeId, final OnSuccessListener onSuccessListener) {
-        ref.child(storeId).child(product.get("id").toString()).setValue(product).addOnSuccessListener(onSuccessListener);
-    }
-
-    public static Map<String, Object> productToMap(Product product) {
-
-        Map<String, Object> hashMap = new HashMap<>();
-
-        if (product.getImage() != null) {
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            product.getImage().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-
-            hashMap.put("image", Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
+    @Override
+    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        if (dataSnapshot.exists()) {
+            mProducts.getValue()
+                    .add(ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue()));
+            notifyObservers();
         }
-
-        hashMap.put("id", product.getId());
-        hashMap.put("name", product.getName());
-        hashMap.put("nameValidate", product.getName().toLowerCase());
-        hashMap.put("price", product.getPrice());
-        hashMap.put("inventoryQuantity", product.getInventoryQuantity());
-        hashMap.put("pointPerItem", product.getPointPerItem());
-        hashMap.put("isDisabled", product.isDisabled());
-        hashMap.put("totalSales", product.getTotalSales());
-
-        return hashMap;
     }
 
-    public static Product mapToProduct(String id, Map<String, Object> map) {
+    @Override
+    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        Product changedProduct = ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+        int changedProductIndex = getProductIndexFromProductId(changedProduct.getId());
+        Product originalProduct = mProducts.getValue()
+                .get(changedProductIndex);
 
-        Product product = new Product();
+        changedProduct.setCartQuantity(originalProduct.getCartQuantity());
+        mProducts.getValue()
+                .set(changedProductIndex, changedProduct);
+        notifyObservers();
+    }
 
-        if (map.get("image") != null) {
-            byte[] decodedString = Base64.decode(map.get("image").toString(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            product.setImage(decodedByte);
-        } else {
-            product.setImage(null);
-        }
+    @Override
+    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        Product removedProduct = ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+        mProducts.getValue()
+                .remove(getProductIndexFromProductId(removedProduct.getId()));
+        notifyObservers();
+    }
 
-        product.setId(id);
-        product.setName(map.get("name").toString());
-        product.setPrice(Float.parseFloat(map.get("price").toString()));
-        product.setInventoryQuantity(Integer.parseInt(map.get("inventoryQuantity").toString()));
-        product.setPointPerItem(Integer.parseInt(map.get("pointPerItem").toString()));
-        product.setDisabled(Boolean.parseBoolean(map.get("isDisabled").toString()));
-        product.setTotalSales(Integer.parseInt(map.get("totalSales").toString()));
+    @Override
+    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-        return product;
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+
+    private int getProductIndexFromProductId(String productId) {
+        for (int i = 0; i < mProducts.getValue().size(); i++)
+            if (mProducts.getValue().get(i).getId().equals(productId))
+                return i;
+        return -1;
+    }
+
+    public void notifyObservers() {
+        mProducts.setValue(mProducts.getValue());
+    }
+
+    public MutableLiveData<ArrayList<Product>> getProducts() {
+        return mProducts;
     }
 }
