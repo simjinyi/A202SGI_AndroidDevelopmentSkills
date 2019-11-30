@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/etProductInventoryQuantity"
+            android:id="@+id/tvProductInventoryQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/product_inventory_quantity_background"
@@ -52,7 +52,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/etProductName"
+            android:id="@+id/tvProductName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -67,16 +67,16 @@
             app:layout_constraintTop_toBottomOf="@+id/ivProductImage" />
 
         <TextView
-            android:id="@+id/etProductPrice"
+            android:id="@+id/tvProductPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/tvProductPrice"
             android:textColor="@color/secondaryTextColor"
             app:layout_constraintBottom_toTopOf="@+id/clProductQuantityControl"
-            app:layout_constraintEnd_toEndOf="@+id/etProductName"
+            app:layout_constraintEnd_toEndOf="@+id/tvProductName"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/etProductName"
-            app:layout_constraintTop_toBottomOf="@+id/etProductName" />
+            app:layout_constraintStart_toStartOf="@+id/tvProductName"
+            app:layout_constraintTop_toBottomOf="@+id/tvProductName" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clProductQuantityControl"
@@ -86,10 +86,10 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/product_quantity_control_background"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/etProductName"
+            app:layout_constraintEnd_toEndOf="@+id/tvProductName"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/etProductName"
-            app:layout_constraintTop_toBottomOf="@+id/etProductPrice">
+            app:layout_constraintStart_toStartOf="@+id/tvProductName"
+            app:layout_constraintTop_toBottomOf="@+id/tvProductPrice">
 
             <Button
                 android:id="@+id/btnMinusProductQuantity"

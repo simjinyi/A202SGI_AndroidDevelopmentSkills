@@ -14,6 +14,7 @@ public class Product {
     private boolean mIsDisabled;
 
     private int mCartQuantity;
+    private float mCartExtension;
 
     public Product() {
         mCartQuantity = 0;
@@ -85,5 +86,12 @@ public class Product {
     public void setCartQuantity(int cartQuantity) {
         if (cartQuantity >= 0)
             mCartQuantity = cartQuantity;
+    }
+
+    public float getCartExtension() {
+        return mCartExtension;
+    }
+    public void setCartExtension(float cartExtension) {
+        mCartExtension = cartExtension;
     }
 }

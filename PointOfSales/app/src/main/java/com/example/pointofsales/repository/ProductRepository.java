@@ -34,16 +34,22 @@ public class ProductRepository implements ChildEventListener {
         return sProductRepository;
     }
 
-    // DATABASE OPERATIONS
+    // OPERATIONS
     public void insert(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).insert(ProductDatabase.Converter.productToMap(product), onSuccessListener);
     }
 
     public void update(Product product, OnSuccessListener onSuccessListener) {
-        Map<String, Object> map = ProductDatabase.Converter.productToMap(product);
         ProductDatabase.getInstance(mStoreId).update(ProductDatabase.Converter.productToMap(product), onSuccessListener);
     }
-    // END DATABASE OPERATIONS
+
+    public void updateCartQuantityAndExtension(int quantity, float extension, int position) {
+        Product product = mProducts.getValue().get(position);
+        product.setCartQuantity(quantity);
+        product.setCartExtension(extension);
+        notifyObservers();
+    }
+    // END OPERATIONS
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -62,6 +68,7 @@ public class ProductRepository implements ChildEventListener {
                 .get(changedProductIndex);
 
         changedProduct.setCartQuantity(originalProduct.getCartQuantity());
+        changedProduct.setCartExtension(originalProduct.getCartExtension());
         mProducts.getValue()
                 .set(changedProductIndex, changedProduct);
         notifyObservers();

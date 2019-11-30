@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 public class ProductFragment extends Fragment implements EditButtonClick {
 
+    public static final String PRODUCT_INDEX_FRAGMENT_ARG = "com.example.pointofsales.view.product.PRODUCT_INDEX_FRAGMENT_ARG";
+
     private ProductViewModel mProductViewModel;
     private ProductAdapter mProductAdapter;
 
@@ -79,8 +81,6 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
-                mSrlProduct.setRefreshing(false);
-
                 if (products.size() > 0)
                     mLoadingScreenHelper.end();
             }
@@ -89,7 +89,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mSrlProduct.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mProductViewModel.refresh();
+                mSrlProduct.setRefreshing(false);
             }
         });
 
@@ -145,7 +145,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     @Override
     public void onEditButtonClick(int position) {
         Bundle bundle = new Bundle();
-        bundle.putInt("product_index", position);
+        bundle.putInt(PRODUCT_INDEX_FRAGMENT_ARG, position);
         Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_edit_product, bundle);
     }
 }

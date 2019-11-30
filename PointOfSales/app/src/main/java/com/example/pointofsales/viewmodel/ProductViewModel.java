@@ -22,7 +22,6 @@ public class ProductViewModel extends ViewModel {
     private String mStoreId;
 
     public ProductViewModel() {
-
         mStoreId = "0";
 
         mProductList = ProductRepository.getInstance(mStoreId).getProducts();
@@ -34,42 +33,49 @@ public class ProductViewModel extends ViewModel {
         mCartQuantity.setValue(0);
     }
 
-    public void setProductCartQuantity(int quantity, int position) {
-        if (quantity <= getProductList().getValue().get(position).getInventoryQuantity() && quantity >= 0) {
-            mProductList.getValue().get(position).setCartQuantity(quantity);
-            mProductList.setValue(mProductList.getValue());
-
-            calculateTotalPrice();
-            calculateCartQuantity();
-        }
+    // CART HANDLER
+    public void addProductCartQuantity(int position) {
+        int quantity = getProductList().getValue().get(position).getCartQuantity();
+        if (quantity + 1 <= getProductList().getValue().get(position).getInventoryQuantity())
+            updateProductCartQuantityAndExtension(quantity + 1, position);
     }
 
-    public void calculateTotalPrice() {
+    public void minusProductCartQuantity(int position) {
+        int quantity = getProductList().getValue().get(position).getCartQuantity();
+        if (quantity - 1 >= 0)
+            updateProductCartQuantityAndExtension(quantity - 1, position);
+    }
+
+    public void resetProductCartQuantity() {
+        for (int i = 0; i < mProductList.getValue().size(); i++)
+            updateProductCartQuantityAndExtension(0, i);
+    }
+
+    private void updateProductCartQuantityAndExtension(int quantity, int position) {
+        ProductRepository.getInstance(mStoreId).updateCartQuantityAndExtension(quantity, quantity * mProductList.getValue().get(position).getPrice(), position);
+        calculateTotalPrice();
+        calculateCartQuantity();
+    }
+
+    private void calculateTotalPrice() {
         float total = 0.0f;
         for (Product product : mProductList.getValue())
             total += product.getCartQuantity() * product.getPrice();
         mTotalPrice.setValue(total);
     }
 
-    public void calculateCartQuantity() {
+    private void calculateCartQuantity() {
         int quantity = 0;
         for (Product product : mProductList.getValue())
             if (product.getCartQuantity() > 0)
                 quantity += 1;
         mCartQuantity.setValue(quantity);
     }
+    // END CART HANDLER
 
-    public void resetProductCartQuantity() {
-        for (int i = 0; i < mProductList.getValue().size(); i++)
-            setProductCartQuantity(0, i);
-    }
-
-    public void refresh() {
-        ProductRepository.getInstance(mStoreId).getProducts();
-    }
-
+    // PRODUCT HANDLER
     public void insertProduct(Product product, OnSuccessListener onSuccessListener) {
-        if (!checkNameExists(product.getName()))
+        if (validateProductName(product.getName()))
             ProductRepository.getInstance(mStoreId).insert(product, onSuccessListener);
         else
             onSuccessListener.onSuccess(PRODUCT_NAME_DUPLICATE);
@@ -77,18 +83,19 @@ public class ProductViewModel extends ViewModel {
 
     public void updateProduct(Product oriProduct, Product product, OnSuccessListener onSuccessListener) {
         product.setId(oriProduct.getId());
-        if (product.getName().equals(oriProduct.getName()) || !checkNameExists(product.getName()))
+        if (product.getName().equals(oriProduct.getName()) || validateProductName(product.getName()))
             ProductRepository.getInstance(mStoreId).update(product, onSuccessListener);
         else
             onSuccessListener.onSuccess(PRODUCT_NAME_DUPLICATE);
     }
 
-    public boolean checkNameExists(String name) {
+    private boolean validateProductName(String name) {
         for (Product product : mProductList.getValue())
             if (product.getName().equalsIgnoreCase(name))
-                return true;
-        return false;
+                return false;
+        return true;
     }
+    // END PRODUCT HANDLER
 
     public LiveData<ArrayList<Product>> getProductList() {
         return mProductList;

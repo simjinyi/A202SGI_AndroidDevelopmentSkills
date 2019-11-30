@@ -38,9 +38,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             super(itemView);
 
             mIvProductImage = itemView.findViewById(R.id.ivProductImage);
-            mTvProductInventoryQuantity = itemView.findViewById(R.id.etProductInventoryQuantity);
-            mTvProductName = itemView.findViewById(R.id.etProductName);
-            mTvProductPrice = itemView.findViewById(R.id.etProductPrice);
+            mTvProductInventoryQuantity = itemView.findViewById(R.id.tvProductInventoryQuantity);
+            mTvProductName = itemView.findViewById(R.id.tvProductName);
+            mTvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             mBtnMinusProductQuantity = itemView.findViewById(R.id.btnMinusProductQuantity);
             mTvProductQuantity = itemView.findViewById(R.id.tvProductQuantity);
             mBtnAddProductQuantity = itemView.findViewById(R.id.btnAddProductQuantity);
@@ -60,14 +60,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductViewModel.setProductCartQuantity(mProductViewModel.getProductList().getValue().get(position).getCartQuantity() + 1, position);
+                    mProductViewModel.addProductCartQuantity(position);
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductViewModel.setProductCartQuantity(mProductViewModel.getProductList().getValue().get(position).getCartQuantity() - 1, position);
+                    mProductViewModel.minusProductCartQuantity(position);
                 }
             });
 
