@@ -70,7 +70,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
     }
 
     public void resetCart() {
-        for (int i = 0; i < ProductRepository.getInstance(mStoreId, this).getProducts().getValue().size(); i++)
+        for (int i = 0; i < ProductRepository.getInstance(mStoreId, this)
+                .getProducts()
+                .getValue()
+                .size(); i++)
             updateCartItem(0, i);
     }
 
@@ -92,6 +95,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
 
         ArrayList<Product> allProducts = mProductList.getValue();
         ArrayList<Product> cartProducts = mCartList.getValue();
+
         if (quantity > 0 && !cartProducts.contains(allProducts.get(position)))
             cartProducts.add(allProducts.get(position));
         else if (quantity <= 0 && cartProducts.contains(allProducts.get(position)))
@@ -148,14 +152,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
         product.setId(oriProduct.getId());
 
         if (product.getName().equals(oriProduct.getName()) || validateProductName(product.getName())) {
-            ProductRepository.getInstance(mStoreId, this).update(product, new OnSuccessListener() {
-                @Override
-                public void onSuccess(Object o) {
-                    updateCart();
-                    onSuccessListener.onSuccess(o);
-                }
-            });
-
+            ProductRepository.getInstance(mStoreId, this).insert(product, onSuccessListener);
             return;
         }
 
@@ -185,7 +182,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
 
     @Override
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        updateCart();
     }
 
     @Override
