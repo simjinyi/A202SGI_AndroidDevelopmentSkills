@@ -2,5 +2,6 @@ Sort
 Search
 Settings (show 0 quantity, show disabled products)
 Validate form
+Handle no product, no cart
 
 "Sausage Bun", "3.00", "10", "30"
