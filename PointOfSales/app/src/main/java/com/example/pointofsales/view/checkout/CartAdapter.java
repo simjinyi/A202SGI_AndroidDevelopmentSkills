@@ -44,8 +44,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
         public void bindCart(Product product, final int position) {
 
-            if (product.getCartQuantity() <= 0)
-                mRootView.setVisibility(View.GONE);
+//            if (product.getCartQuantity() <= 0)
+//                mRootView.setVisibility(View.GONE);
 
             mTvProductName.setText(product.getName());
             mTvProductPrice.setText(String.format("%.2f", product.getPrice()));
@@ -55,14 +55,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
             mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductViewModel.addProductCartQuantity(position);
+                    mProductViewModel.addCartQuantity(mProductViewModel.getCartList().getValue().get(position));
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductViewModel.minusProductCartQuantity(position);
+                    mProductViewModel.minusCartQuantity(mProductViewModel.getCartList().getValue().get(position));
                 }
             });
         }
@@ -82,11 +82,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
-        holder.bindCart(mProductViewModel.getProductList().getValue().get(position), position);
+        holder.bindCart(mProductViewModel.getCartList().getValue().get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return mProductViewModel.getProductList().getValue().size();
+        return mProductViewModel.getCartList().getValue().size();
     }
 }

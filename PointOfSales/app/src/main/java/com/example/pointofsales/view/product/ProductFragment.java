@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
+import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -81,7 +82,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
-                if (products.size() > 0)
+//                if (products.size() > 0)
                     mLoadingScreenHelper.end();
             }
         });
@@ -104,13 +105,6 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
-        mProductViewModel.getTotalPrice().observe(this, new Observer<Float>() {
-            @Override
-            public void onChanged(Float aFloat) {
-                mTvTotalPrice.setText(getResources().getString(R.string.tvTotalPrice, aFloat));
-            }
-        });
-
         mIbCancelCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,18 +113,19 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mProductViewModel.resetProductCartQuantity();
+                                mProductViewModel.resetCart();
                                 Toast.makeText(getActivity(), getResources().getString(R.string.cart_cleared_successfully), Toast.LENGTH_SHORT).show();
                             }
                         }).show();
             }
         });
 
-        mProductViewModel.getCartQuantity().observe(this, new Observer<Integer>() {
+        mProductViewModel.getCart().observe(this, new Observer<Cart>() {
             @Override
-            public void onChanged(Integer integer) {
-                mTvCartQuantity.setVisibility((integer > 0) ? View.VISIBLE : View.GONE);
-                mTvCartQuantity.setText(String.valueOf(integer));
+            public void onChanged(Cart cart) {
+                mTvTotalPrice.setText(getResources().getString(R.string.tvTotalPrice, cart.getSubtotal()));
+                mTvCartQuantity.setVisibility((cart.getCartQuantity() > 0) ? View.VISIBLE : View.GONE);
+                mTvCartQuantity.setText(String.valueOf(cart.getCartQuantity()));
             }
         });
 

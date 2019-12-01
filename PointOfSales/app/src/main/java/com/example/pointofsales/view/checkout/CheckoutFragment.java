@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +46,12 @@ public class CheckoutFragment extends Fragment {
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
         mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
+        mCartAdapter.setHasStableIds(true);
 
-        rvCart.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvCart.setLayoutManager(new CartLinearLayoutManager(getActivity()));
         rvCart.setAdapter(mCartAdapter);
 
-        mProductViewModel.getProductList().observe(this, new Observer<ArrayList<Product>>() {
+        mProductViewModel.getCartList().observe(this, new Observer<ArrayList<Product>>() {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mCartAdapter.notifyDataSetChanged();

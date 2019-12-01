@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ProductDatabase {
 
-    private static final String PRODUCT = "product";
+    private static final String PRODUCT_COLLECTION = "product";
     private static ProductDatabase sProductDatabase;
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -26,7 +26,7 @@ public class ProductDatabase {
 
     private ProductDatabase(String storeId) {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference(PRODUCT).child(storeId);
+        mDatabaseReference = mFirebaseDatabase.getReference(PRODUCT_COLLECTION).child(storeId);
     }
 
     public static ProductDatabase getInstance(String storeId) {

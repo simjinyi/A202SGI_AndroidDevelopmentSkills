@@ -60,14 +60,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductViewModel.addProductCartQuantity(position);
+                    mProductViewModel.addCartQuantity(position);
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductViewModel.minusProductCartQuantity(position);
+                    mProductViewModel.minusCartQuantity(position);
                 }
             });
 

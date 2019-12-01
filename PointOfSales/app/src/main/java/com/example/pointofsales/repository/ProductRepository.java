@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,36 +19,38 @@ public class ProductRepository implements ChildEventListener {
 
     private String mStoreId;
     private MutableLiveData<ArrayList<Product>> mProducts;
+    private MutableLiveData<ArrayList<Product>> mCartItems;
+    private ChildEventListener mChildEventListener;
 
     private static ProductRepository sProductRepository;
 
-    private ProductRepository(String storeId) {
+    private ProductRepository(String storeId, ChildEventListener childEventListener) {
         mStoreId = storeId;
         mProducts = new MutableLiveData<>();
         mProducts.setValue(new ArrayList<Product>());
+        mCartItems = new MutableLiveData<>();
+        mCartItems.setValue(new ArrayList<Product>());
         ProductDatabase.getInstance(mStoreId).get(this);
+        mChildEventListener = childEventListener;
     }
 
-    public static ProductRepository getInstance(String storeId) {
+    public static ProductRepository getInstance(String storeId, ChildEventListener childEventListener) {
         if (sProductRepository == null)
-            sProductRepository = new ProductRepository(storeId);
+            sProductRepository = new ProductRepository(storeId, childEventListener);
         return sProductRepository;
     }
 
     // OPERATIONS
+    public Product get(int index) {
+        return mProducts.getValue().get(index);
+    }
+
     public void insert(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).insert(ProductDatabase.Converter.productToMap(product), onSuccessListener);
     }
 
     public void update(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).update(ProductDatabase.Converter.productToMap(product), onSuccessListener);
-    }
-
-    public void updateCartQuantityAndExtension(int quantity, float extension, int position) {
-        Product product = mProducts.getValue().get(position);
-        product.setCartQuantity(quantity);
-        product.setCartExtension(extension);
-        notifyObservers();
     }
     // END OPERATIONS
 
@@ -79,6 +82,9 @@ public class ProductRepository implements ChildEventListener {
         Product removedProduct = ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         mProducts.getValue()
                 .remove(getProductIndexFromProductId(removedProduct.getId()));
+        mCartItems.getValue()
+                .remove(getCartIndexFromProductId(removedProduct.getId()));
+        mChildEventListener.onChildRemoved(dataSnapshot);
         notifyObservers();
     }
 
@@ -92,6 +98,13 @@ public class ProductRepository implements ChildEventListener {
 
     }
 
+    private int getCartIndexFromProductId(String productId) {
+        for (int i = 0; i < mCartItems.getValue().size(); i++)
+            if (mCartItems.getValue().get(i).getId().equals(productId))
+                return i;
+        return -1;
+    }
+
     private int getProductIndexFromProductId(String productId) {
         for (int i = 0; i < mProducts.getValue().size(); i++)
             if (mProducts.getValue().get(i).getId().equals(productId))
@@ -99,11 +112,22 @@ public class ProductRepository implements ChildEventListener {
         return -1;
     }
 
+    public int getProductIndexFromProduct(Product product) {
+        for (int i = 0; i < mProducts.getValue().size(); i++)
+            if (product == mProducts.getValue().get(i))
+                return i;
+        return -1;
+    }
+
     public void notifyObservers() {
         mProducts.setValue(mProducts.getValue());
+        mCartItems.setValue(mCartItems.getValue());
     }
 
     public MutableLiveData<ArrayList<Product>> getProducts() {
         return mProducts;
+    }
+    public MutableLiveData<ArrayList<Product>> getCartItems() {
+        return mCartItems;
     }
 }
