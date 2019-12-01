@@ -14,14 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> {
 
     private Context mContext;
     private ProductViewModel mProductViewModel;
-    private CheckoutViewModel mCheckoutViewModel;
     private LayoutInflater mLayoutInflater;
     private EditButtonClick mEditButtonClick;
 
@@ -49,7 +47,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mIbEditProduct = itemView.findViewById(R.id.ibEditProductImage);
         }
 
-        public void bindProduct(Product product, int quantity, final int position) {
+        public void bindProduct(Product product, final int position) {
 
             if (product.getImage() != null)
                 mIvProductImage.setImageBitmap(product.getImage());
@@ -57,19 +55,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mTvProductInventoryQuantity.setText(String.valueOf(product.getInventoryQuantity()));
             mTvProductName.setText(product.getName());
             mTvProductPrice.setText(mContext.getResources().getString(R.string.tvProductPrice, product.getPrice()));
-            mTvProductQuantity.setText(String.valueOf(quantity));
+            mTvProductQuantity.setText(String.valueOf(product.getCartQuantity()));
 
             mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCheckoutViewModel.addCartQuantity(mProductViewModel.getProductList().getValue().get(position));
+                    mProductViewModel.addProductCartQuantity(position);
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCheckoutViewModel.minusCartQuantity(mProductViewModel.getProductList().getValue().get(position));
+                    mProductViewModel.minusProductCartQuantity(position);
                 }
             });
 
@@ -82,12 +80,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         }
     }
 
-    public ProductAdapter(Context context, EditButtonClick editButtonClick, ProductViewModel productViewModel, CheckoutViewModel checkoutViewModel) {
+    public ProductAdapter(Context context, EditButtonClick editButtonClick, ProductViewModel productViewModel) {
         mContext = context;
         mEditButtonClick = editButtonClick;
         mLayoutInflater = LayoutInflater.from(context);
         mProductViewModel = productViewModel;
-        mCheckoutViewModel = checkoutViewModel;
     }
 
     @NonNull
@@ -98,8 +95,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     @Override
     public void onBindViewHolder(@NonNull ProductItemViewHolder holder, int position) {
-        Product product = mProductViewModel.getProductList().getValue().get(position);
-        holder.bindProduct(product, mCheckoutViewModel.getCartQuantity(product), position);
+        holder.bindProduct(mProductViewModel.getProductList().getValue().get(position), position);
     }
 
     @Override

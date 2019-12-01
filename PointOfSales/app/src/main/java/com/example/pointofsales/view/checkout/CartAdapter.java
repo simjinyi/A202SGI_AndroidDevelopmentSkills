@@ -11,16 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private CheckoutViewModel mCheckoutViewModel;
+    private ProductViewModel mProductViewModel;
 
     public class CartHolder extends RecyclerView.ViewHolder {
 
@@ -44,32 +42,36 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
             mTvProductPriceExtension = itemView.findViewById(R.id.tvProductPriceExtension);
         }
 
-        public void bindCart(Cart cart, final int position) {
-            mTvProductName.setText(cart.getProduct().getName());
-            mTvProductPrice.setText(String.format("%.2f", cart.getProduct().getPrice()));
-            mTvProductQuantity.setText(String.valueOf(cart.getCartQuantity()));
-            mTvProductPriceExtension.setText(String.format("%.2f", cart.getCartExtension()));
+        public void bindCart(Product product, final int position) {
+
+            if (product.getCartQuantity() <= 0)
+                mRootView.setVisibility(View.GONE);
+
+            mTvProductName.setText(product.getName());
+            mTvProductPrice.setText(String.format("%.2f", product.getPrice()));
+            mTvProductQuantity.setText(String.valueOf(product.getCartQuantity()));
+            mTvProductPriceExtension.setText(String.format("%.2f", product.getCartExtension()));
 
             mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCheckoutViewModel.addCartQuantity(position);
+                    mProductViewModel.addProductCartQuantity(position);
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCheckoutViewModel.minusCartQuantity(position);
+                    mProductViewModel.minusProductCartQuantity(position);
                 }
             });
         }
     }
 
-    public CartAdapter(Context context, CheckoutViewModel checkoutViewModel) {
+    public CartAdapter(Context context, ProductViewModel productViewModel) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
-        mCheckoutViewModel = checkoutViewModel;
+        mProductViewModel = productViewModel;
     }
 
     @NonNull
@@ -80,11 +82,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
-        holder.bindCart(mCheckoutViewModel.getCartItems().getValue().get(position), position);
+        holder.bindCart(mProductViewModel.getProductList().getValue().get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return mCheckoutViewModel.getCartItems().getValue().size();
+        return mProductViewModel.getProductList().getValue().size();
     }
 }

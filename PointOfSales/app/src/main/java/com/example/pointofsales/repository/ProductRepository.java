@@ -23,10 +23,8 @@ public class ProductRepository implements ChildEventListener {
 
     private ProductRepository(String storeId) {
         mStoreId = storeId;
-
         mProducts = new MutableLiveData<>();
         mProducts.setValue(new ArrayList<Product>());
-
         ProductDatabase.getInstance(mStoreId).get(this);
     }
 
@@ -37,16 +35,19 @@ public class ProductRepository implements ChildEventListener {
     }
 
     // OPERATIONS
-    public Product get(int index) {
-        return mProducts.getValue().get(index);
-    }
-
     public void insert(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).insert(ProductDatabase.Converter.productToMap(product), onSuccessListener);
     }
 
     public void update(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).update(ProductDatabase.Converter.productToMap(product), onSuccessListener);
+    }
+
+    public void updateCartQuantityAndExtension(int quantity, float extension, int position) {
+        Product product = mProducts.getValue().get(position);
+        product.setCartQuantity(quantity);
+        product.setCartExtension(extension);
+        notifyObservers();
     }
     // END OPERATIONS
 
@@ -63,7 +64,13 @@ public class ProductRepository implements ChildEventListener {
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         Product changedProduct = ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         int changedProductIndex = getProductIndexFromProductId(changedProduct.getId());
-        mProducts.getValue().set(changedProductIndex, changedProduct);
+        Product originalProduct = mProducts.getValue()
+                .get(changedProductIndex);
+
+        changedProduct.setCartQuantity(originalProduct.getCartQuantity());
+        changedProduct.setCartExtension(originalProduct.getCartExtension());
+        mProducts.getValue()
+                .set(changedProductIndex, changedProduct);
         notifyObservers();
     }
 
@@ -92,7 +99,7 @@ public class ProductRepository implements ChildEventListener {
         return -1;
     }
 
-    private void notifyObservers() {
+    public void notifyObservers() {
         mProducts.setValue(mProducts.getValue());
     }
 
