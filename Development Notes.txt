@@ -1,6 +1,6 @@
 Sort
 Search
 Settings (show 0 quantity, show disabled products)
-Handling quantity update
+Validate form
 
 "Sausage Bun", "3.00", "10", "30"

@@ -28,9 +28,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
 
     private MutableLiveData<Cart> mCart;
 
-    public ProductViewModel() {
+    public ProductViewModel(String storeId) {
 
-        mStoreId = "0";
+        mStoreId = storeId;
 
         mProductList = ProductRepository.getInstance(mStoreId, this).getProducts();
         mCartList = ProductRepository.getInstance(mStoreId, this).getCartItems();

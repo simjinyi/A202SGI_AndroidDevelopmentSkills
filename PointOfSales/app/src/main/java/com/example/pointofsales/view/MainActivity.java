@@ -1,19 +1,20 @@
-package com.example.pointofsales;
+package com.example.pointofsales.view;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.pointofsales.R;
 import com.example.pointofsales.viewmodel.ProductViewModel;
+import com.example.pointofsales.viewmodel.ProductViewModelFactory;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends UserValidationActivity {
 
     private ProductViewModel mProductViewModel;
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProductViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(getUserId())).get(ProductViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
