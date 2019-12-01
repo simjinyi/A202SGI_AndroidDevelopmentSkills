@@ -15,14 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
 
 public class CheckoutFragment extends Fragment {
 
-    private ProductViewModel mProductViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
     private CartAdapter mCartAdapter;
 
     private RecyclerView rvCart;
@@ -43,15 +45,15 @@ public class CheckoutFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
-        mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
+        mCheckoutViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
+        mCartAdapter = new CartAdapter(getActivity(), mCheckoutViewModel);
 
         rvCart.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvCart.setAdapter(mCartAdapter);
 
-        mProductViewModel.getProductList().observe(this, new Observer<ArrayList<Product>>() {
+        mCheckoutViewModel.getCartItems().observe(this, new Observer<ArrayList<Cart>>() {
             @Override
-            public void onChanged(ArrayList<Product> products) {
+            public void onChanged(ArrayList<Cart> carts) {
                 mCartAdapter.notifyDataSetChanged();
             }
         });

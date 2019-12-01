@@ -10,12 +10,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     private ProductViewModel mProductViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mProductViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

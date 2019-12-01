@@ -13,13 +13,6 @@ public class Product {
     private int mTotalSales;
     private boolean mIsDisabled;
 
-    private int mCartQuantity;
-    private float mCartExtension;
-
-    public Product() {
-        mCartQuantity = 0;
-    }
-
     public String getId() {
         return mId;
     }
@@ -78,20 +71,5 @@ public class Product {
     }
     public void setDisabled(boolean disabled) {
         mIsDisabled = disabled;
-    }
-
-    public int getCartQuantity() {
-        return mCartQuantity;
-    }
-    public void setCartQuantity(int cartQuantity) {
-        if (cartQuantity >= 0)
-            mCartQuantity = cartQuantity;
-    }
-
-    public float getCartExtension() {
-        return mCartExtension;
-    }
-    public void setCartExtension(float cartExtension) {
-        mCartExtension = cartExtension;
     }
 }

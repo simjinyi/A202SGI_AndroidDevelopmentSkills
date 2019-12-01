@@ -22,7 +22,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
+import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -33,6 +35,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     public static final String PRODUCT_INDEX_FRAGMENT_ARG = "com.example.pointofsales.view.product.PRODUCT_INDEX_FRAGMENT_ARG";
 
     private ProductViewModel mProductViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
     private ProductAdapter mProductAdapter;
 
     private SwipeRefreshLayout mSrlProduct;
@@ -72,7 +75,9 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
-        mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel);
+        mCheckoutViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
+
+        mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel, mCheckoutViewModel);
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
 
@@ -83,6 +88,13 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                 mProductAdapter.notifyDataSetChanged();
                 if (products.size() > 0)
                     mLoadingScreenHelper.end();
+            }
+        });
+
+        mCheckoutViewModel.getCartItems().observe(this, new Observer<ArrayList<Cart>>() {
+            @Override
+            public void onChanged(ArrayList<Cart> carts) {
+                mProductAdapter.notifyDataSetChanged();
             }
         });
 
@@ -104,7 +116,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
-        mProductViewModel.getTotalPrice().observe(this, new Observer<Float>() {
+        mCheckoutViewModel.getSubtotalPrice().observe(this, new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 mTvTotalPrice.setText(getResources().getString(R.string.tvTotalPrice, aFloat));
@@ -119,14 +131,14 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mProductViewModel.resetProductCartQuantity();
+                                mCheckoutViewModel.resetCartItems();
                                 Toast.makeText(getActivity(), getResources().getString(R.string.cart_cleared_successfully), Toast.LENGTH_SHORT).show();
                             }
                         }).show();
             }
         });
 
-        mProductViewModel.getCartQuantity().observe(this, new Observer<Integer>() {
+        mCheckoutViewModel.getCartQuantity().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 mTvCartQuantity.setVisibility((integer > 0) ? View.VISIBLE : View.GONE);
