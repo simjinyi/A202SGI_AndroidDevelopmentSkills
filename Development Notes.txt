@@ -1,7 +1,7 @@
-Sort
-Search
-Settings (show 0 quantity, show disabled products)
-Validate form
-Handle no product, no cart
+Sort (DONE)
+Search (DONE)
+Settings (show 0 quantity, show disabled products) [NOT NEEDED]
+Validate form (DONE)
+Handle no product, no cart (DONE)
 
 "Sausage Bun", "3.00", "10", "30"
