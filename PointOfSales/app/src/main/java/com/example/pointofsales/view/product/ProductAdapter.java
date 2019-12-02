@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.Collections;
@@ -59,23 +60,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mTvProductPrice.setText(mContext.getResources().getString(R.string.tvProductPrice, product.getPrice()));
             mTvProductQuantity.setText(String.valueOf(product.getCartQuantity()));
 
-            mBtnAddProductQuantity.setOnClickListener(new View.OnClickListener() {
+            mBtnAddProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onSingleClick(View v) {
                     mProductViewModel.addCartQuantity(position);
                 }
             });
 
-            mBtnMinusProductQuantity.setOnClickListener(new View.OnClickListener() {
+            mBtnMinusProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onSingleClick(View v) {
                     mProductViewModel.minusCartQuantity(position);
                 }
             });
 
-            mIbEditProduct.setOnClickListener(new View.OnClickListener() {
+            mIbEditProduct.setOnClickListener(new OnSingleClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onSingleClick(View v) {
                     mEditButtonClick.onEditButtonClick(position);
                 }
             });

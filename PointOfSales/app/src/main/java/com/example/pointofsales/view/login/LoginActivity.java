@@ -21,6 +21,7 @@ import com.example.pointofsales.model.validation.LoginFormState;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.MainActivity;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -109,17 +110,17 @@ public class LoginActivity extends AppCompatActivity {
         mEtEmail.addTextChangedListener(afterTextChangedListener);
         mEtPassword.addTextChangedListener(afterTextChangedListener);
 
-        mBtnLogin.setOnClickListener(new View.OnClickListener() {
+        mBtnLogin.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 mLoginViewModel.login(mEtEmail.getText().toString(), mEtPassword.getText().toString());
                 mLoadingScreenHelper.start();
             }
         });
 
-        mBtnRegister.setOnClickListener(new View.OnClickListener() {
+        mBtnRegister.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
 
             }
         });

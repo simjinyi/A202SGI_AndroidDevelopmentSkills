@@ -28,6 +28,7 @@ import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.validation.CartOpenableState;
 import com.example.pointofsales.model.validation.ProductLoadState;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -113,16 +114,16 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mRvProductList.setLayoutManager(new ProductGridLayoutManager(getActivity(), 2));
         mRvProductList.setAdapter(mProductAdapter);
 
-        mFabAddProduct.setOnClickListener(new View.OnClickListener() {
+        mFabAddProduct.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_add_product);
             }
         });
 
-        mIbCancelCart.setOnClickListener(new View.OnClickListener() {
+        mIbCancelCart.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
                         getResources().getString(R.string.clear_cart_confirmation),
                         new DialogInterface.OnClickListener() {
@@ -154,9 +155,9 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
-        mIbCheckout.setOnClickListener(new View.OnClickListener() {
+        mIbCheckout.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_checkout);
             }
         });

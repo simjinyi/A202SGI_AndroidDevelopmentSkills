@@ -29,6 +29,7 @@ import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.validation.LoginFormState;
 import com.example.pointofsales.model.validation.ProductFormState;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductFormViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.squareup.picasso.Picasso;
@@ -86,9 +87,9 @@ public abstract class ProductFormFragment extends Fragment {
 
         mProductFormViewModel = ViewModelProviders.of(getActivity()).get(ProductFormViewModel.class);
 
-        mIbEditProductImage.setOnClickListener(new View.OnClickListener() {
+        mIbEditProductImage.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -96,9 +97,9 @@ public abstract class ProductFormFragment extends Fragment {
             }
         });
 
-        mBtnCancel.setOnClickListener(new View.OnClickListener() {
+        mBtnCancel.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
 
 //                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
 //                        getResources().getString(R.string.quit_manage_confirmation),
@@ -114,9 +115,9 @@ public abstract class ProductFormFragment extends Fragment {
             }
         });
 
-        mBtnSubmit.setOnClickListener(new View.OnClickListener() {
+        mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 if (validate()) {
                     submit();
                 }
