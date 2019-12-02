@@ -1,8 +1,10 @@
 package com.example.pointofsales.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -10,12 +12,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.view.login.LoginActivity;
+import com.example.pointofsales.viewmodel.LoginViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModelFactory;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends UserValidationActivity {
+public class MainActivity extends AppCompatActivity {
 
+    private String storeId;
     private ProductViewModel mProductViewModel;
 
     @Override
@@ -23,7 +28,15 @@ public class MainActivity extends UserValidationActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(getUserId())).get(ProductViewModel.class);
+        if (LoginViewModel.isLoggedIn()) {
+            storeId = LoginViewModel.getUserId();
+        } else {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(storeId)).get(ProductViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

@@ -19,6 +19,7 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.LoginFormState;
 import com.example.pointofsales.model.User;
+import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.viewmodel.LoginViewModel;
 
@@ -71,8 +72,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onChanged(User user) {
                 if (!(mEtEmail.getText().toString().isEmpty() && mEtPassword.getText().toString().isEmpty())) {
                     if (user.isLoggedIn()) {
-                        Toast.makeText(LoginActivity.this, getString(R.string.welcome) + user.getName(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        if (user.getType().equals(UserType.CUSTOMER)) {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            Toast.makeText(LoginActivity.this, getString(R.string.welcome) + user.getName(), Toast.LENGTH_SHORT).show();
+                        }
+                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                     }

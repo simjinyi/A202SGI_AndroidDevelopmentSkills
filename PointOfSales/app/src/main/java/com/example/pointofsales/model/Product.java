@@ -12,6 +12,7 @@ public class Product {
     private int mInventoryQuantity;
     private int mTotalSales;
     private boolean mIsDisabled;
+    private String mStoreId;
 
     private int mCartQuantity;
     private float mCartExtension;
@@ -93,5 +94,12 @@ public class Product {
     }
     public void setCartExtension(float cartExtension) {
         mCartExtension = cartExtension;
+    }
+
+    public String getStoreId() {
+        return mStoreId;
+    }
+    public void setStoreId(String storeId) {
+        mStoreId = storeId;
     }
 }

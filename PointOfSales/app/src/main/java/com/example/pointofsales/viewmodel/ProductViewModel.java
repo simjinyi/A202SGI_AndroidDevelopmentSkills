@@ -141,6 +141,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
     // PRODUCT HANDLER
     public void insertProduct(Product product, OnSuccessListener onSuccessListener) {
         if (validateProductName(product.getName())) {
+            product.setStoreId(mStoreId);
             ProductRepository.getInstance(mStoreId, this).insert(product, onSuccessListener);
             return;
         }

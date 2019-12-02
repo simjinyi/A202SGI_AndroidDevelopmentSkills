@@ -21,12 +21,14 @@ public class ProductDatabase {
     private static final String PRODUCT_COLLECTION = "product";
     private static ProductDatabase sProductDatabase;
 
+    private String mStoreId;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
 
     private ProductDatabase(String storeId) {
+        mStoreId = storeId;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference(PRODUCT_COLLECTION).child(storeId);
+        mDatabaseReference = mFirebaseDatabase.getReference(PRODUCT_COLLECTION);
     }
 
     public static ProductDatabase getInstance(String storeId) {
@@ -36,7 +38,9 @@ public class ProductDatabase {
     }
 
     public void get(ChildEventListener childEventListener) {
-        mDatabaseReference.addChildEventListener(childEventListener);
+        mDatabaseReference.orderByChild("storeId")
+                .equalTo(mStoreId)
+                .addChildEventListener(childEventListener);
     }
 
     public void insert(Map<String, Object> product, OnSuccessListener onSuccessListener) {
@@ -67,7 +71,6 @@ public class ProductDatabase {
                 hashMap.put("image", Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
             }
 
-            hashMap.put("id", product.getId());
             hashMap.put("name", product.getName());
             hashMap.put("nameValidate", product.getName().toLowerCase());
             hashMap.put("price", product.getPrice());
@@ -75,6 +78,7 @@ public class ProductDatabase {
             hashMap.put("pointPerItem", product.getPointPerItem());
             hashMap.put("isDisabled", product.isDisabled());
             hashMap.put("totalSales", product.getTotalSales());
+            hashMap.put("storeId", product.getStoreId());
 
             return hashMap;
         }
