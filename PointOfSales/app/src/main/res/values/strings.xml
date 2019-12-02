@@ -88,4 +88,8 @@
     <string name="cartAscending">Cart (Ascending)</string>
     <string name="cartDescending">Cart (Descending)</string>
     <string name="ibSettings">Settings button</string>
+    <string name="tvEnabled">Enabled?</string>
+    <string name="btnDelete">Delete</string>
+    <string name="delete_product_confirmation">Are you sure you want to delete the product? This process is irreversible.</string>
+    <string name="product_deleted_successfully">Product deleted successfully</string>
 </resources>

@@ -77,15 +77,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 app:cardCornerRadius="@dimen/cardview_dimen"
                 app:cardElevation="@dimen/cardview_dimen"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btnDelete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvProductImageHolder"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintTop_toBottomOf="@+id/cvProductImageHolder">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -164,8 +163,9 @@
                         android:background="@drawable/table_header_cell_first"
                         android:gravity="start|center"
                         android:padding="8dp"
-                        android:text="Enabled"
+                        android:text="@string/tvEnabled"
                         android:textColor="@android:color/white"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/swEnabled"
                         app:layout_constraintEnd_toStartOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
@@ -241,16 +241,35 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:checked="true"
-                        android:theme="@style/SwitchTheme"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
+                        android:theme="@style/SwitchTheme"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toBottomOf="@+id/etProductPoints" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:drawableEnd="@drawable/ic_delete_forever_24dp"
+                android:text="@string/btnDelete"
+                android:visibility="gone"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

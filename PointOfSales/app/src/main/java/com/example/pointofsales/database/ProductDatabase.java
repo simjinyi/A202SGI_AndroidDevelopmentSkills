@@ -6,6 +6,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.repository.ProductInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
@@ -62,8 +63,8 @@ public class ProductDatabase {
                 .addOnSuccessListener(onSuccessListener);
     }
 
-    public void delete(Map<String, Object> product, ChildEventListener childEventListener) {
-        mDatabaseReference.child(product.get("id").toString()).removeEventListener(childEventListener);
+    public void delete(Map<String, Object> product, DatabaseReference.CompletionListener completionListener) {
+        mDatabaseReference.child(product.get("id").toString()).removeValue(completionListener);
     }
 
     public static class Converter {

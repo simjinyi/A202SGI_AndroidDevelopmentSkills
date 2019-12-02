@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -69,6 +70,10 @@ public class ProductRepository implements ChildEventListener {
 
     public void update(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).update(ProductDatabase.Converter.productToMap(product), onSuccessListener);
+    }
+
+    public void delete(Product product, DatabaseReference.CompletionListener completionListener) {
+        ProductDatabase.getInstance(mStoreId).delete(ProductDatabase.Converter.productToMap(product), completionListener);
     }
 
     public void move(int fromIndex, int toIndex) {

@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,8 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private MutableLiveData<CartOpenableState> mCartOpenableState;
     private MutableLiveData<ProductInventoryQuantityChangeState> mProductInventoryQuantityChangeState;
     private MutableLiveData<CartRemovalState> mCartRemovalState;
+
+    private MutableLiveData<Boolean> mProductRemoved;
 
     private MutableLiveData<ArrayList<Product>> mProductList;
     private MutableLiveData<ArrayList<Product>> mCartList;
@@ -66,6 +69,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
         mCartRemovalState = new MutableLiveData<>();
         mCartRemovalState.setValue(new CartRemovalState());
+
+        mProductRemoved = new MutableLiveData<>();
+        mProductRemoved.setValue(false);
 
         mProductList = mProductRepository.getProducts();
         mCartList = mProductRepository.getCartItems();
@@ -207,6 +213,15 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
         onSuccessListener.onSuccess(PRODUCT_NAME_DUPLICATE);
     }
 
+    public void deleteProduct(Product product) {
+        mProductRepository.delete(product, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                mProductRemoved.setValue(true);
+            }
+        });
+    }
+
     public void moveProduct(int fromPosition, int toPosition) {
         mProductRepository.move(fromPosition, toPosition);
     }
@@ -250,6 +265,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
                 return R.string.cartDescending;
         }
     }
+
+    public void clearProductRemoved() {
+        mProductRemoved.setValue(false);
+    }
     // END PRODUCT HANDLER
 
     public LiveData<ArrayList<Product>> getProductList() {
@@ -272,6 +291,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
     public LiveData<CartRemovalState> getCartRemovalState() {
         return mCartRemovalState;
+    }
+    public LiveData<Boolean> getProductRemoved() {
+        return mProductRemoved;
     }
 
     @Override
