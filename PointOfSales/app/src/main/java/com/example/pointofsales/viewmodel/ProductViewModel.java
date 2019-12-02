@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.model.validation.CartOpenableState;
-import com.example.pointofsales.model.validation.ProductInventoryQuantityChangeState;
-import com.example.pointofsales.model.validation.ProductLoadState;
+import com.example.pointofsales.model.state.CartOpenableState;
+import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
+import com.example.pointofsales.model.state.ProductLoadState;
 import com.example.pointofsales.repository.CartRepository;
 import com.example.pointofsales.repository.ProductInterface;
 import com.example.pointofsales.repository.ProductRepository;

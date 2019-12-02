@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.model.validation.LoginFormState;
+import com.example.pointofsales.model.state.LoginFormState;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.repository.UserRepository;
 

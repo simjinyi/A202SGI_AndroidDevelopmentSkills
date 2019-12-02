@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.model.validation.ProductFormState;
+import com.example.pointofsales.model.state.ProductFormState;
 
 public class ProductFormViewModel extends ViewModel {
 
