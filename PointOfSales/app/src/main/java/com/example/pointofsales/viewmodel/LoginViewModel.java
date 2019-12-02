@@ -15,17 +15,18 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<User> mUser;
     private MutableLiveData<LoginFormState> mLoginFormState;
+    
+    private UserRepository mUserRepository;
 
     public LoginViewModel() {
         mLoginFormState = new MutableLiveData<>();
         mLoginFormState.setValue(new LoginFormState(false));
-        mUser = UserRepository.getInstance()
-                .getUser();
+        mUserRepository = UserRepository.getInstance();
+        mUser = mUserRepository.getUser();
     }
 
     public void login(String username, String password) {
-        UserRepository.getInstance()
-                .login(username, password);
+        mUserRepository.login(username, password);
     }
 
     public void loginDataChanged(String username, String password) {

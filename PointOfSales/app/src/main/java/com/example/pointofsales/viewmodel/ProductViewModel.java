@@ -8,7 +8,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.validation.CartOpenableState;
+import com.example.pointofsales.model.validation.ProductLoadState;
 import com.example.pointofsales.repository.CartRepository;
+import com.example.pointofsales.repository.ProductInterface;
 import com.example.pointofsales.repository.ProductRepository;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -17,81 +20,88 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
-public class ProductViewModel extends ViewModel implements ChildEventListener {
+public class ProductViewModel extends ViewModel implements ChildEventListener, ProductInterface {
 
     private static final int PRODUCT_NAME_DUPLICATE = 1;
 
     private String mStoreId;
 
+    private MutableLiveData<ProductLoadState> mProductLoadState;
+    private MutableLiveData<CartOpenableState> mCartOpenableState;
+    
     private MutableLiveData<ArrayList<Product>> mProductList;
     private MutableLiveData<ArrayList<Product>> mCartList;
 
     private MutableLiveData<Cart> mCart;
 
+    private ProductRepository mProductRepository;
+    private CartRepository mCartRepository;
+
     public ProductViewModel(String storeId) {
 
         mStoreId = storeId;
 
-        mProductList = ProductRepository.getInstance(mStoreId, this).getProducts();
-        mCartList = ProductRepository.getInstance(mStoreId, this).getCartItems();
+        mProductRepository = ProductRepository.getInstance(mStoreId, this);
+        mCartRepository = CartRepository.getInstance(mStoreId);
 
-        mCart = CartRepository.getInstance(mStoreId).getCart();
+        mProductLoadState = new MutableLiveData<>();
+        mProductLoadState.setValue(ProductLoadState.LOADING);
+        checkProductExists();
+
+        mCartOpenableState = new MutableLiveData<>();
+        mCartOpenableState.setValue(CartOpenableState.DISABLED);
+        checkCartExists();
+
+        mProductList = mProductRepository.getProducts();
+        mCartList = mProductRepository.getCartItems();
+
+        mCart = mCartRepository.getCart();
     }
 
     // CART HANDLER
     public void addCartQuantity(int position) {
-        int cartQuantityAdded = ProductRepository.getInstance(mStoreId, this)
-                .get(position)
-                .getCartQuantity() + 1;
-
-        int inventoryQuantity = ProductRepository.getInstance(mStoreId, this)
-                .get(position)
-                .getInventoryQuantity();
+        int cartQuantityAdded = mProductRepository.get(position).getCartQuantity() + 1;
+        int inventoryQuantity = mProductRepository.get(position).getInventoryQuantity();
 
         if (cartQuantityAdded <= inventoryQuantity)
             updateCartItem(cartQuantityAdded, position);
     }
 
     public void addCartQuantity(Product product) {
-        addCartQuantity(ProductRepository.getInstance(mStoreId, this).getProductIndexFromProduct(product));
+        addCartQuantity(mProductRepository.getProductIndexFromProduct(product));
     }
 
     public void minusCartQuantity(int position) {
-        int cartQuantitySubtracted = ProductRepository.getInstance(mStoreId, this)
-                .get(position)
-                .getCartQuantity() - 1;
+        int cartQuantitySubtracted = mProductRepository.get(position).getCartQuantity() - 1;
 
         if (cartQuantitySubtracted >= 0)
             updateCartItem(cartQuantitySubtracted, position);
     }
 
     public void minusCartQuantity(Product product) {
-        minusCartQuantity(ProductRepository.getInstance(mStoreId, this).getProductIndexFromProduct(product));
+        minusCartQuantity(mProductRepository.getProductIndexFromProduct(product));
     }
 
     public void resetCart() {
-        for (int i = 0; i < ProductRepository.getInstance(mStoreId, this)
-                .getProducts()
-                .getValue()
-                .size(); i++)
+        for (int i = 0; i < mProductRepository.getProducts().getValue().size(); i++)
             updateCartItem(0, i);
     }
 
     private void updateCart() {
         mCartList.getValue().clear();
-        for (int i = 0; i < ProductRepository.getInstance(mStoreId, this).getProducts().getValue().size(); i++)
-            updateCartItem(ProductRepository.getInstance(mStoreId, this).getProducts().getValue().get(i).getCartQuantity(), i);
+        for (int i = 0; i < mProductRepository.getProducts().getValue().size(); i++)
+            updateCartItem(mProductRepository.getProducts().getValue().get(i).getCartQuantity(), i);
         calculateCartDetails();
     }
 
     private void updateCartItem(int quantity, int position) {
-        ProductRepository.getInstance(mStoreId, this)
+        mProductRepository
                 .get(position)
                 .setCartQuantity(quantity);
 
-        ProductRepository.getInstance(mStoreId, this)
+        mProductRepository
                 .get(position)
-                .setCartExtension(quantity * ProductRepository.getInstance(mStoreId, this).get(position).getPrice());
+                .setCartExtension(quantity * mProductRepository.get(position).getPrice());
 
         ArrayList<Product> allProducts = mProductList.getValue();
         ArrayList<Product> cartProducts = mCartList.getValue();
@@ -101,40 +111,37 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
         else if (quantity <= 0 && cartProducts.contains(allProducts.get(position)))
             cartProducts.remove(allProducts.get(position));
 
-        ProductRepository.getInstance(mStoreId, this)
-                .notifyObservers();
-
+        mProductRepository.notifyObservers();
         calculateCartDetails();
     }
 
-    public void calculateCartDetails() {
+    private void calculateCartDetails() {
         calculateSubtotalPrice();
         calculateCartQuantity();
-        CartRepository.getInstance(mStoreId)
-                .notifyObservers();
+        checkCartExists();
+        mCartRepository.notifyObservers();
     }
 
     private void calculateSubtotalPrice() {
         float total = 0.0f;
-        for (Product product : ProductRepository.getInstance(mStoreId, this).getProducts().getValue())
+        for (Product product : mProductRepository.getProducts().getValue())
             total += product.getCartQuantity() * product.getPrice();
-
-        CartRepository.getInstance(mStoreId)
-                .getCart()
-                .getValue()
-                .setSubtotal(total);
+        mCartRepository.getCart().getValue().setSubtotal(total);
     }
 
     private void calculateCartQuantity() {
         int quantity = 0;
-        for (Product product : ProductRepository.getInstance(mStoreId, this).getProducts().getValue())
+        for (Product product : mProductRepository.getProducts().getValue())
             if (product.getCartQuantity() > 0)
                 quantity++;
+        mCartRepository.getCart().getValue().setCartQuantity(quantity);
+    }
 
-        CartRepository.getInstance(mStoreId)
-                .getCart()
-                .getValue()
-                .setCartQuantity(quantity);
+    private void checkCartExists() {
+        if (mProductRepository.getCartItems().getValue().size() > 0)
+            mCartOpenableState.setValue(CartOpenableState.ENABLED);
+        else
+            mCartOpenableState.setValue(CartOpenableState.DISABLED);
     }
     // END CART HANDLER
 
@@ -142,7 +149,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
     public void insertProduct(Product product, OnSuccessListener onSuccessListener) {
         if (validateProductName(product.getName())) {
             product.setStoreId(mStoreId);
-            ProductRepository.getInstance(mStoreId, this).insert(product, onSuccessListener);
+            mProductRepository.insert(product, onSuccessListener);
             return;
         }
 
@@ -153,7 +160,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
         if (product.getName().equals(oriProduct.getName()) || validateProductName(product.getName())) {
             product.setId(oriProduct.getId());
             product.setStoreId(mStoreId);
-            ProductRepository.getInstance(mStoreId, this).update(product, onSuccessListener);
+            mProductRepository.update(product, onSuccessListener);
             return;
         }
 
@@ -161,14 +168,18 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
     }
 
     public void moveProduct(int fromPosition, int toPosition) {
-        ProductRepository.getInstance(mStoreId, this).move(fromPosition, toPosition);
+        mProductRepository.move(fromPosition, toPosition);
     }
 
     private boolean validateProductName(String name) {
-        for (Product product : ProductRepository.getInstance(mStoreId, this).getProducts().getValue())
+        for (Product product : mProductRepository.getProducts().getValue())
             if (product.getName().equalsIgnoreCase(name))
                 return false;
         return true;
+    }
+
+    private void checkProductExists() {
+        mProductRepository.check(this);
     }
     // END PRODUCT HANDLER
 
@@ -179,20 +190,28 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
     public LiveData<Cart> getCart() {
         return mCart;
     }
+    public LiveData<ProductLoadState> getProductLoadState() {
+        return mProductLoadState;
+    }
+    public LiveData<CartOpenableState> getCartOpenableState() {
+        return mCartOpenableState;
+    }
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        checkProductExists();
     }
 
     @Override
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         updateCart();
+        checkProductExists();
     }
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
         updateCart();
+        checkProductExists();
     }
 
     @Override
@@ -203,5 +222,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+    }
+
+    @Override
+    public void checkIfProductExists(boolean existence) {
+        mProductLoadState.setValue(existence ? ProductLoadState.LOADED : ProductLoadState.NO_PRODUCT);
     }
 }

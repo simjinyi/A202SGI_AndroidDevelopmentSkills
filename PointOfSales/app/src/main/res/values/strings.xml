@@ -73,4 +73,7 @@
     <string name="invalid_product_price">Invalid product price</string>
     <string name="invalid_product_inventory">Invalid inventory quantity</string>
     <string name="invalid_product_points">Invalid product points</string>
+    <string name="tvNoProduct">No Product</string>
+    <string name="tvAddSomeProduct">Add some to start</string>
+    <string name="ivNoProductBackground">No product background</string>
 </resources>

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,6 +26,8 @@ import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.validation.CartOpenableState;
+import com.example.pointofsales.model.validation.ProductLoadState;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -44,6 +47,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     private TextView mTvCartQuantity;
     private ImageButton mIbCheckout;
     private ProgressBar mPbLoading;
+    private CardView mCvNoProduct;
 
     private LoadingScreenHelper mLoadingScreenHelper;
 
@@ -63,6 +67,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mTvCartQuantity = getView().findViewById(R.id.tvCartQuantity);
         mIbCheckout = getView().findViewById(R.id.ibCheckout);
         mPbLoading = getView().findViewById(R.id.pbLoading);
+        mCvNoProduct = getView().findViewById(R.id.cvNoProduct);
 
         mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
     }
@@ -76,8 +81,28 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
 
-        mProductViewModel.getProductList().observe(this, new Observer<ArrayList<Product>>() {
+        mProductViewModel.getProductLoadState().observe(this, new Observer<ProductLoadState>() {
+            @Override
+            public void onChanged(ProductLoadState productLoadState) {
+                switch (productLoadState) {
+                    case LOADING:
+                        mLoadingScreenHelper.start();
+                        mCvNoProduct.setVisibility(View.GONE);
+                        break;
 
+                    case LOADED:
+                        mLoadingScreenHelper.end();
+                        mCvNoProduct.setVisibility(View.GONE);
+                        break;
+
+                    default:
+                        mLoadingScreenHelper.end();
+                        mCvNoProduct.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mProductViewModel.getProductList().observe(this, new Observer<ArrayList<Product>>() {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
@@ -117,6 +142,16 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                 mTvTotalPrice.setText(getResources().getString(R.string.tvTotalPrice, cart.getSubtotal()));
                 mTvCartQuantity.setVisibility((cart.getCartQuantity() > 0) ? View.VISIBLE : View.GONE);
                 mTvCartQuantity.setText(String.valueOf(cart.getCartQuantity()));
+            }
+        });
+
+        mProductViewModel.getCartOpenableState().observe(this, new Observer<CartOpenableState>() {
+            @Override
+            public void onChanged(CartOpenableState cartOpenableState) {
+                if (cartOpenableState.equals(CartOpenableState.ENABLED))
+                    mIbCheckout.setEnabled(true);
+                else
+                    mIbCheckout.setEnabled(false);
             }
         });
 

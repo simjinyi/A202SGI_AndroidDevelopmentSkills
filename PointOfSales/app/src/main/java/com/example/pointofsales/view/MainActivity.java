@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (LoginViewModel.isLoggedIn()) {
-            storeId = LoginViewModel.getUserId();
+        if (LoginViewModel.isLoggedIn() || true) {
+//            storeId = LoginViewModel.getUserId();
+            storeId = "0";
         } else {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();

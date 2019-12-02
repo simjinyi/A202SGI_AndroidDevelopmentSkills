@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.validation.CartOpenableState;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
@@ -55,6 +56,14 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mCartAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mProductViewModel.getCartOpenableState().observe(this, new Observer<CartOpenableState>() {
+            @Override
+            public void onChanged(CartOpenableState cartOpenableState) {
+                if (cartOpenableState.equals(CartOpenableState.DISABLED))
+                    getActivity().onBackPressed();
             }
         });
     }

@@ -37,6 +37,12 @@ public class ProductDatabase {
         return sProductDatabase;
     }
 
+    public void check(ValueEventListener valueEventListener) {
+        mDatabaseReference.orderByChild("storeId")
+                .equalTo(mStoreId)
+                .addListenerForSingleValueEvent(valueEventListener);
+    }
+
     public void get(ChildEventListener childEventListener) {
         mDatabaseReference.orderByChild("storeId")
                 .equalTo(mStoreId)

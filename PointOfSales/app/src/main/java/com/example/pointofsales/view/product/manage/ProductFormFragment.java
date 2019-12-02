@@ -99,6 +99,7 @@ public abstract class ProductFormFragment extends Fragment {
         mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 //                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
 //                        getResources().getString(R.string.quit_manage_confirmation),
 //                        new DialogInterface.OnClickListener() {

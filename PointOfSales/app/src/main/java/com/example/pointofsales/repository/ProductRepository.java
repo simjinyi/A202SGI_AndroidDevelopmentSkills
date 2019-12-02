@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +42,21 @@ public class ProductRepository implements ChildEventListener {
     }
 
     // OPERATIONS
+    public void check(final ProductInterface productInterface) {
+        ProductDatabase.getInstance(mStoreId)
+                .check(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        productInterface.checkIfProductExists(dataSnapshot.exists());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        productInterface.checkIfProductExists(false);
+                    }
+                });
+    }
+
     public Product get(int index) {
         return mProducts.getValue().get(index);
     }
@@ -68,6 +84,7 @@ public class ProductRepository implements ChildEventListener {
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         if (dataSnapshot.exists()) {
             mProducts.getValue().add(ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue()));
+            mChildEventListener.onChildAdded(dataSnapshot, s);
             notifyObservers();
         }
     }
@@ -83,6 +100,7 @@ public class ProductRepository implements ChildEventListener {
         changedProduct.setCartExtension(originalProduct.getCartExtension());
         mProducts.getValue()
                 .set(changedProductIndex, changedProduct);
+        mChildEventListener.onChildChanged(dataSnapshot, s);
         notifyObservers();
     }
 
@@ -104,12 +122,12 @@ public class ProductRepository implements ChildEventListener {
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        mChildEventListener.onChildMoved(dataSnapshot, s);
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+        mChildEventListener.onCancelled(databaseError);
     }
 
     private int getCartIndexFromProductId(String productId) {
