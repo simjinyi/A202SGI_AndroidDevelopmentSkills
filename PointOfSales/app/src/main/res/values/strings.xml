@@ -79,4 +79,12 @@
     <string name="app_bar_sort">Sort</string>
     <string name="app_bar_search">Search</string>
     <string name="product_query_hint">Search name or price…</string>
+    <string name="nameAscending">Name (Ascending)</string>
+    <string name="nameDescending">Name (Descending)</string>
+    <string name="priceAscending">Price (Ascending)</string>
+    <string name="priceDescending">Price (Descending)</string>
+    <string name="inventoryAscending">Inventory (Ascending)</string>
+    <string name="inventoryDescending">Inventory (Descending)</string>
+    <string name="cartAscending">Cart (Ascending)</string>
+    <string name="cartDescending">Cart (Descending)</string>
 </resources>

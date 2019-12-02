@@ -80,6 +80,46 @@ public class ProductRepository implements ChildEventListener {
                 Collections.swap(mProducts.getValue(), i, i - 1);
         notifyObservers();
     }
+
+    public void sortNameAsc() {
+        Collections.sort(mProducts.getValue(), Product.nameAscComparator);
+        notifyObservers();
+    }
+
+    public void sortNameDesc() {
+        Collections.sort(mProducts.getValue(), Product.nameDescComparator);
+        notifyObservers();
+    }
+
+    public void sortPriceAsc() {
+        Collections.sort(mProducts.getValue(), Product.priceAscComparator);
+        notifyObservers();
+    }
+
+    public void sortPriceDesc() {
+        Collections.sort(mProducts.getValue(), Product.priceDescComparator);
+        notifyObservers();
+    }
+
+    public void sortInventoryAsc() {
+        Collections.sort(mProducts.getValue(), Product.inventoryAscComparator);
+        notifyObservers();
+    }
+
+    public void sortInventoryDesc() {
+        Collections.sort(mProducts.getValue(), Product.inventoryDescComparator);
+        notifyObservers();
+    }
+
+    public void sortCartAsc() {
+        Collections.sort(mProducts.getValue(), Product.cartAscComparator);
+        notifyObservers();
+    }
+
+    public void sortCartDesc() {
+        Collections.sort(mProducts.getValue(), Product.cartDescComparator);
+        notifyObservers();
+    }
     // END OPERATIONS
 
     @Override

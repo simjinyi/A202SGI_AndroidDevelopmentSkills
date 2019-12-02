@@ -6,8 +6,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.ProductSort;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
@@ -28,6 +30,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private static final int PRODUCT_NAME_DUPLICATE = 1;
 
     private String mStoreId;
+    private ProductSort mProductSort;
 
     private MutableLiveData<ProductLoadState> mProductLoadState;
     private MutableLiveData<CartOpenableState> mCartOpenableState;
@@ -45,6 +48,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     public ProductViewModel(String storeId) {
 
         mStoreId = storeId;
+        mProductSort = new ProductSort();
 
         mProductRepository = ProductRepository.getInstance(mStoreId, this, this);
         mCartRepository = CartRepository.getInstance(mStoreId);
@@ -216,6 +220,35 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
     private void checkProductExists() {
         mProductRepository.check(this);
+    }
+
+    public int sort() {
+        switch (mProductSort.next()) {
+            case NAME_ASC:
+                mProductRepository.sortNameAsc();
+                return R.string.nameAscending;
+            case NAME_DESC:
+                mProductRepository.sortNameDesc();
+                return R.string.nameDescending;
+            case PRICE_ASC:
+                mProductRepository.sortPriceAsc();
+                return R.string.priceAscending;
+            case PRICE_DESC:
+                mProductRepository.sortPriceDesc();
+                return R.string.priceDescending;
+            case INVENTORY_ASC:
+                mProductRepository.sortInventoryAsc();
+                return R.string.inventoryAscending;
+            case INVENTORY_DESC:
+                mProductRepository.sortInventoryDesc();
+                return R.string.inventoryDescending;
+            case CART_ASC:
+                mProductRepository.sortCartAsc();
+                return R.string.cartAscending;
+            default:
+                mProductRepository.sortCartDesc();
+                return R.string.cartDescending;
+        }
     }
     // END PRODUCT HANDLER
 

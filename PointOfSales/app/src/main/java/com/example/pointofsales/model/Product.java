@@ -2,6 +2,8 @@ package com.example.pointofsales.model;
 
 import android.graphics.Bitmap;
 
+import java.util.Comparator;
+
 public class Product {
 
     private String mId;
@@ -16,6 +18,62 @@ public class Product {
 
     private int mCartQuantity;
     private float mCartExtension;
+
+    public static Comparator<Product> nameAscComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return product1.getName().toLowerCase().compareTo(product2.getName().toLowerCase());
+        }
+    };
+
+    public static Comparator<Product> nameDescComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return product2.getName().toLowerCase().compareTo(product1.getName().toLowerCase());
+        }
+    };
+
+    public static Comparator<Product> priceAscComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return Float.compare(product1.getPrice(), product2.getPrice());
+        }
+    };
+
+    public static Comparator<Product> priceDescComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return Float.compare(product2.getPrice(), product1.getPrice());
+        }
+    };
+
+    public static Comparator<Product> inventoryAscComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return Integer.compare(product1.getInventoryQuantity(), product2.getInventoryQuantity());
+        }
+    };
+
+    public static Comparator<Product> inventoryDescComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return Integer.compare(product2.getInventoryQuantity(), product1.getInventoryQuantity());
+        }
+    };
+
+    public static Comparator<Product> cartAscComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return Integer.compare(product1.getCartQuantity(), product2.getCartQuantity());
+        }
+    };
+
+    public static Comparator<Product> cartDescComparator = new Comparator<Product>() {
+        @Override
+        public int compare(Product product1, Product product2) {
+            return Integer.compare(product2.getCartQuantity(), product1.getCartQuantity());
+        }
+    };
 
     public Product() {
         mCartQuantity = 0;
