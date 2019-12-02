@@ -87,4 +87,5 @@
     <string name="inventoryDescending">Inventory (Descending)</string>
     <string name="cartAscending">Cart (Ascending)</string>
     <string name="cartDescending">Cart (Descending)</string>
+    <string name="ibSettings">Settings button</string>
 </resources>

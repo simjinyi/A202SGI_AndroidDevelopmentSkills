@@ -56,6 +56,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     private ImageButton mIbCheckout;
     private ProgressBar mPbLoading;
     private CardView mCvNoProduct;
+    private ImageButton mIbSettings;
 
     private LoadingScreenHelper mLoadingScreenHelper;
 
@@ -77,6 +78,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mIbCheckout = getView().findViewById(R.id.ibCheckout);
         mPbLoading = getView().findViewById(R.id.pbLoading);
         mCvNoProduct = getView().findViewById(R.id.cvNoProduct);
+        mIbSettings = getView().findViewById(R.id.ibSettings);
 
         mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
     }
