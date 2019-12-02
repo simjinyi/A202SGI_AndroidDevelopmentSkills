@@ -1,4 +1,4 @@
-package com.example.pointofsales.model.validation;
+package com.example.pointofsales.model.state;
 
 public class ProductFormState {
 

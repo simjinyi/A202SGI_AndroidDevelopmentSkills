@@ -1,6 +1,4 @@
-package com.example.pointofsales.model.validation;
-
-import androidx.annotation.Nullable;
+package com.example.pointofsales.model.state;
 
 public class LoginFormState {
 
