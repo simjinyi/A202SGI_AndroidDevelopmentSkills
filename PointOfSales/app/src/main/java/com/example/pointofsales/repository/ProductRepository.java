@@ -88,11 +88,16 @@ public class ProductRepository implements ChildEventListener {
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        Product removedProduct = ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+        Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
+        Product removedProduct = ProductDatabase.Converter.mapToProduct(dataSnapshot.getKey(), data);
         mProducts.getValue()
                 .remove(getProductIndexFromProductId(removedProduct.getId()));
-        mCartItems.getValue()
-                .remove(getCartIndexFromProductId(removedProduct.getId()));
+
+        int cartPosition = 0;
+        if ((cartPosition = getCartIndexFromProductId(removedProduct.getId())) != -1)
+            mCartItems.getValue()
+                    .remove(cartPosition);
+
         mChildEventListener.onChildRemoved(dataSnapshot);
         notifyObservers();
     }

@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
 
                 mBtnLogin.setEnabled(loginFormState.isDataValid());
+
                 if (loginFormState.getEmailError() != null)
                     mEtEmail.setError(getString(loginFormState.getEmailError()));
 

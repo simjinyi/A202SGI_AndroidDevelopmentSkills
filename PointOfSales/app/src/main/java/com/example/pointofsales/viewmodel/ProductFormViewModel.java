@@ -13,7 +13,7 @@ public class ProductFormViewModel extends ViewModel {
 
     public ProductFormViewModel() {
         mProductFormState = new MutableLiveData<>();
-        mProductFormState.setValue(new ProductFormState(R.string.invalid_product_name, R.string.invalid_product_price, R.string.invalid_product_inventory, R.string.invalid_product_points));
+        mProductFormState.setValue(new ProductFormState(false));
     }
 
     public void productFormDataChanged(String productName, String productPrice, String productInventory, String productPoints) {

@@ -18,7 +18,7 @@ public class LoginViewModel extends ViewModel {
 
     public LoginViewModel() {
         mLoginFormState = new MutableLiveData<>();
-        mLoginFormState.setValue(new LoginFormState(true));
+        mLoginFormState.setValue(new LoginFormState(false));
         mUser = UserRepository.getInstance()
                 .getUser();
     }
