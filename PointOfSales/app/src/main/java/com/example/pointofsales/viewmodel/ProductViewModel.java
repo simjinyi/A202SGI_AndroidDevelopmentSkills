@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.CartOpenableState;
+import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.state.ProductLoadState;
+import com.example.pointofsales.repository.CartInterface;
 import com.example.pointofsales.repository.CartRepository;
 import com.example.pointofsales.repository.ProductInterface;
 import com.example.pointofsales.repository.ProductRepository;
@@ -21,7 +23,7 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
-public class ProductViewModel extends ViewModel implements ChildEventListener, ProductInterface {
+public class ProductViewModel extends ViewModel implements ChildEventListener, ProductInterface, CartInterface {
 
     private static final int PRODUCT_NAME_DUPLICATE = 1;
 
@@ -30,7 +32,8 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private MutableLiveData<ProductLoadState> mProductLoadState;
     private MutableLiveData<CartOpenableState> mCartOpenableState;
     private MutableLiveData<ProductInventoryQuantityChangeState> mProductInventoryQuantityChangeState;
-    
+    private MutableLiveData<CartRemovalState> mCartRemovalState;
+
     private MutableLiveData<ArrayList<Product>> mProductList;
     private MutableLiveData<ArrayList<Product>> mCartList;
 
@@ -43,7 +46,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
         mStoreId = storeId;
 
-        mProductRepository = ProductRepository.getInstance(mStoreId, this);
+        mProductRepository = ProductRepository.getInstance(mStoreId, this, this);
         mCartRepository = CartRepository.getInstance(mStoreId);
 
         mProductLoadState = new MutableLiveData<>();
@@ -56,6 +59,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
         mProductInventoryQuantityChangeState = new MutableLiveData<>();
         mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState());
+
+        mCartRemovalState = new MutableLiveData<>();
+        mCartRemovalState.setValue(new CartRemovalState());
 
         mProductList = mProductRepository.getProducts();
         mCartList = mProductRepository.getCartItems();
@@ -165,9 +171,17 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     public void clearProductInventoryQuantityChangeFlag() {
         mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState());
     }
+
+    public void clearCartRemovalFlag() {
+        mCartRemovalState.setValue(new CartRemovalState());
+    }
     // END CART HANDLER
 
     // PRODUCT HANDLER
+    public int getProductIndexFromProduct(Product product) {
+        return mProductRepository.getProductIndexFromProduct(product);
+    }
+
     public void insertProduct(Product product, OnSuccessListener onSuccessListener) {
         if (validateProductName(product.getName())) {
             product.setStoreId(mStoreId);
@@ -223,6 +237,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     public LiveData<ProductInventoryQuantityChangeState> getProductInventoryQuantityChangeState() {
         return mProductInventoryQuantityChangeState;
     }
+    public LiveData<CartRemovalState> getCartRemovalState() {
+        return mCartRemovalState;
+    }
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -254,5 +271,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     @Override
     public void productExistCallback(boolean existence) {
         mProductLoadState.setValue(existence ? ProductLoadState.LOADED : ProductLoadState.NO_PRODUCT);
+    }
+
+    @Override
+    public void notifyCartChanged(ArrayList<String> productNames) {
+        mCartRemovalState.setValue(new CartRemovalState(productNames));
     }
 }

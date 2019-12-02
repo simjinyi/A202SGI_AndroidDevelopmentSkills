@@ -15,11 +15,14 @@ import com.example.pointofsales.model.Product;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
+import java.util.ArrayList;
+
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ProductViewModel mProductViewModel;
+    private ArrayList<Product> mCartList;
 
     public class CartHolder extends RecyclerView.ViewHolder {
 
@@ -56,14 +59,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
             mBtnAddProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mProductViewModel.addCartQuantity(mProductViewModel.getCartList().getValue().get(position));
+                    mProductViewModel.addCartQuantity(mCartList.get(position));
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mProductViewModel.minusCartQuantity(mProductViewModel.getCartList().getValue().get(position));
+                    mProductViewModel.minusCartQuantity(mCartList.get(position));
                 }
             });
         }
@@ -73,6 +76,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mProductViewModel = productViewModel;
+        mCartList = mProductViewModel.getCartList().getValue();
     }
 
     @NonNull
@@ -83,11 +87,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
-        holder.bindCart(mProductViewModel.getCartList().getValue().get(position), position);
+        holder.bindCart(mCartList.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return mProductViewModel.getCartList().getValue().size();
+        return mCartList.size();
     }
 }

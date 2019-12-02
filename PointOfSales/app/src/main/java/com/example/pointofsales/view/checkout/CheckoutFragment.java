@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.CartOpenableState;
+import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
@@ -62,6 +64,16 @@ public class CheckoutFragment extends Fragment {
             public void onChanged(CartOpenableState cartOpenableState) {
                 if (cartOpenableState.equals(CartOpenableState.DISABLED))
                     getActivity().onBackPressed();
+            }
+        });
+
+        mProductViewModel.getCartRemovalState().observe(getViewLifecycleOwner(), new Observer<CartRemovalState>() {
+            @Override
+            public void onChanged(CartRemovalState cartRemovalState) {
+                if (cartRemovalState.getProductNames().size() > 0) {
+                    Toast.makeText(getActivity(), cartRemovalState.toString(), Toast.LENGTH_SHORT).show();
+                    mProductViewModel.clearCartRemovalFlag();
+                }
             }
         });
     }

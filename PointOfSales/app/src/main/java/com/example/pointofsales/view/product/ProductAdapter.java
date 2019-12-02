@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,14 +19,16 @@ import com.example.pointofsales.model.Product;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> implements Filterable {
 
     private Context mContext;
     private ProductViewModel mProductViewModel;
     private LayoutInflater mLayoutInflater;
     private EditButtonClick mEditButtonClick;
+    private ArrayList<Product> mProducts;
 
     public class ProductItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -63,21 +67,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             mBtnAddProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mProductViewModel.addCartQuantity(position);
+                    mProductViewModel.addCartQuantity(mProducts.get(position));
                 }
             });
 
             mBtnMinusProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mProductViewModel.minusCartQuantity(position);
+                    mProductViewModel.minusCartQuantity(mProducts.get(position));
                 }
             });
 
             mIbEditProduct.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mEditButtonClick.onEditButtonClick(position);
+                    mEditButtonClick.onEditButtonClick(mProducts.get(position));
                 }
             });
         }
@@ -88,6 +92,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         mEditButtonClick = editButtonClick;
         mLayoutInflater = LayoutInflater.from(context);
         mProductViewModel = productViewModel;
+        mProducts = mProductViewModel.getProductList().getValue();
     }
 
     @NonNull
@@ -98,21 +103,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     @Override
     public void onBindViewHolder(@NonNull ProductItemViewHolder holder, int position) {
-        holder.bindProduct(mProductViewModel.getProductList().getValue().get(position), position);
+        holder.bindProduct(mProducts.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return mProductViewModel.getProductList().getValue().size();
+        return mProducts.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mProductViewModel.getProductList().getValue().get(position).hashCode();
+        return mProducts.get(position).hashCode();
     }
 
     public void move(int fromPosition, int toPosition) {
         mProductViewModel.moveProduct(fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new ProductFilter(this, mProductViewModel);
+    }
+
+    public void setProducts(ArrayList<Product> products) {
+        mProducts = products;
     }
 }

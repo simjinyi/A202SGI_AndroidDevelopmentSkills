@@ -1,5 +1,7 @@
 package com.example.pointofsales.view.product;
 
+import com.example.pointofsales.model.Product;
+
 public interface EditButtonClick {
-    void onEditButtonClick(int position);
+    void onEditButtonClick(Product product);
 }

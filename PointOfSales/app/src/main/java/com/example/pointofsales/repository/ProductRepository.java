@@ -22,10 +22,11 @@ public class ProductRepository implements ChildEventListener {
     private MutableLiveData<ArrayList<Product>> mProducts;
     private MutableLiveData<ArrayList<Product>> mCartItems;
     private ChildEventListener mChildEventListener;
+    private CartInterface mCartInterface;
 
     private static ProductRepository sProductRepository;
 
-    private ProductRepository(String storeId, ChildEventListener childEventListener) {
+    private ProductRepository(String storeId, ChildEventListener childEventListener, CartInterface cartInterface) {
         mStoreId = storeId;
         mProducts = new MutableLiveData<>();
         mProducts.setValue(new ArrayList<Product>());
@@ -33,11 +34,12 @@ public class ProductRepository implements ChildEventListener {
         mCartItems.setValue(new ArrayList<Product>());
         ProductDatabase.getInstance(mStoreId).get(this);
         mChildEventListener = childEventListener;
+        mCartInterface = cartInterface;
     }
 
-    public static ProductRepository getInstance(String storeId, ChildEventListener childEventListener) {
+    public static ProductRepository getInstance(String storeId, ChildEventListener childEventListener, CartInterface cartInterface) {
         if (sProductRepository == null)
-            sProductRepository = new ProductRepository(storeId, childEventListener);
+            sProductRepository = new ProductRepository(storeId, childEventListener, cartInterface);
         return sProductRepository;
     }
 
@@ -111,10 +113,17 @@ public class ProductRepository implements ChildEventListener {
         mProducts.getValue()
                 .remove(getProductIndexFromProductId(removedProduct.getId()));
 
+        ArrayList<String> productNames = new ArrayList<>();
         int cartPosition = 0;
-        if ((cartPosition = getCartIndexFromProductId(removedProduct.getId())) != -1)
+
+        if ((cartPosition = getCartIndexFromProductId(removedProduct.getId())) != -1) {
+            productNames.add(removedProduct.getName());
             mCartItems.getValue()
                     .remove(cartPosition);
+        }
+
+        if (productNames.size() > 0)
+            mCartInterface.notifyCartChanged(productNames);
 
         mChildEventListener.onChildRemoved(dataSnapshot);
         notifyObservers();

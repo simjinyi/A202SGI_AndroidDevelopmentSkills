@@ -38,7 +38,7 @@
     <string name="btnSubmit">Save</string>
     <string name="error_set_image">Error setting image</string>
     <string name="product_name_duplicate">Product name duplicated</string>
-    <string name="product_unknown_error">An unknown error occured</string>
+    <string name="product_unknown_error">An unknown error occurred</string>
     <string name="product_added_successfully">Product added successfully</string>
     <string name="cart_cleared_successfully">Cart cleared successfully</string>
     <string name="clear_cart_confirmation">Are you sure you want to clear the cart?</string>
@@ -76,4 +76,7 @@
     <string name="tvNoProduct">No Product</string>
     <string name="tvAddSomeProduct">Add some to start</string>
     <string name="ivNoProductBackground">No product background</string>
+    <string name="app_bar_sort">Sort</string>
+    <string name="app_bar_search">Search</string>
+    <string name="product_query_hint">Search name or price…</string>
 </resources>

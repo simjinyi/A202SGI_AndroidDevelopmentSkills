@@ -1,12 +1,18 @@
 package com.example.pointofsales.view.product;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +32,7 @@ import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.CartOpenableState;
+import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.state.ProductLoadState;
 import com.example.pointofsales.view.OnSingleClickListener;
@@ -54,6 +61,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_product, container, false);
     }
 
@@ -165,8 +173,20 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mProductViewModel.getProductInventoryQuantityChangeState().observe(getViewLifecycleOwner(), new Observer<ProductInventoryQuantityChangeState>() {
             @Override
             public void onChanged(ProductInventoryQuantityChangeState productInventoryQuantityChangeState) {
-                if (productInventoryQuantityChangeState.getProductNames().size() > 0)
+                if (productInventoryQuantityChangeState.getProductNames().size() > 0) {
                     Toast.makeText(getActivity(), productInventoryQuantityChangeState.toString(), Toast.LENGTH_SHORT).show();
+                    mProductViewModel.clearProductInventoryQuantityChangeFlag();
+                }
+            }
+        });
+
+        mProductViewModel.getCartRemovalState().observe(getViewLifecycleOwner(), new Observer<CartRemovalState>() {
+            @Override
+            public void onChanged(CartRemovalState cartRemovalState) {
+                if (cartRemovalState.getProductNames().size() > 0) {
+                    Toast.makeText(getActivity(), cartRemovalState.toString(), Toast.LENGTH_SHORT).show();
+                    mProductViewModel.clearCartRemovalFlag();
+                }
             }
         });
 
@@ -176,9 +196,40 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     }
 
     @Override
-    public void onEditButtonClick(int position) {
+    public void onEditButtonClick(Product product) {
         Bundle bundle = new Bundle();
-        bundle.putInt(PRODUCT_INDEX_FRAGMENT_ARG, position);
+        bundle.putInt(PRODUCT_INDEX_FRAGMENT_ARG, mProductViewModel.getProductIndexFromProduct(product));
         Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_edit_product, bundle);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.seach_sort_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.product_query_hint));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mProductAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mProductAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.app_bar_sort)
+            Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_SHORT).show();
+
+        return super.onOptionsItemSelected(item);
     }
 }
