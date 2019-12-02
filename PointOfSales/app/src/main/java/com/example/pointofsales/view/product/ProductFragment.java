@@ -106,7 +106,6 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
-                mLoadingScreenHelper.end();
             }
         });
 

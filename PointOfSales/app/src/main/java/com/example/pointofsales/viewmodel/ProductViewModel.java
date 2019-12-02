@@ -225,7 +225,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
 
     @Override
-    public void checkIfProductExists(boolean existence) {
+    public void productExistCallback(boolean existence) {
         mProductLoadState.setValue(existence ? ProductLoadState.LOADED : ProductLoadState.NO_PRODUCT);
     }
 }

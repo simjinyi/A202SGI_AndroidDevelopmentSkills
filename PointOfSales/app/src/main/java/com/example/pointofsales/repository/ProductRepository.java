@@ -47,12 +47,12 @@ public class ProductRepository implements ChildEventListener {
                 .check(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        productInterface.checkIfProductExists(dataSnapshot.exists());
+                        productInterface.productExistCallback(dataSnapshot.exists());
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        productInterface.checkIfProductExists(false);
+                        productInterface.productExistCallback(false);
                     }
                 });
     }
