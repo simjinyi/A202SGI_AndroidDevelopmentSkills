@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.validation.LoginFormState;
+import com.example.pointofsales.model.validation.ProductFormState;
+import com.example.pointofsales.viewmodel.ProductFormViewModel;
+import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -30,6 +38,8 @@ public abstract class ProductFormFragment extends Fragment {
 
     private static final int SELECT_IMAGE = 1;
     private static final int IMAGE_HEIGHT_SCALE = 300;
+
+    private ProductFormViewModel mProductFormViewModel;
 
     private Bitmap mBitmap;
     private ImageView mIvProductImage;
@@ -74,6 +84,8 @@ public abstract class ProductFormFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mProductFormViewModel = ViewModelProviders.of(getActivity()).get(ProductFormViewModel.class);
+
         mIbEditProductImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +121,50 @@ public abstract class ProductFormFragment extends Fragment {
                 }
             }
         });
+
+        mProductFormViewModel.getProductFormState().observe(this, new Observer<ProductFormState>() {
+            @Override
+            public void onChanged(ProductFormState productFormState) {
+                if (productFormState == null)
+                    return;
+
+                mBtnSubmit.setEnabled(productFormState.isDataValid());
+
+                if (productFormState.getNameError() != null)
+                    mEtProductName.setError(getString(productFormState.getNameError()));
+
+                if (productFormState.getPriceError() != null)
+                    mEtProductPrice.setError(getString(productFormState.getPriceError()));
+
+                if (productFormState.getInventoryError() != null)
+                    mEtProductInventoryQuantity.setError(getString(productFormState.getInventoryError()));
+
+                if (productFormState.getPointsError() != null)
+                    mEtProductPoints.setError(getString(productFormState.getPointsError()));
+            }
+        });
+
+        TextWatcher afterTextChangedListener = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // ignore
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ignore
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mProductFormViewModel.productFormDataChanged(mEtProductName.getText().toString(), mEtProductPrice.getText().toString(), mEtProductInventoryQuantity.getText().toString(), mEtProductPoints.getText().toString());
+            }
+        };
+
+        mEtProductName.addTextChangedListener(afterTextChangedListener);
+        mEtProductPrice.addTextChangedListener(afterTextChangedListener);
+        mEtProductInventoryQuantity.addTextChangedListener(afterTextChangedListener);
+        mEtProductPoints.addTextChangedListener(afterTextChangedListener);
     }
 
     @Override

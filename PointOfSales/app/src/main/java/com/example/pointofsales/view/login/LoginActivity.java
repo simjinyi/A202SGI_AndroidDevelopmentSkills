@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.helper.LoadingScreenHelper;
-import com.example.pointofsales.model.LoginFormState;
+import com.example.pointofsales.model.validation.LoginFormState;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.MainActivity;

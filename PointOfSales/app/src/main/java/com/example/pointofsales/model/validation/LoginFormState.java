@@ -1,4 +1,4 @@
-package com.example.pointofsales.model;
+package com.example.pointofsales.model.validation;
 
 import androidx.annotation.Nullable;
 

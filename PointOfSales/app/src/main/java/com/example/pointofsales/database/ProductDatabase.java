@@ -50,7 +50,8 @@ public class ProductDatabase {
     }
 
     public void update(Map<String, Object> product, OnSuccessListener onSuccessListener) {
-        mDatabaseReference.child(product.get("id").toString())
+        mDatabaseReference
+                .child(product.get("id").toString())
                 .setValue(product)
                 .addOnSuccessListener(onSuccessListener);
     }
@@ -71,6 +72,7 @@ public class ProductDatabase {
                 hashMap.put("image", Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
             }
 
+            hashMap.put("id", product.getId());
             hashMap.put("name", product.getName());
             hashMap.put("nameValidate", product.getName().toLowerCase());
             hashMap.put("price", product.getPrice());

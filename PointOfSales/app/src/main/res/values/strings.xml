@@ -69,4 +69,8 @@
     <string name="tvPos">Point of Sales System</string>
     <string name="tvRememberMe">Remember Me</string>
     <string name="btnRegister">Register</string>
+    <string name="invalid_product_name">Invalid product name</string>
+    <string name="invalid_product_price">Invalid product price</string>
+    <string name="invalid_product_inventory">Invalid inventory quantity</string>
+    <string name="invalid_product_points">Invalid product points</string>
 </resources>
