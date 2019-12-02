@@ -5,7 +5,6 @@ import android.widget.Filter;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ProductFilter extends Filter {
@@ -40,7 +39,9 @@ public class ProductFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-        mAdapter.setProducts((ArrayList<Product>) results.values);
+        @SuppressWarnings("unchecked")
+        ArrayList<Product> products = (ArrayList<Product>) results.values;
+        mAdapter.setProducts(products);
         mAdapter.notifyDataSetChanged();
     }
 }

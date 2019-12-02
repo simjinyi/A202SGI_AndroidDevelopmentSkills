@@ -58,6 +58,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
             if (product.getImage() != null)
                 mIvProductImage.setImageBitmap(product.getImage());
+            else
+                mIvProductImage.setImageResource(R.drawable.ic_add_photo_alternate_24px);
 
             mTvProductInventoryQuantity.setText(String.valueOf(product.getInventoryQuantity()));
             mTvProductName.setText(product.getName());

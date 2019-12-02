@@ -227,8 +227,12 @@ public class ProductFragment extends Fragment implements EditButtonClick {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.app_bar_sort)
-            Toast.makeText(getActivity(), getString(mProductViewModel.sort()), Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.app_bar_sort) {
+            String sortText = getString(mProductViewModel.sort());
+            item.setTitle(sortText);
+            Toast.makeText(getActivity(), sortText, Toast.LENGTH_SHORT).show();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

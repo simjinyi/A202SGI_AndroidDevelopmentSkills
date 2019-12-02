@@ -87,8 +87,10 @@ public class UserDatabase {
             hashMap.put("password", user.getPassword());
             hashMap.put("type", user.getType().name());
 
-            if (user instanceof Store)
+            if (user instanceof Store) {
                 hashMap.put("address", ((Store) user).getAddress());
+                hashMap.put("pointsPerPrice", ((Store) user).getPointsPerPrice());
+            }
 
             return hashMap;
         }
@@ -105,6 +107,7 @@ public class UserDatabase {
             if (user instanceof Store) {
                 user.setType(UserType.SELLER);
                 ((Store) user).setAddress(map.get("address").toString());
+                ((Store) user).setPointsPerPrice(Integer.parseInt(map.get("pointsPerPrice").toString()));
             } else {
                 user.setType(UserType.CUSTOMER);
             }
