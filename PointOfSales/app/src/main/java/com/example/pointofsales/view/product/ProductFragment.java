@@ -27,6 +27,7 @@ import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.validation.CartOpenableState;
+import com.example.pointofsales.model.validation.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.validation.ProductLoadState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
@@ -82,7 +83,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
 
-        mProductViewModel.getProductLoadState().observe(this, new Observer<ProductLoadState>() {
+        mProductViewModel.getProductLoadState().observe(getViewLifecycleOwner(), new Observer<ProductLoadState>() {
             @Override
             public void onChanged(ProductLoadState productLoadState) {
                 switch (productLoadState) {
@@ -103,7 +104,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
-        mProductViewModel.getProductList().observe(this, new Observer<ArrayList<Product>>() {
+        mProductViewModel.getProductList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Product>>() {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
@@ -136,7 +137,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
-        mProductViewModel.getCart().observe(this, new Observer<Cart>() {
+        mProductViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<Cart>() {
             @Override
             public void onChanged(Cart cart) {
                 mTvTotalPrice.setText(getResources().getString(R.string.tvTotalPrice, cart.getSubtotal()));
@@ -145,7 +146,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
-        mProductViewModel.getCartOpenableState().observe(this, new Observer<CartOpenableState>() {
+        mProductViewModel.getCartOpenableState().observe(getViewLifecycleOwner(), new Observer<CartOpenableState>() {
             @Override
             public void onChanged(CartOpenableState cartOpenableState) {
                 if (cartOpenableState.equals(CartOpenableState.ENABLED))
@@ -159,6 +160,14 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onSingleClick(View v) {
                 Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_checkout);
+            }
+        });
+
+        mProductViewModel.getProductInventoryQuantityChangeState().observe(getViewLifecycleOwner(), new Observer<ProductInventoryQuantityChangeState>() {
+            @Override
+            public void onChanged(ProductInventoryQuantityChangeState productInventoryQuantityChangeState) {
+                if (productInventoryQuantityChangeState.getProductNames().size() > 0)
+                    Toast.makeText(getActivity(), productInventoryQuantityChangeState.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

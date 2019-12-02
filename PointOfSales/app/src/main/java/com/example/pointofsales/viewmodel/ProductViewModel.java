@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.validation.CartOpenableState;
+import com.example.pointofsales.model.validation.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.validation.ProductLoadState;
 import com.example.pointofsales.repository.CartRepository;
 import com.example.pointofsales.repository.ProductInterface;
@@ -28,6 +29,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
     private MutableLiveData<ProductLoadState> mProductLoadState;
     private MutableLiveData<CartOpenableState> mCartOpenableState;
+    private MutableLiveData<ProductInventoryQuantityChangeState> mProductInventoryQuantityChangeState;
     
     private MutableLiveData<ArrayList<Product>> mProductList;
     private MutableLiveData<ArrayList<Product>> mCartList;
@@ -51,6 +53,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
         mCartOpenableState = new MutableLiveData<>();
         mCartOpenableState.setValue(CartOpenableState.DISABLED);
         checkCartExists();
+
+        mProductInventoryQuantityChangeState = new MutableLiveData<>();
+        mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState());
 
         mProductList = mProductRepository.getProducts();
         mCartList = mProductRepository.getCartItems();
@@ -88,10 +93,23 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
 
     private void updateCart() {
+
         mCartList.getValue().clear();
-        for (int i = 0; i < mProductRepository.getProducts().getValue().size(); i++)
-            updateCartItem(mProductRepository.getProducts().getValue().get(i).getCartQuantity(), i);
+        ArrayList<String> productNames = new ArrayList<>();
+
+        for (int i = 0; i < mProductRepository.getProducts().getValue().size(); i++) {
+            Product product = mProductRepository.getProducts().getValue().get(i);
+
+            if (product.getInventoryQuantity() < product.getCartQuantity()) {
+                updateCartItem(product.getInventoryQuantity(), i);
+                productNames.add(product.getName());
+            } else {
+                updateCartItem(product.getCartQuantity(), i);
+            }
+        }
+
         calculateCartDetails();
+        mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState(productNames));
     }
 
     private void updateCartItem(int quantity, int position) {
@@ -143,6 +161,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
         else
             mCartOpenableState.setValue(CartOpenableState.DISABLED);
     }
+
+    public void clearProductInventoryQuantityChangeFlag() {
+        mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState());
+    }
     // END CART HANDLER
 
     // PRODUCT HANDLER
@@ -186,7 +208,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     public LiveData<ArrayList<Product>> getProductList() {
         return mProductList;
     }
-    public LiveData<ArrayList<Product>> getCartList() { return mCartList; }
+    public LiveData<ArrayList<Product>> getCartList() {
+        return mCartList;
+    }
     public LiveData<Cart> getCart() {
         return mCart;
     }
@@ -195,6 +219,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
     public LiveData<CartOpenableState> getCartOpenableState() {
         return mCartOpenableState;
+    }
+    public LiveData<ProductInventoryQuantityChangeState> getProductInventoryQuantityChangeState() {
+        return mProductInventoryQuantityChangeState;
     }
 
     @Override

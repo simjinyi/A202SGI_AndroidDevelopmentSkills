@@ -52,14 +52,14 @@ public class CheckoutFragment extends Fragment {
         rvCart.setLayoutManager(new CartLinearLayoutManager(getActivity()));
         rvCart.setAdapter(mCartAdapter);
 
-        mProductViewModel.getCartList().observe(this, new Observer<ArrayList<Product>>() {
+        mProductViewModel.getCartList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Product>>() {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mCartAdapter.notifyDataSetChanged();
             }
         });
 
-        mProductViewModel.getCartOpenableState().observe(this, new Observer<CartOpenableState>() {
+        mProductViewModel.getCartOpenableState().observe(getViewLifecycleOwner(), new Observer<CartOpenableState>() {
             @Override
             public void onChanged(CartOpenableState cartOpenableState) {
                 if (cartOpenableState.equals(CartOpenableState.DISABLED))

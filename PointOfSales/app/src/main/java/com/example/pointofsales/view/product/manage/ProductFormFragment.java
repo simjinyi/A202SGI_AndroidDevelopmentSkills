@@ -124,7 +124,7 @@ public abstract class ProductFormFragment extends Fragment {
             }
         });
 
-        mProductFormViewModel.getProductFormState().observe(this, new Observer<ProductFormState>() {
+        mProductFormViewModel.getProductFormState().observe(getViewLifecycleOwner(), new Observer<ProductFormState>() {
             @Override
             public void onChanged(ProductFormState productFormState) {
                 if (productFormState == null)
