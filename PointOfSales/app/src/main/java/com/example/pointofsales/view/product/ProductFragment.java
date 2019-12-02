@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -36,7 +37,6 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     private ProductViewModel mProductViewModel;
     private ProductAdapter mProductAdapter;
 
-    private SwipeRefreshLayout mSrlProduct;
     private RecyclerView mRvProductList;
     private FloatingActionButton mFabAddProduct;
     private TextView mTvTotalPrice;
@@ -56,7 +56,6 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSrlProduct = getView().findViewById(R.id.srlProduct);
         mRvProductList = getView().findViewById(R.id.rvProductList);
         mFabAddProduct = getView().findViewById(R.id.fabAddProduct);
         mTvTotalPrice = getView().findViewById(R.id.tvTotalPrice);
@@ -82,15 +81,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
-//                if (products.size() > 0)
-                    mLoadingScreenHelper.end();
-            }
-        });
-
-        mSrlProduct.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mSrlProduct.setRefreshing(false);
+                mLoadingScreenHelper.end();
             }
         });
 
@@ -135,6 +126,10 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                 Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_checkout);
             }
         });
+
+        ItemTouchHelper.Callback callback = new ProductItemTouchHelper(mProductAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRvProductList);
     }
 
     @Override

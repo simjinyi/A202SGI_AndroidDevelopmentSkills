@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.model.validation.ProductFormState;
 import com.example.pointofsales.repository.CartRepository;
 import com.example.pointofsales.repository.ProductRepository;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -159,6 +158,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener {
         }
 
         onSuccessListener.onSuccess(PRODUCT_NAME_DUPLICATE);
+    }
+
+    public void moveProduct(int fromPosition, int toPosition) {
+        ProductRepository.getInstance(mStoreId, this).move(fromPosition, toPosition);
     }
 
     private boolean validateProductName(String name) {

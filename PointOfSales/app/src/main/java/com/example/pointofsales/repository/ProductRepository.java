@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class ProductRepository implements ChildEventListener {
@@ -50,6 +51,16 @@ public class ProductRepository implements ChildEventListener {
 
     public void update(Product product, OnSuccessListener onSuccessListener) {
         ProductDatabase.getInstance(mStoreId).update(ProductDatabase.Converter.productToMap(product), onSuccessListener);
+    }
+
+    public void move(int fromIndex, int toIndex) {
+        if (fromIndex < toIndex)
+            for (int i = fromIndex; i < toIndex; i++)
+                Collections.swap(mProducts.getValue(), i, i + 1);
+        else
+            for (int i = fromIndex; i > toIndex; i--)
+                Collections.swap(mProducts.getValue(), i, i - 1);
+        notifyObservers();
     }
     // END OPERATIONS
 

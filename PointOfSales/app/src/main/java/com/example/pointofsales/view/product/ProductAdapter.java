@@ -16,6 +16,8 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
+import java.util.Collections;
+
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> {
 
     private Context mContext;
@@ -106,5 +108,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
     @Override
     public long getItemId(int position) {
         return mProductViewModel.getProductList().getValue().get(position).hashCode();
+    }
+
+    public void move(int fromPosition, int toPosition) {
+        mProductViewModel.moveProduct(fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
     }
 }
