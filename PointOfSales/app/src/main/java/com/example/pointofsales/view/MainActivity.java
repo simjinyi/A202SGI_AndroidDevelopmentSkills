@@ -3,6 +3,7 @@ package com.example.pointofsales.view;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,12 +18,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends UserValidationActivity {
 
-    private ProductViewModel mProductViewModel;
-
     @Override
     protected void onCreateValidated(Bundle savedInstanceState) {
-        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
-
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);

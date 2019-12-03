@@ -115,4 +115,8 @@ public class ProductDatabase {
             return product;
         }
     }
+
+    public static void clearInstance() {
+        sProductDatabase = null;
+    }
 }

@@ -30,4 +30,8 @@ public class CartRepository {
     public MutableLiveData<Cart> getCart() {
         return mCart;
     }
+
+    public static void clearInstance() {
+        sCartRepository = null;
+    }
 }

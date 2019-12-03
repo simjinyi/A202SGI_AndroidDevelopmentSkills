@@ -1,5 +1,7 @@
 package com.example.pointofsales.view.account;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
@@ -22,10 +24,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
+import com.example.pointofsales.repository.CartRepository;
+import com.example.pointofsales.repository.ProductRepository;
+import com.example.pointofsales.repository.UserRepository;
+import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.UserViewModel;
@@ -153,12 +160,10 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_logout) {
             UserViewModel.logout();
-
             Intent i = new Intent(getActivity(), LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             getActivity().finish();
-
             return true;
         }
 

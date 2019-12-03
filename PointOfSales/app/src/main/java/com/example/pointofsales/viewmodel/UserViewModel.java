@@ -3,6 +3,8 @@ package com.example.pointofsales.viewmodel;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.User;
+import com.example.pointofsales.repository.CartRepository;
+import com.example.pointofsales.repository.ProductRepository;
 import com.example.pointofsales.repository.UserRepository;
 
 public class UserViewModel extends ViewModel {
@@ -19,6 +21,8 @@ public class UserViewModel extends ViewModel {
     }
 
     public static void logout() {
-        UserRepository.getInstance().logout();
+        CartRepository.clearInstance();
+        ProductRepository.clearInstance();
+        UserRepository.clearInstance();
     }
 }

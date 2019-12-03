@@ -115,4 +115,9 @@ public class UserDatabase {
             return user;
         }
     }
+
+    public static void clearInstance() {
+        sUserDatabase = null;
+        UserDatabase.clearInstance();
+    }
 }

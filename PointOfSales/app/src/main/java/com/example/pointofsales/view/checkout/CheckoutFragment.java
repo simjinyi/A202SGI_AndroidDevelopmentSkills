@@ -19,6 +19,8 @@ import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.viewmodel.ProductViewModel;
+import com.example.pointofsales.viewmodel.ProductViewModelFactory;
+import com.example.pointofsales.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,7 @@ public class CheckoutFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
         mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
         mCartAdapter.setHasStableIds(true);
 

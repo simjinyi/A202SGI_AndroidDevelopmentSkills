@@ -17,6 +17,8 @@ import com.example.pointofsales.view.product.ProductFragment;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.repository.ProductRepository;
+import com.example.pointofsales.viewmodel.ProductViewModelFactory;
+import com.example.pointofsales.viewmodel.UserViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Map;
@@ -30,7 +32,7 @@ public class EditProductFragment extends ProductFormFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
         mOriProduct = mProductViewModel.getProductList().getValue().get(getArguments().getInt(ProductFragment.PRODUCT_INDEX_FRAGMENT_ARG));
 
         setData(mOriProduct);

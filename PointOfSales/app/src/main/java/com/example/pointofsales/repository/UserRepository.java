@@ -1,25 +1,13 @@
 package com.example.pointofsales.repository;
 
-import android.service.autofill.UserData;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.UserDatabase;
-import com.example.pointofsales.model.Cart;
-import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.view.login.LoginInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class UserRepository implements LoginInterface {
@@ -57,13 +45,6 @@ public class UserRepository implements LoginInterface {
         UserDatabase.getInstance().get(username, password, this);
     }
 
-    public void logout() {
-        if (mUser.getValue() instanceof Store)
-            mUser.setValue(new Store());
-        else
-            mUser.setValue(new User());
-    }
-
     @Override
     public void onLogin(boolean status, DataSnapshot dataSnapshot, String password) {
         if (status) {
@@ -90,5 +71,9 @@ public class UserRepository implements LoginInterface {
 
     public MutableLiveData<User> getUser() {
         return mUser;
+    }
+
+    public static void clearInstance() {
+        sUserRepository = null;
     }
 }
