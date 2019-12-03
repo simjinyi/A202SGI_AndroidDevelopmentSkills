@@ -62,5 +62,5 @@
         android:id="@+id/navigation_manage_store"
         android:name="com.example.pointofsales.view.account.StoreAccountFragment"
         android:label="@string/title_manage_store"
-        tools:layout="@layout/fragment_store_account" />
+        tools:layout="@layout/fragment_account" />
 </navigation>

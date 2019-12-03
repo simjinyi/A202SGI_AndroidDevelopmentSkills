@@ -30,15 +30,15 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username))
-            mLoginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
+        if (!isEmailValid(username))
+            mLoginFormState.setValue(new LoginFormState(R.string.invalid_email, null));
         else if (!isPasswordValid(password))
             mLoginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
         else
             mLoginFormState.setValue(new LoginFormState(true));
     }
 
-    private boolean isUserNameValid(String username) {
+    private boolean isEmailValid(String username) {
         if (username == null)
             return false;
 
@@ -49,15 +49,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
-    }
-
-    public static boolean isLoggedIn() {
-        return UserRepository.getInstance().getUser().getValue().isLoggedIn();
-    }
-
-    public static String getUserId() {
-        return UserRepository.getInstance().getUser().getValue().getId();
+        return password != null && password.trim().length() > 7;
     }
 
     public LiveData<LoginFormState> getLoginFormState() {

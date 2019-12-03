@@ -1,63 +1,105 @@
 package com.example.pointofsales.view.account;
 
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Switch;
-
-import com.example.pointofsales.R;
+import com.example.pointofsales.model.state.ProductFormState;
+import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
+import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
+import com.example.pointofsales.viewmodel.UserViewModel;
 
-public class StoreAccountFragment extends Fragment {
+public class StoreAccountFragment extends AccountFormFragment {
 
-    private StoreAccountViewModel mViewModel;
-
-    private EditText mEtStoreName;
-    private EditText mEtStoreEmail;
-    protected EditText mEtPassword;
-    private EditText mEtStoreAddress;
-    private EditText mEtPointsPerPrice;
-    protected EditText mEtOriginalPassword;
-    protected EditText mEtNewPassword;
-    protected Switch mSwChangePassword;
-    protected CardView mCvStorePasswordHolder;
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_store_account, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mEtStoreName = getView().findViewById(R.id.etStoreName);
-        mEtStoreEmail = getView().findViewById(R.id.etStoreEmail);
-        mEtPassword = getView().findViewById(R.id.etPassword);
-        mEtStoreAddress = getView().findViewById(R.id.etStoreAddress);
-        mEtPointsPerPrice = getView().findViewById(R.id.etPointsPerPrice);
-        mEtOriginalPassword = getView().findViewById(R.id.etOriginalPassword);
-        mEtNewPassword = getView().findViewById(R.id.etNewPassword);
-        mSwChangePassword = getView().findViewById(R.id.swChangePassword);
-        mCvStorePasswordHolder = getView().findViewById(R.id.cvStorePasswordHolder);
-    }
+    private StoreAccountViewModel mStoreAccountViewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(StoreAccountViewModel.class);
-    }
+        mStoreAccountViewModel = ViewModelProviders.of(this, new StoreAccountViewModelFactory(UserViewModel.getUserId())).get(StoreAccountViewModel.class);
 
+        mSwChangePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mStoreAccountViewModel.setEnableChangePassword(isChecked);
+            }
+        });
+
+        mStoreAccountViewModel.getStoreAccountFormState().observe(getViewLifecycleOwner(), new Observer<StoreAccountFormState>() {
+            @Override
+            public void onChanged(StoreAccountFormState storeAccountFormState) {
+                if (storeAccountFormState == null)
+                    return;
+
+                // mBtnSubmit.setEnabled(productFormState.isDataValid());
+
+                if (storeAccountFormState.getNameError() != null)
+                    mEtName.setError(getString(storeAccountFormState.getNameError()));
+
+                if (storeAccountFormState.getEmailError() != null)
+                    mEtEmail.setError(getString(storeAccountFormState.getEmailError()));
+
+                if (storeAccountFormState.getPasswordError() != null)
+                    mEtPassword.setError(getString(storeAccountFormState.getPasswordError()));
+
+                if (storeAccountFormState.getAddressError() != null)
+                    mEtAddress.setError(getString(storeAccountFormState.getAddressError()));
+
+                if (storeAccountFormState.getPointsPerPriceError() != null)
+                    mEtPointsPerPrice.setError(getString(storeAccountFormState.getPointsPerPriceError()));
+
+                if (storeAccountFormState.getOriginalPasswordError() != null)
+                    mEtOriginalPassword.setError(getString(storeAccountFormState.getOriginalPasswordError()));
+
+                if (storeAccountFormState.getNewPasswordError() != null)
+                    mEtNewPassword.setError(getString(storeAccountFormState.getNewPasswordError()));
+            }
+        });
+
+        TextWatcher afterTextChangedListener = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // ignore
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ignore
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mStoreAccountViewModel.storeAccountFormChanged(mEtName.getText().toString(),
+                        mEtEmail.getText().toString(),
+                        mEtPassword.getText().toString(),
+                        mEtOriginalPassword.getText().toString(),
+                        mEtNewPassword.getText().toString(),
+                        mEtAddress.getText().toString(),
+                        mEtPointsPerPrice.getText().toString());
+            }
+        };
+
+        mEtName.addTextChangedListener(afterTextChangedListener);
+        mEtEmail.addTextChangedListener(afterTextChangedListener);
+        mEtPassword.addTextChangedListener(afterTextChangedListener);
+        mEtAddress.addTextChangedListener(afterTextChangedListener);
+        mEtPointsPerPrice.addTextChangedListener(afterTextChangedListener);
+        mEtOriginalPassword.addTextChangedListener(afterTextChangedListener);
+        mEtNewPassword.addTextChangedListener(afterTextChangedListener);
+
+        mStoreAccountViewModel.getAccountFormEnableState().observe(getViewLifecycleOwner(), this);
+        setData(UserViewModel.getUser());
+    }
 }

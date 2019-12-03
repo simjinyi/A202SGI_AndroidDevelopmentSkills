@@ -53,7 +53,7 @@
     <string name="action_sign_in_short">Login</string>
     <string name="welcome">"Welcome!"</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be > 5 characters</string>
+    <string name="invalid_password">Password must be > 7 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="tvSubtotalLabel">Subtotal</string>
     <string name="tvSubtotal">MYR 50.00</string>
@@ -100,13 +100,17 @@
     <string name="tvNewPasswordLabel">New Password</string>
     <string name="tvOriginalPasswordLabel">Original Password</string>
     <string name="etPointsPerPrice">Points Per Price</string>
-    <string name="etStoreAddress">Store Address</string>
-    <string name="etStoreEmail">Email Address</string>
-    <string name="etStoreName">Store Name</string>
     <string name="tvPointsPerPriceLabel">Points Per Price</string>
-    <string name="tvStoreAddress">Address</string>
     <string name="tvEmailLabel">Email</string>
-    <string name="tvStoreNameLabel">Name</string>
     <string name="etPassword">Password</string>
     <string name="tvPasswordLabel">Password</string>
+    <string name="tvNameLabel">Name</string>
+    <string name="tvAddressLabel">Address</string>
+    <string name="etName">Name</string>
+    <string name="etEmail">Email Address</string>
+    <string name="etAddress">Address</string>
+    <string name="invalid_name">Invalid name</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_address">Invalid address</string>
+    <string name="invalid_points_per_price">Invalid points per price</string>
 </resources>
