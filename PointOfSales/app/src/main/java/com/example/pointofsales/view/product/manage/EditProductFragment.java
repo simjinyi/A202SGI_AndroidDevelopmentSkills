@@ -56,7 +56,7 @@ public class EditProductFragment extends ProductFormFragment {
                 if (aBoolean) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.product_deleted_successfully), Toast.LENGTH_SHORT).show();
                     mProductViewModel.clearProductRemoved();
-                    getActivity().onBackPressed();
+                    getFragmentManager().popBackStack();
                 }
             }
         });
@@ -71,7 +71,7 @@ public class EditProductFragment extends ProductFormFragment {
                 mLoadingScreenHelper.end();
                 if (o == null) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.product_updated_successfully), Toast.LENGTH_SHORT).show();
-                    getActivity().onBackPressed();
+                    getFragmentManager().popBackStack();
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.product_name_duplicate), Toast.LENGTH_SHORT).show();
                 }

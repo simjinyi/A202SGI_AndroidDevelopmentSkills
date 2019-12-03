@@ -107,11 +107,11 @@ public abstract class ProductFormFragment extends Fragment {
 //                            @Override
 //                            public void onClick(DialogInterface dialog, int which) {
 ////                                Navigation.findNavController(getView()).navigateUp();
-//                                getActivity().onBackPressed();
+//                                getFragmentManager().popBackStack();
 //                            }
 //                        }).show();
 
-                getActivity().onBackPressed();
+                getFragmentManager().popBackStack();
             }
         });
 

@@ -63,7 +63,7 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onChanged(CartOpenableState cartOpenableState) {
                 if (cartOpenableState.equals(CartOpenableState.DISABLED))
-                    getActivity().onBackPressed();
+                    getFragmentManager().popBackStack();
             }
         });
 
