@@ -67,7 +67,7 @@
                             app:layout_constraintBottom_toTopOf="@+id/tvUsername"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toEndOf="@+id/ivAccount"
+                            app:layout_constraintStart_toEndOf="@+id/ibAccount"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -83,12 +83,12 @@
                             app:layout_constraintTop_toBottomOf="@+id/tvGreeting" />
 
                         <ImageButton
-                            android:id="@+id/ivAccount"
+                            android:id="@+id/ibAccount"
                             android:layout_width="wrap_content"
                             android:layout_height="97dp"
                             android:adjustViewBounds="true"
                             android:backgroundTint="@android:color/transparent"
-                            android:contentDescription="@string/ivAccount"
+                            android:contentDescription="@string/ibAccount"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_account_circle_24px"
                             app:layout_constraintBottom_toBottomOf="parent"

@@ -48,6 +48,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     private ProductViewModel mProductViewModel;
     private ProductAdapter mProductAdapter;
 
+    private ImageButton mIbAccount;
     private RecyclerView mRvProductList;
     private FloatingActionButton mFabAddProduct;
     private TextView mTvTotalPrice;
@@ -70,6 +71,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mIbAccount = getView().findViewById(R.id.ibAccount);
         mRvProductList = getView().findViewById(R.id.rvProductList);
         mFabAddProduct = getView().findViewById(R.id.fabAddProduct);
         mTvTotalPrice = getView().findViewById(R.id.tvTotalPrice);
@@ -202,6 +204,13 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                     Toast.makeText(getActivity(), getString(R.string.product_missing), Toast.LENGTH_SHORT).show();
                     mProductViewModel.clearProductMissingFlag();
                 }
+            }
+        });
+
+        mIbAccount.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_manage_store);
             }
         });
 

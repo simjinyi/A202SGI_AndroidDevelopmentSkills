@@ -4,7 +4,7 @@
     <string name="app_bar_image">Main header background</string>
     <string name="tvGreeting">Good Evening</string>
     <string name="tvUsername">ABC Bakery</string>
-    <string name="ivAccount">Account icon</string>
+    <string name="ibAccount">Account icon</string>
     <string name="ivBackground">Main background</string>
     <string name="ivProductImage">Product image</string>
     <string name="tvProductName">Croissant</string>
@@ -93,4 +93,5 @@
     <string name="delete_product_confirmation">Are you sure you want to delete the product? This process is irreversible.</string>
     <string name="product_deleted_successfully">Product deleted successfully</string>
     <string name="product_missing">Product is missing</string>
+    <string name="title_manage_store">Edit Profile</string>
 </resources>
