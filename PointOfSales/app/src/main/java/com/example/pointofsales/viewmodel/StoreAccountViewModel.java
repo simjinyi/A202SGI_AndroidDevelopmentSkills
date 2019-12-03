@@ -2,6 +2,6 @@ package com.example.pointofsales.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
-public class ManageStoreViewModel extends ViewModel {
+public class StoreAccountViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 }
