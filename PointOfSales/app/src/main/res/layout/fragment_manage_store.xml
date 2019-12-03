@@ -92,8 +92,23 @@
                         android:textColor="@android:color/white"
                         app:layout_constraintBottom_toBottomOf="@+id/etStoreEmail"
                         app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/etStoreName" />
+                        app:layout_constraintTop_toBottomOf="@+id/etStoreName"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                    <TextView
+                        android:id="@+id/tvPasswordLabel"
+                        android:layout_width="146dp"
+                        android:layout_height="43dp"
+                        android:background="@drawable/table_header_cell_first"
+                        android:gravity="center|start"
+                        android:padding="8dp"
+                        android:text="@string/tvPasswordLabel"
+                        android:textColor="@android:color/white"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvEmailLabel" />
 
                     <TextView
                         android:id="@+id/tvStoreAddress"
@@ -107,7 +122,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/etStoreAddress"
                         app:layout_constraintEnd_toStartOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/etStoreEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvPasswordLabel" />
 
                     <TextView
                         android:id="@+id/tvPointsPerPriceLabel"
@@ -147,15 +162,33 @@
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@color/primaryDarkColor"
                         android:ems="10"
+                        android:enabled="false"
                         android:hint="@string/etStoreEmail"
                         android:importantForAutofill="no"
-                        android:enabled="false"
                         android:inputType="textEmailAddress"
                         android:textColor="@color/primaryDarkColor"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toBottomOf="@+id/etStoreName" />
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="@color/primaryDarkColor"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="@string/etPassword"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/etStoreEmail" />
 
                     <EditText
                         android:id="@+id/etStoreAddress"
@@ -170,8 +203,9 @@
                         android:textColor="@color/primaryDarkColor"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
-                        app:layout_constraintTop_toBottomOf="@+id/etStoreEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
                     <EditText
                         android:id="@+id/etPointsPerPrice"

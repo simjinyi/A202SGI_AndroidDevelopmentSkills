@@ -107,4 +107,6 @@
     <string name="tvStoreAddress">Address</string>
     <string name="tvEmailLabel">Email</string>
     <string name="tvStoreNameLabel">Name</string>
+    <string name="etPassword">Password</string>
+    <string name="tvPasswordLabel">Password</string>
 </resources>
