@@ -1,4 +1,4 @@
-package com.example.pointofsales.view.profile;
+package com.example.pointofsales.view.account;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -11,22 +11,35 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Switch;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.viewmodel.ManageStoreViewModel;
 
-public class ManageStore extends Fragment {
+public class ManageStoreFragment extends Fragment {
 
     private ManageStoreViewModel mViewModel;
 
-    public static ManageStore newInstance() {
-        return new ManageStore();
-    }
+    private EditText mEtStoreName;
+    private EditText mEtStoreEmail;
+    private EditText mEtStoreAddress;
+    private EditText mEtPointsPerPrice;
+    private EditText mEtOriginalPassword;
+    private EditText mEtNewPassword;
+    private Switch mSwChangePassword;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_manage_store, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mEtStoreName = getView().findViewById(R.id.etStoreName);
     }
 
     @Override
