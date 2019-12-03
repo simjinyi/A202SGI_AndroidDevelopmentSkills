@@ -47,7 +47,7 @@ public class UserDatabase {
         mDatabaseReference.orderByChild("email")
                 .equalTo(username)
                 .limitToFirst(1)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         loginInterface.onLogin(true, dataSnapshot, password);

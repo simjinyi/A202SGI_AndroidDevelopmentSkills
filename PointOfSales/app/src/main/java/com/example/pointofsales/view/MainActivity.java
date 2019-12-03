@@ -21,9 +21,9 @@ public class MainActivity extends UserValidationActivity {
 
     @Override
     protected void onCreateValidated(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_main);
-
         mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
+
+        setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

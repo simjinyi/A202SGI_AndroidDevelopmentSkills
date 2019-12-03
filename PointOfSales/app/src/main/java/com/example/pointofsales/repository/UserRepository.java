@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.Cart;
+import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.view.login.LoginInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class UserRepository implements LoginInterface, OnSuccessListener {
+public class UserRepository implements LoginInterface {
 
     private MutableLiveData<User> mUser;
 
@@ -42,12 +43,25 @@ public class UserRepository implements LoginInterface, OnSuccessListener {
         return mUser.getValue();
     }
 
-    public void update(User user, OnSuccessListener onSuccessListener) {
-        UserDatabase.getInstance().update(UserDatabase.Converter.userToMap(user), onSuccessListener);
+    public void update(final User user, final OnSuccessListener onSuccessListener) {
+        UserDatabase.getInstance().update(UserDatabase.Converter.userToMap(user), new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                mUser.setValue(user);
+                onSuccessListener.onSuccess(o);
+            }
+        });
     }
 
     public void login(String username, String password) {
         UserDatabase.getInstance().get(username, password, this);
+    }
+
+    public void logout() {
+        if (mUser.getValue() instanceof Store)
+            mUser.setValue(new Store());
+        else
+            mUser.setValue(new User());
     }
 
     @Override
@@ -68,11 +82,6 @@ public class UserRepository implements LoginInterface, OnSuccessListener {
         }
 
         notifyObservers();
-    }
-
-    @Override
-    public void onSuccess(Object o) {
-
     }
 
     public void notifyObservers() {

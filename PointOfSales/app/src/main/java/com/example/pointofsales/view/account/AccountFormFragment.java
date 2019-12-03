@@ -1,8 +1,12 @@
 package com.example.pointofsales.view.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +27,8 @@ import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.login.LoginActivity;
+import com.example.pointofsales.viewmodel.UserViewModel;
 
 public abstract class AccountFormFragment extends Fragment implements Observer<AccountFormEnableState> {
 
@@ -47,6 +53,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 
@@ -135,4 +142,26 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
 
     public abstract void submit();
     public abstract Object getData();
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.logout_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.app_bar_logout) {
+            UserViewModel.logout();
+
+            Intent i = new Intent(getActivity(), LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            getActivity().finish();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

@@ -17,4 +17,8 @@ public class UserViewModel extends ViewModel {
     public static User getUser() {
         return UserRepository.getInstance().getUser().getValue();
     }
+
+    public static void logout() {
+        UserRepository.getInstance().logout();
+    }
 }

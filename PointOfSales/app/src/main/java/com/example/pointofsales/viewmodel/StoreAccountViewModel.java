@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.repository.UserRepository;
@@ -22,6 +23,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     private MutableLiveData<AccountFormEnableState> mAccountFormEnableState;
     private MutableLiveData<Boolean> mUnmatchedPassword;
     private MutableLiveData<Boolean> mUserUpdated;
+    private MutableLiveData<User> mUserData;
 
     private UserRepository mUserRepository;
 
@@ -57,6 +59,8 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
         mUserUpdated = new MutableLiveData<>();
         mUserUpdated.setValue(false);
+
+        mUserData = UserRepository.getInstance().getUser();
     }
 
     public void updateStore(Pair<Store, String> pair) {
@@ -172,6 +176,9 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     }
     public LiveData<Boolean> getUserUpdated() {
         return mUserUpdated;
+    }
+    public LiveData<User> getUserData() {
+        return mUserData;
     }
 
     @Override

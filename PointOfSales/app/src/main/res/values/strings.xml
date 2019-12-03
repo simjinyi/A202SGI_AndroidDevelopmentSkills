@@ -116,4 +116,5 @@
     <string name="log_out">Log Out</string>
     <string name="seller_details_updated">Seller details updated</string>
     <string name="unmatched_original_password">Unmatched original password</string>
+    <string name="app_bar_logout">Logout</string>
 </resources>

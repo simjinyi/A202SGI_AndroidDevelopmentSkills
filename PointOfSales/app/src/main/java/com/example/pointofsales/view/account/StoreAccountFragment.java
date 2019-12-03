@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
@@ -118,6 +119,13 @@ public class StoreAccountFragment extends AccountFormFragment {
         mEtPointsPerPrice.addTextChangedListener(afterTextChangedListener);
         mEtOriginalPassword.addTextChangedListener(afterTextChangedListener);
         mEtNewPassword.addTextChangedListener(afterTextChangedListener);
+
+        mStoreAccountViewModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                setData(user);
+            }
+        });
 
         mStoreAccountViewModel.getAccountFormEnableState().observe(getViewLifecycleOwner(), this);
         setData(UserViewModel.getUser());

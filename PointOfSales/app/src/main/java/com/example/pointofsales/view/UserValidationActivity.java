@@ -21,16 +21,12 @@ public abstract class UserValidationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        User user = new Store();
-        user.setId("0");
-        user.setLoggedIn(true);
-        UserRepository.getInstance().getUser().setValue(user);
-        UserRepository.getInstance().login("abc@gmail.com", "12345678");
-
         if (UserViewModel.isLoggedIn()) {
             onCreateValidated(savedInstanceState);
         } else {
-            startActivity(new Intent(UserValidationActivity.this, LoginActivity.class));
+            Intent i = new Intent(UserValidationActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
             finish();
         }
     }

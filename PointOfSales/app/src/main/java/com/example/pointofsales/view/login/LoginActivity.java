@@ -76,13 +76,23 @@ public class LoginActivity extends AppCompatActivity {
             public void onChanged(User user) {
                 if (!(mEtEmail.getText().toString().isEmpty() && mEtPassword.getText().toString().isEmpty())) {
                     if (user.isLoggedIn()) {
+
+                        Intent i = null;
+
                         if (user.getType().equals(UserType.CUSTOMER)) {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                            i = new Intent(LoginActivity.this, MainActivity.class);
+
                         } else {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                            i = new Intent(LoginActivity.this, MainActivity.class);
                             Toast.makeText(LoginActivity.this, getString(R.string.welcome) + user.getName(), Toast.LENGTH_SHORT).show();
                         }
+
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
                         finish();
+
                     } else {
                         Toast.makeText(LoginActivity.this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                     }
