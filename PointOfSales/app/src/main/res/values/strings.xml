@@ -113,4 +113,7 @@
     <string name="invalid_email">Invalid email</string>
     <string name="invalid_address">Invalid address</string>
     <string name="invalid_points_per_price">Invalid points per price</string>
+    <string name="log_out">Log Out</string>
+    <string name="seller_details_updated">Seller details updated</string>
+    <string name="unmatched_original_password">Unmatched original password</string>
 </resources>

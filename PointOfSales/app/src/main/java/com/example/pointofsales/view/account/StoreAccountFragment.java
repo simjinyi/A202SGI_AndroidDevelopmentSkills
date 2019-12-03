@@ -3,18 +3,17 @@ package com.example.pointofsales.view.account;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.pointofsales.model.state.ProductFormState;
+import com.example.pointofsales.R;
+import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
@@ -34,6 +33,16 @@ public class StoreAccountFragment extends AccountFormFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mStoreAccountViewModel.setEnableChangePassword(isChecked);
+            }
+        });
+
+        mStoreAccountViewModel.getUnmatchedPassword().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(getActivity(), getString(R.string.unmatched_original_password), Toast.LENGTH_SHORT).show();
+                    mStoreAccountViewModel.clearUnmatchedPasswordFlag();
+                }
             }
         });
 
@@ -91,6 +100,17 @@ public class StoreAccountFragment extends AccountFormFragment {
             }
         };
 
+        mStoreAccountViewModel.getUserUpdated().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(getActivity(), getString(R.string.seller_details_updated), Toast.LENGTH_SHORT).show();
+                    mStoreAccountViewModel.clearUserUpdatedFlag();
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
+
         mEtName.addTextChangedListener(afterTextChangedListener);
         mEtEmail.addTextChangedListener(afterTextChangedListener);
         mEtPassword.addTextChangedListener(afterTextChangedListener);
@@ -101,5 +121,25 @@ public class StoreAccountFragment extends AccountFormFragment {
 
         mStoreAccountViewModel.getAccountFormEnableState().observe(getViewLifecycleOwner(), this);
         setData(UserViewModel.getUser());
+    }
+
+    @Override
+    public void submit() {
+        mStoreAccountViewModel.updateStore(getData());
+    }
+
+    @Override
+    public Pair<Store, String> getData() {
+
+        Store store = new Store();
+
+        store.setName(mEtName.getText().toString());
+        store.setAddress(mEtAddress.getText().toString());
+        store.setEmail(mEtEmail.getText().toString());
+        store.setPointsPerPrice(Integer.parseInt(mEtPointsPerPrice.getText().toString()));
+        store.setType(UserType.SELLER);
+        store.setPassword(mEtNewPassword.getText().toString());
+
+        return new Pair<>(store, mEtOriginalPassword.getText().toString());
     }
 }

@@ -118,9 +118,7 @@ public abstract class ProductFormFragment extends Fragment {
         mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (validate()) {
-                    submit();
-                }
+                submit();
             }
         });
 
@@ -202,10 +200,6 @@ public abstract class ProductFormFragment extends Fragment {
                 }
             }
         }
-    }
-
-    private boolean validate() {
-        return true;
     }
 
     public Product getProductObject() {

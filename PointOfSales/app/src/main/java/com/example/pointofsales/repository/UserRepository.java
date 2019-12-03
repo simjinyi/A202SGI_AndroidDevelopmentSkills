@@ -38,6 +38,14 @@ public class UserRepository implements LoginInterface, OnSuccessListener {
         return sUserRepository;
     }
 
+    public User getUserValue() {
+        return mUser.getValue();
+    }
+
+    public void update(User user, OnSuccessListener onSuccessListener) {
+        UserDatabase.getInstance().update(UserDatabase.Converter.userToMap(user), onSuccessListener);
+    }
+
     public void login(String username, String password) {
         UserDatabase.getInstance().get(username, password, this);
     }

@@ -1,9 +1,11 @@
 package com.example.pointofsales.view.account;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -20,21 +22,24 @@ import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
+import com.example.pointofsales.view.OnSingleClickListener;
 
 public abstract class AccountFormFragment extends Fragment implements Observer<AccountFormEnableState> {
 
     protected EditText mEtName;
     protected EditText mEtEmail;
-    protected TextView mTvPasswordLabel;
+    private TextView mTvPasswordLabel;
     protected EditText mEtPassword;
-    protected TextView mTvAddressLabel;
+    private TextView mTvAddressLabel;
     protected EditText mEtAddress;
-    protected TextView mTvPointsPerPriceLabel;
+    private TextView mTvPointsPerPriceLabel;
     protected EditText mEtPointsPerPrice;
     protected EditText mEtOriginalPassword;
     protected EditText mEtNewPassword;
     protected Switch mSwChangePassword;
-    protected CardView mCvStorePasswordHolder;
+    private CardView mCvStorePasswordHolder;
+    private Button mBtnSubmit;
+    private Button mBtnCancel;
     protected ProgressBar mPbLoading;
 
     private LoadingScreenHelper mLoadingScreenHelper;
@@ -61,9 +66,30 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
         mEtNewPassword = getView().findViewById(R.id.etNewPassword);
         mSwChangePassword = getView().findViewById(R.id.swChangePassword);
         mCvStorePasswordHolder = getView().findViewById(R.id.cvStorePasswordHolder);
+        mBtnCancel = getView().findViewById(R.id.btnCancel);
+        mBtnSubmit = getView().findViewById(R.id.btnSubmit);
         mPbLoading = getView().findViewById(R.id.pbLoading);
 
         mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mBtnCancel.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
+
+        mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                submit();
+            }
+        });
     }
 
     @Override
@@ -106,4 +132,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
             mEtPointsPerPrice.setText(String.valueOf(((Store) user).getPointsPerPrice()));
         }
     }
+
+    public abstract void submit();
+    public abstract Object getData();
 }
