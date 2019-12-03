@@ -92,7 +92,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
         mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel);
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();

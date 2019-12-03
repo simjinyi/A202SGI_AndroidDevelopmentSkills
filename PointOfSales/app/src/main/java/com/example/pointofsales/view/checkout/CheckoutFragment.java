@@ -47,7 +47,7 @@ public class CheckoutFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
         mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
         mCartAdapter.setHasStableIds(true);
 

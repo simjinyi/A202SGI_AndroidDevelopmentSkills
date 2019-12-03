@@ -18,9 +18,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends UserValidationActivity {
 
+    public ProductViewModel mProductViewModel;
+
     @Override
     protected void onCreateValidated(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
+
+        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

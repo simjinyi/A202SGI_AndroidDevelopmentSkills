@@ -32,7 +32,7 @@ public class EditProductFragment extends ProductFormFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
         mOriProduct = mProductViewModel.getProductList().getValue().get(getArguments().getInt(ProductFragment.PRODUCT_INDEX_FRAGMENT_ARG));
 
         setData(mOriProduct);
