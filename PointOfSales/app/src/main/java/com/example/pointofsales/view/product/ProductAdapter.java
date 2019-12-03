@@ -20,7 +20,6 @@ import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder> implements Filterable {
 
@@ -100,7 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
     @NonNull
     @Override
     public ProductItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ProductItemViewHolder(mLayoutInflater.inflate(R.layout.product_list_item, parent, false));
+        return new ProductItemViewHolder(mLayoutInflater.inflate(R.layout.list_item_product, parent, false));
     }
 
     @Override
