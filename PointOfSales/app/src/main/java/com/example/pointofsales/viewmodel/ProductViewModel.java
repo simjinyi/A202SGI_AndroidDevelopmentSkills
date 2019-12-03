@@ -39,6 +39,7 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private MutableLiveData<CartRemovalState> mCartRemovalState;
 
     private MutableLiveData<Boolean> mProductRemoved;
+    private MutableLiveData<Boolean> mProductMissing;
 
     private MutableLiveData<ArrayList<Product>> mProductList;
     private MutableLiveData<ArrayList<Product>> mCartList;
@@ -73,6 +74,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
         mProductRemoved = new MutableLiveData<>();
         mProductRemoved.setValue(false);
 
+        mProductMissing = new MutableLiveData<>();
+        mProductMissing.setValue(false);
+
         mProductList = mProductRepository.getProducts();
         mCartList = mProductRepository.getCartItems();
 
@@ -81,6 +85,11 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
     // CART HANDLER
     public void addCartQuantity(int position) {
+        if (position < 0) {
+            mProductMissing.setValue(true);
+            return;
+        }
+
         int cartQuantityAdded = mProductRepository.get(position).getCartQuantity() + 1;
         int inventoryQuantity = mProductRepository.get(position).getInventoryQuantity();
 
@@ -93,6 +102,11 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
 
     public void minusCartQuantity(int position) {
+        if (position < 0) {
+            mProductMissing.setValue(true);
+            return;
+        }
+
         int cartQuantitySubtracted = mProductRepository.get(position).getCartQuantity() - 1;
 
         if (cartQuantitySubtracted >= 0)
@@ -129,6 +143,11 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
 
     private void updateCartItem(int quantity, int position) {
+        if (position < 0) {
+            mProductMissing.setValue(true);
+            return;
+        }
+
         mProductRepository
                 .get(position)
                 .setCartQuantity(quantity);
@@ -184,6 +203,10 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
 
     public void clearCartRemovalFlag() {
         mCartRemovalState.setValue(new CartRemovalState());
+    }
+
+    public void clearProductMissingFlag() {
+        mProductMissing.setValue(false);
     }
     // END CART HANDLER
 
@@ -294,6 +317,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
     public LiveData<Boolean> getProductRemoved() {
         return mProductRemoved;
+    }
+    public LiveData<Boolean> getProductMissing() {
+        return mProductMissing;
     }
 
     @Override

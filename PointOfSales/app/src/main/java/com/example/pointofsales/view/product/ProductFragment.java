@@ -195,6 +195,16 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             }
         });
 
+        mProductViewModel.getProductMissing().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(getActivity(), getString(R.string.product_missing), Toast.LENGTH_SHORT).show();
+                    mProductViewModel.clearProductMissingFlag();
+                }
+            }
+        });
+
         ItemTouchHelper.Callback callback = new ProductItemTouchHelper(mProductAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRvProductList);
