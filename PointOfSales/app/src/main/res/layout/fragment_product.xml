@@ -36,6 +36,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/app_bar_image"
                     android:scaleType="centerCrop"
+                    android:background="@drawable/button_ripple_primary"
                     android:src="@drawable/main_header_background"
                     app:layout_collapseMode="pin" />
 

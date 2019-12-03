@@ -94,4 +94,17 @@
     <string name="product_deleted_successfully">Product deleted successfully</string>
     <string name="product_missing">Product is missing</string>
     <string name="title_manage_store">Edit Profile</string>
+    <string name="etOriginalPassword">Original Password</string>
+    <string name="etNewPassword">New Password</string>
+    <string name="tvChangePasswordLabel">Change Password</string>
+    <string name="tvNewPasswordLabel">New Password</string>
+    <string name="tvOriginalPasswordLabel">Original Password</string>
+    <string name="etPointsPerPrice">Points Per Price</string>
+    <string name="etStoreAddress">Store Address</string>
+    <string name="etStoreEmail">Email Address</string>
+    <string name="etStoreName">Store Name</string>
+    <string name="tvPointsPerPriceLabel">Points Per Price</string>
+    <string name="tvStoreAddress">Address</string>
+    <string name="tvEmailLabel">Email</string>
+    <string name="tvStoreNameLabel">Name</string>
 </resources>
