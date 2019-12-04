@@ -1,5 +1,6 @@
 package com.example.pointofsales.view.product.manage;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +11,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.product.ProductFragment;
 import com.example.pointofsales.viewmodel.ProductViewModel;
@@ -35,14 +35,17 @@ public class EditProductFragment extends ProductFormFragment {
         mBtnDelete.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                ConfirmationDialog.getConfirmationDialog(getActivity(),
-                        getResources().getString(R.string.delete_product_confirmation),
-                        new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.delete_product))
+                        .setMessage(getString(R.string.delete_product_confirmation))
+                        .setIcon(R.drawable.ic_warning_24dp)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mProductViewModel.deleteProduct(mOriProduct);
                             }
-                        }).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
 

@@ -1,7 +1,6 @@
 package com.example.pointofsales.view.login;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,13 +13,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.state.LoginFormState;
 import com.example.pointofsales.model.User;

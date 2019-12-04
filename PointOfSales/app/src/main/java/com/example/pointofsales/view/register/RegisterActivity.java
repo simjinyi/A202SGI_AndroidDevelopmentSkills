@@ -1,15 +1,11 @@
 package com.example.pointofsales.view.register;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.view.ValidationActivity;
 import com.google.android.material.tabs.TabLayout;
 

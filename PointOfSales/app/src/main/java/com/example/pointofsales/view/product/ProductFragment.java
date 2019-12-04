@@ -1,5 +1,6 @@
 package com.example.pointofsales.view.product;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
@@ -141,15 +141,18 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mIbCancelCart.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                ConfirmationDialog.getConfirmationDialog(getActivity(),
-                        getResources().getString(R.string.clear_cart_confirmation),
-                        new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.clear_cart))
+                        .setMessage(getString(R.string.clear_cart))
+                        .setIcon(R.drawable.ic_warning_24dp)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mProductViewModel.resetCart();
                                 Toast.makeText(getActivity(), getResources().getString(R.string.cart_cleared_successfully), Toast.LENGTH_SHORT).show();
                             }
-                        }).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
 
