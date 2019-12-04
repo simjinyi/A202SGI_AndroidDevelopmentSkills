@@ -28,8 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
         mTabRegister = findViewById(R.id.tabRegister);
         mTabRegister.setupWithViewPager(mVpRegister);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

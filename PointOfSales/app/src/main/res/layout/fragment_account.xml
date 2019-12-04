@@ -180,7 +180,6 @@
                         android:layout_marginStart="8dp"
                         android:backgroundTint="@color/primaryDarkColor"
                         android:ems="10"
-                        android:enabled="false"
                         android:hint="@string/etPassword"
                         android:importantForAutofill="no"
                         android:inputType="textPassword"
