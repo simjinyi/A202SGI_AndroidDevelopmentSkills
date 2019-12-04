@@ -51,7 +51,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     protected EditText mEtNewPassword;
     protected Switch mSwChangePassword;
     private CardView mCvStorePasswordHolder;
-    private Button mBtnSubmit;
+    protected Button mBtnSubmit;
     private Button mBtnCancel;
     protected ProgressBar mPbLoading;
 

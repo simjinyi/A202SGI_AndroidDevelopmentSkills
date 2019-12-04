@@ -1,0 +1,166 @@
+package com.example.pointofsales.viewmodel;
+
+import android.util.Pair;
+import android.util.Patterns;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+import com.example.pointofsales.R;
+import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.User;
+import com.example.pointofsales.model.state.AccountFormEnableState;
+import com.example.pointofsales.model.state.StoreAccountFormState;
+import com.example.pointofsales.model.state.UserAccountFormState;
+import com.example.pointofsales.repository.UserRepository;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+public class UserAccountViewModel extends ViewModel implements OnSuccessListener {
+
+    private String mUserId;
+    private MutableLiveData<UserAccountFormState> mUserAccountFormState;
+    private MutableLiveData<AccountFormEnableState> mAccountFormEnableState;
+    private MutableLiveData<Boolean> mUnmatchedPassword;
+    private MutableLiveData<Boolean> mUserUpdated;
+    private MutableLiveData<User> mUserData;
+
+    private UserRepository mUserRepository;
+
+    public UserAccountViewModel() {
+        mUserRepository = UserRepository.getInstance();
+
+        mUserAccountFormState = new MutableLiveData<>();
+        mUserAccountFormState.setValue(new UserAccountFormState(false));
+
+        mAccountFormEnableState = new MutableLiveData<>();
+        mAccountFormEnableState.setValue(new AccountFormEnableState(true, true, false, false, false, false));
+
+        mUnmatchedPassword = new MutableLiveData<>();
+        mUnmatchedPassword.setValue(false);
+
+        mUserUpdated = new MutableLiveData<>();
+        mUserUpdated.setValue(false);
+    }
+
+    public UserAccountViewModel(String userId) {
+        mUserRepository = UserRepository.getInstance();
+
+        mUserId = userId;
+
+        mUserAccountFormState = new MutableLiveData<>();
+        mUserAccountFormState.setValue(new StoreAccountFormState(false));
+
+        mAccountFormEnableState = new MutableLiveData<>();
+        mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, true, false));
+
+        mUnmatchedPassword = new MutableLiveData<>();
+        mUnmatchedPassword.setValue(false);
+
+        mUserUpdated = new MutableLiveData<>();
+        mUserUpdated.setValue(false);
+
+        mUserData = UserRepository.getInstance().getUser();
+    }
+
+    public void updateUser(Pair<User, String> pair) {
+
+        User oriUser = mUserRepository.getUserValue();
+        User user = pair.first;
+        user.setId(oriUser.getId());
+
+        if (!mAccountFormEnableState.getValue().isChangePasswordEnabled()) {
+            user.setPassword(oriUser.getPassword());
+            mUserRepository.update(user, this);
+        } else {
+            if (!pair.second.equals(oriUser.getPassword())) {
+                mUnmatchedPassword.setValue(true);
+            } else {
+
+                mUserRepository.update(user, this);
+            }
+        }
+    }
+
+    public void userAccountFormChanged(String name, String email, String password, String originalPassword, String newPassword) {
+
+        if (name.trim().isEmpty()) {
+            mUserAccountFormState.setValue(new StoreAccountFormState(R.string.invalid_name, null, null, null, null, null, null));
+            return;
+        }
+
+        if (mUserId == null) {
+            if (!isEmailValid(email)) {
+                mUserAccountFormState.setValue(new StoreAccountFormState(null, R.string.invalid_email, null, null, null, null, null));
+                return;
+            }
+
+            if (!isPasswordValid(password)) {
+                mUserAccountFormState.setValue(new StoreAccountFormState(null, null, R.string.invalid_password, null, null, null, null));
+                return;
+            }
+        } else if (mAccountFormEnableState.getValue().isChangePasswordEnabled()) {
+            if (!isPasswordValid(originalPassword)) {
+                mUserAccountFormState.setValue(new StoreAccountFormState(null, null, null, R.string.invalid_password, null, null, null));
+                return;
+            }
+
+            if (!isPasswordValid(newPassword)) {
+                mUserAccountFormState.setValue(new StoreAccountFormState(null, null, null, null, R.string.invalid_password, null, null));
+                return;
+            }
+        }
+
+        mUserAccountFormState.setValue(new StoreAccountFormState(true));
+    }
+
+    public void setEnableChangePassword(boolean changePasswordEnabled) {
+        if (mUserId != null && changePasswordEnabled)
+            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, true, true));
+        else
+            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, true, false));
+    }
+
+    private boolean isEmailValid(String username) {
+        if (username == null)
+            return false;
+
+        if (username.contains("@"))
+            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+
+        return !username.trim().isEmpty();
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.trim().length() > 7;
+    }
+
+    public void clearUnmatchedPasswordFlag() {
+        mUnmatchedPassword.setValue(false);
+    }
+
+    public void clearUserUpdatedFlag() {
+        mUserUpdated.setValue(false);
+    }
+
+    public LiveData<UserAccountFormState> getUserAccountFormState() {
+        return mUserAccountFormState;
+    }
+    public LiveData<AccountFormEnableState> getAccountFormEnableState() {
+        return mAccountFormEnableState;
+    }
+    public LiveData<Boolean> getUnmatchedPassword() {
+        return mUnmatchedPassword;
+    }
+    public LiveData<Boolean> getUserUpdated() {
+        return mUserUpdated;
+    }
+    public LiveData<User> getUserData() {
+        return mUserData;
+    }
+
+    @Override
+    public void onSuccess(Object o) {
+        mUserUpdated.setValue(true);
+    }
+}

@@ -1,10 +1,9 @@
-package com.example.pointofsales.view.account;
+package com.example.pointofsales.view.register;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,8 +14,8 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.UserAccountFormState;
+import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
-import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
 
 public class UserAccountFragment extends AccountFormFragment {
@@ -27,24 +26,7 @@ public class UserAccountFragment extends AccountFormFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mUserAccountViewModel = ViewModelProviders.of(this, new UserAccountViewModelFactory(UserViewModel.getUserId())).get(UserAccountViewModel.class);
-
-        mSwChangePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mUserAccountViewModel.setEnableChangePassword(isChecked);
-            }
-        });
-
-        mUserAccountViewModel.getUnmatchedPassword().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Toast.makeText(getActivity(), getString(R.string.unmatched_original_password), Toast.LENGTH_SHORT).show();
-                    mUserAccountViewModel.clearUnmatchedPasswordFlag();
-                }
-            }
-        });
+        mUserAccountViewModel = ViewModelProviders.of(this).get(UserAccountViewModel.class);
 
         mUserAccountViewModel.getUserAccountFormState().observe(getViewLifecycleOwner(), new Observer<UserAccountFormState>() {
             @Override
@@ -110,13 +92,6 @@ public class UserAccountFragment extends AccountFormFragment {
         mEtPointsPerPrice.addTextChangedListener(afterTextChangedListener);
         mEtOriginalPassword.addTextChangedListener(afterTextChangedListener);
         mEtNewPassword.addTextChangedListener(afterTextChangedListener);
-
-        mUserAccountViewModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                setData(user);
-            }
-        });
 
         mUserAccountViewModel.getAccountFormEnableState().observe(getViewLifecycleOwner(), this);
         setData(UserViewModel.getUser());

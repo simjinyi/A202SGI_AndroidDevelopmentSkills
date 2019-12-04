@@ -117,4 +117,8 @@
     <string name="seller_details_updated">Seller details updated</string>
     <string name="unmatched_original_password">Unmatched original password</string>
     <string name="app_bar_logout">Logout</string>
+    <string name="title_activity_register">Register</string>
+    <string name="tab_customer">Customer</string>
+    <string name="tab_seller">Seller</string>
+    <string name="btnLogin">Login</string>
 </resources>
