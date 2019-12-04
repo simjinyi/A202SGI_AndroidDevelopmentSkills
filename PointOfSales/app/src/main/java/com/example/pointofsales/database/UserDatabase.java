@@ -12,6 +12,7 @@ import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.login.LoginInterface;
+import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +42,22 @@ public class UserDatabase {
         if (sUserDatabase == null)
             sUserDatabase = new UserDatabase();
         return sUserDatabase;
+    }
+
+    public void get(String username, final RegisterInterface registerInterface) {
+        mDatabaseReference.orderByChild("email")
+                .equalTo(username)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        registerInterface.isUsernameValid(!dataSnapshot.exists());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        registerInterface.isUsernameValid(false);
+                    }
+                });
     }
 
     public void get(String username, final String password, final LoginInterface loginInterface) {

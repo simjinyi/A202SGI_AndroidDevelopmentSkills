@@ -13,7 +13,9 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserAccountFormState;
+import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.repository.UserRepository;
+import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class UserAccountViewModel extends ViewModel implements OnSuccessListener {
@@ -22,7 +24,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
     private MutableLiveData<UserAccountFormState> mUserAccountFormState;
     private MutableLiveData<AccountFormEnableState> mAccountFormEnableState;
     private MutableLiveData<Boolean> mUnmatchedPassword;
-    private MutableLiveData<Boolean> mUserUpdated;
+    private MutableLiveData<UserUpdatedState> mUserUpdated;
     private MutableLiveData<User> mUserData;
 
     private UserRepository mUserRepository;
@@ -40,7 +42,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUnmatchedPassword.setValue(false);
 
         mUserUpdated = new MutableLiveData<>();
-        mUserUpdated.setValue(false);
+        mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
     public UserAccountViewModel(String userId) {
@@ -58,7 +60,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUnmatchedPassword.setValue(false);
 
         mUserUpdated = new MutableLiveData<>();
-        mUserUpdated.setValue(false);
+        mUserUpdated.setValue(UserUpdatedState.NONE);
 
         mUserData = UserRepository.getInstance().getUser();
     }
@@ -80,6 +82,19 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
                 mUserRepository.update(user, this);
             }
         }
+    }
+
+    public void insertUser(final User user) {
+        user.setEmail(user.getEmail().toLowerCase());
+        mUserRepository.get(user.getEmail(), new RegisterInterface() {
+            @Override
+            public void isUsernameValid(boolean isValid) {
+                if (isValid)
+                    mUserRepository.insert(user, UserAccountViewModel.this);
+                else
+                    onSuccess(false);
+            }
+        });
     }
 
     public void userAccountFormChanged(String name, String email, String password, String originalPassword, String newPassword) {
@@ -125,10 +140,10 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         if (username == null)
             return false;
 
-        if (username.contains("@"))
-            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        if (username.trim().isEmpty())
+            return false;
 
-        return !username.trim().isEmpty();
+        return Patterns.EMAIL_ADDRESS.matcher(username).matches();
     }
 
     private boolean isPasswordValid(String password) {
@@ -140,7 +155,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
     }
 
     public void clearUserUpdatedFlag() {
-        mUserUpdated.setValue(false);
+        mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
     public LiveData<UserAccountFormState> getUserAccountFormState() {
@@ -152,7 +167,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
     public LiveData<Boolean> getUnmatchedPassword() {
         return mUnmatchedPassword;
     }
-    public LiveData<Boolean> getUserUpdated() {
+    public LiveData<UserUpdatedState> getUserUpdated() {
         return mUserUpdated;
     }
     public LiveData<User> getUserData() {
@@ -161,6 +176,8 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
 
     @Override
     public void onSuccess(Object o) {
-        mUserUpdated.setValue(true);
+        if (o instanceof Boolean)
+            mUserUpdated.setValue(UserUpdatedState.FAILED);
+        mUserUpdated.setValue(UserUpdatedState.SUCCESS);
     }
 }

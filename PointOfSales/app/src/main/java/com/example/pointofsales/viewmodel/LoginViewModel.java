@@ -26,7 +26,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        mUserRepository.login(username, password);
+        mUserRepository.login(username.toLowerCase(), password);
     }
 
     public void loginDataChanged(String username, String password) {
@@ -42,10 +42,10 @@ public class LoginViewModel extends ViewModel {
         if (username == null)
             return false;
 
-        if (username.contains("@"))
-            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        if (username.trim().isEmpty())
+            return false;
 
-        return !username.trim().isEmpty();
+        return Patterns.EMAIL_ADDRESS.matcher(username).matches();
     }
 
     private boolean isPasswordValid(String password) {

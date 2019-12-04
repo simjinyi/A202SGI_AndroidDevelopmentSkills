@@ -2,6 +2,7 @@ package com.example.pointofsales.viewmodel;
 
 import android.util.Pair;
 import android.util.Patterns;
+import android.widget.Button;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,7 +14,9 @@ import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
+import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.repository.UserRepository;
+import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class StoreAccountViewModel extends ViewModel implements OnSuccessListener {
@@ -22,7 +25,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     private MutableLiveData<StoreAccountFormState> mStoreAccountFormState;
     private MutableLiveData<AccountFormEnableState> mAccountFormEnableState;
     private MutableLiveData<Boolean> mUnmatchedPassword;
-    private MutableLiveData<Boolean> mUserUpdated;
+    private MutableLiveData<UserUpdatedState> mUserUpdated;
     private MutableLiveData<User> mUserData;
 
     private UserRepository mUserRepository;
@@ -40,7 +43,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         mUnmatchedPassword.setValue(false);
 
         mUserUpdated = new MutableLiveData<>();
-        mUserUpdated.setValue(false);
+        mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
     public StoreAccountViewModel(String storeId) {
@@ -58,7 +61,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         mUnmatchedPassword.setValue(false);
 
         mUserUpdated = new MutableLiveData<>();
-        mUserUpdated.setValue(false);
+        mUserUpdated.setValue(UserUpdatedState.NONE);
 
         mUserData = UserRepository.getInstance().getUser();
     }
@@ -80,6 +83,19 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                 mUserRepository.update(store, this);
             }
         }
+    }
+
+    public void insertStore(final Store store) {
+        store.setEmail(store.getEmail().toLowerCase());
+        mUserRepository.get(store.getEmail(), new RegisterInterface() {
+            @Override
+            public void isUsernameValid(boolean isValid) {
+                if (isValid)
+                    mUserRepository.insert(store, StoreAccountViewModel.this);
+                else
+                    onSuccess(false);
+            }
+        });
     }
 
     public void storeAccountFormChanged(String name, String email, String password, String originalPassword, String newPassword, String address, String pointsPerPrice) {
@@ -147,10 +163,10 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         if (username == null)
             return false;
 
-        if (username.contains("@"))
-            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        if (username.trim().isEmpty())
+            return false;
 
-        return !username.trim().isEmpty();
+        return Patterns.EMAIL_ADDRESS.matcher(username).matches();
     }
 
     private boolean isPasswordValid(String password) {
@@ -162,7 +178,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     }
 
     public void clearUserUpdatedFlag() {
-        mUserUpdated.setValue(false);
+        mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
     public LiveData<StoreAccountFormState> getStoreAccountFormState() {
@@ -174,7 +190,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     public LiveData<Boolean> getUnmatchedPassword() {
         return mUnmatchedPassword;
     }
-    public LiveData<Boolean> getUserUpdated() {
+    public LiveData<UserUpdatedState> getUserUpdated() {
         return mUserUpdated;
     }
     public LiveData<User> getUserData() {
@@ -183,6 +199,8 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
     @Override
     public void onSuccess(Object o) {
-        mUserUpdated.setValue(true);
+        if (o instanceof Boolean)
+            mUserUpdated.setValue(UserUpdatedState.FAILED);
+        mUserUpdated.setValue(UserUpdatedState.SUCCESS);
     }
 }

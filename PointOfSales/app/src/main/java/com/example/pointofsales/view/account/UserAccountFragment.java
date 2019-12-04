@@ -20,6 +20,7 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.UserAccountFormState;
+import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
 import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
@@ -98,13 +99,15 @@ public class UserAccountFragment extends AccountFormFragment {
             }
         };
 
-        mUserAccountViewModel.getUserUpdated().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        mUserAccountViewModel.getUserUpdated().observe(getViewLifecycleOwner(), new Observer<UserUpdatedState>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Toast.makeText(getActivity(), getString(R.string.seller_details_updated), Toast.LENGTH_SHORT).show();
+            public void onChanged(UserUpdatedState userUpdatedState) {
+                if (userUpdatedState.equals(UserUpdatedState.SUCCESS)) {
+                    Toast.makeText(getActivity(), getString(R.string.user_details_updated), Toast.LENGTH_SHORT).show();
                     mUserAccountViewModel.clearUserUpdatedFlag();
                     getFragmentManager().popBackStack();
+                } else if (userUpdatedState.equals(UserUpdatedState.FAILED)) {
+                    Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
                 }
             }
         });

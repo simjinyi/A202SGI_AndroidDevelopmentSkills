@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.view.login.LoginInterface;
+import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 
@@ -39,6 +40,20 @@ public class UserRepository implements LoginInterface {
                 onSuccessListener.onSuccess(o);
             }
         });
+    }
+
+    public void insert(final User user, final OnSuccessListener onSuccessListener) {
+        UserDatabase.getInstance().insert(UserDatabase.Converter.userToMap(user), new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                mUser.setValue(user);
+                onSuccessListener.onSuccess(o);
+            }
+        });
+    }
+
+    public void get(String username, RegisterInterface registerInterface) {
+        UserDatabase.getInstance().get(username, registerInterface);
     }
 
     public void login(String username, String password) {

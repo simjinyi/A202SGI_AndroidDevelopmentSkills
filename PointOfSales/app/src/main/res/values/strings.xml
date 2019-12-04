@@ -121,4 +121,8 @@
     <string name="tab_customer">Customer</string>
     <string name="tab_seller">Seller</string>
     <string name="btnLogin">Login</string>
+    <string name="seller_inserted">Seller registered successfully</string>
+    <string name="user_inserted">User registered successfully</string>
+    <string name="user_details_updated">User details updated</string>
+    <string name="username_exists">Email already exists</string>
 </resources>

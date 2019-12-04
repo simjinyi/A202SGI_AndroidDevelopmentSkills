@@ -16,6 +16,7 @@ import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
+import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
@@ -85,13 +86,16 @@ public class StoreAccountFragment extends AccountFormFragment {
             }
         };
 
-        mStoreAccountViewModel.getUserUpdated().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        mStoreAccountViewModel.getUserUpdated().observe(getViewLifecycleOwner(), new Observer<UserUpdatedState>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Toast.makeText(getActivity(), getString(R.string.seller_details_updated), Toast.LENGTH_SHORT).show();
+            public void onChanged(UserUpdatedState userUpdatedState) {
+                if (userUpdatedState.equals(UserUpdatedState.SUCCESS)) {
+                    Toast.makeText(getActivity(), getString(R.string.seller_inserted), Toast.LENGTH_SHORT).show();
                     mStoreAccountViewModel.clearUserUpdatedFlag();
-                    getFragmentManager().popBackStack();
+                    getActivity().onBackPressed();
+                } else if (userUpdatedState.equals(UserUpdatedState.FAILED)) {
+                    Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
+                    mStoreAccountViewModel.clearUserUpdatedFlag();
                 }
             }
         });
@@ -110,11 +114,11 @@ public class StoreAccountFragment extends AccountFormFragment {
 
     @Override
     public void submit() {
-        mStoreAccountViewModel.updateStore(getData());
+        mStoreAccountViewModel.insertStore(getData());
     }
 
     @Override
-    public Pair<Store, String> getData() {
+    public Store getData() {
 
         Store store = new Store();
 
@@ -123,8 +127,8 @@ public class StoreAccountFragment extends AccountFormFragment {
         store.setEmail(mEtEmail.getText().toString());
         store.setPointsPerPrice(Integer.parseInt(mEtPointsPerPrice.getText().toString()));
         store.setType(UserType.SELLER);
-        store.setPassword(mEtNewPassword.getText().toString());
+        store.setPassword(mEtPassword.getText().toString());
 
-        return new Pair<>(store, mEtOriginalPassword.getText().toString());
+        return store;
     }
 }
