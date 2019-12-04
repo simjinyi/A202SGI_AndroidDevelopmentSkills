@@ -19,7 +19,7 @@ import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 
-public class StoreAccountFragment extends AccountFormFragment {
+public class StoreRegistrationFragment extends AccountFormFragment {
 
     private StoreAccountViewModel mStoreAccountViewModel;
 

@@ -15,14 +15,11 @@ import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.LoginViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
 
-public abstract class UserValidationActivity extends AppCompatActivity {
+public abstract class UserValidationActivity extends ValidationActivity {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void onCreateValidated(@Nullable Bundle savedInstanceState) {
         if (UserViewModel.isLoggedIn()) {
-            onCreateValidated(savedInstanceState);
+            onCreateLoginValidated(savedInstanceState);
         } else {
             Intent i = new Intent(UserValidationActivity.this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -31,5 +28,5 @@ public abstract class UserValidationActivity extends AppCompatActivity {
         }
     }
 
-    protected abstract void onCreateValidated(@Nullable Bundle savedInstanceState);
+    protected abstract void onCreateLoginValidated(@Nullable Bundle savedInstanceState);
 }

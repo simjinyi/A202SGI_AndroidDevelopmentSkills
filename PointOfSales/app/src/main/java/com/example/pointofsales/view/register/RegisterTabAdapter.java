@@ -24,8 +24,8 @@ public class RegisterTabAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position > 0)
-            return new StoreAccountFragment();
-        return new UserAccountFragment();
+            return new StoreRegistrationFragment();
+        return new UserRegistrationFragment();
     }
 
     @Override

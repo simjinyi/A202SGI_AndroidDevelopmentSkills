@@ -100,17 +100,6 @@ public abstract class ProductFormFragment extends Fragment {
         mBtnCancel.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-
-//                ConfirmationDialog.getConfirmationDialog(getActivity(),
-//                        getResources().getString(R.string.quit_manage_confirmation),
-//                        new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-////                                Navigation.findNavController(getView()).navigateUp();
-//                                getFragmentManager().popBackStack();
-//                            }
-//                        }).show();
-
                 getFragmentManager().popBackStack();
             }
         });
@@ -196,7 +185,6 @@ public abstract class ProductFormFragment extends Fragment {
 
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.error_set_image), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
                 }
             }
         }

@@ -4,20 +4,22 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.utility.ConfirmationDialog;
+import com.example.pointofsales.view.ValidationActivity;
 import com.google.android.material.tabs.TabLayout;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends ValidationActivity {
 
     ViewPager mVpRegister;
     TabLayout mTabRegister;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateValidated(Bundle savedInstanceState) {
         setContentView(R.layout.activity_register);
 
         getSupportActionBar().setTitle(R.string.title_activity_register);

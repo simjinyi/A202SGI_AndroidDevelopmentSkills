@@ -1,6 +1,7 @@
 package com.example.pointofsales.view.login;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,21 +14,24 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.state.LoginFormState;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.ValidationActivity;
 import com.example.pointofsales.view.register.RegisterActivity;
 import com.example.pointofsales.viewmodel.LoginViewModel;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends ValidationActivity {
 
     public static final String SP_NAME = "com.example.pointofsales.view.login.SP_NAME";
     public static final String SP_USERNAME = "com.example.pointofsales.view.login.SP_USERNAME";
@@ -44,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoadingScreen mLoadingScreen;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreateValidated(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().setTitle(R.string.title_activity_login);

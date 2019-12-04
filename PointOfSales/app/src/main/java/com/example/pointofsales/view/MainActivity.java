@@ -1,6 +1,7 @@
 package com.example.pointofsales.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModelFactory;
@@ -23,7 +25,7 @@ public class MainActivity extends UserValidationActivity {
     public ProductViewModel mProductViewModel;
 
     @Override
-    protected void onCreateValidated(Bundle savedInstanceState) {
+    protected void onCreateLoginValidated(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
         mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
