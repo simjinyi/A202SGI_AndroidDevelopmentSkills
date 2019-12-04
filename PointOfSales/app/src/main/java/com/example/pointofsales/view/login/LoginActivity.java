@@ -88,17 +88,7 @@ public class LoginActivity extends ValidationActivity {
                         persistLoginState(mEtEmail.getText().toString());
 
                     Intent i = null;
-
-                    if (user.getType().equals(UserType.CUSTOMER)) {
-
-                        i = new Intent(LoginActivity.this, MainActivity.class);
-
-                    } else {
-
-                        i = new Intent(LoginActivity.this, MainActivity.class);
-                        Toast.makeText(LoginActivity.this, getString(R.string.welcome) + user.getName(), Toast.LENGTH_SHORT).show();
-                    }
-
+                    i = new Intent(LoginActivity.this, user.getType().equals(UserType.CUSTOMER) ? MainActivity.class : MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
@@ -139,6 +129,8 @@ public class LoginActivity extends ValidationActivity {
         mBtnRegister.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                mEtEmail.getText().clear();
+                mEtPassword.getText().clear();
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });

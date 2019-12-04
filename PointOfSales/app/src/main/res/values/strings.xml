@@ -53,7 +53,7 @@
     <string name="welcome">"Welcome!"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be > 7 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_failed">Invalid credentials</string>
     <string name="tvSubtotalLabel">Subtotal</string>
     <string name="tvSubtotal">MYR 50.00</string>
     <string name="tvMembership">Membership</string>
@@ -136,4 +136,5 @@
     <string name="product_quantity_changed_description">The cart quantity for the following product(s) have changed as the inventory quantity was updated.\n\n%1$s</string>
     <string name="product_removed_from_cart">Product Removed From Cart</string>
     <string name="product_removed_from_cart_description">The following product(s) were removed from the cart as the product(s) were deleted.\n\n%1$s</string>
+    <string name="sorting_by">Sorting by: %1$s</string>
 </resources>

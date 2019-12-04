@@ -292,7 +292,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         if (item.getItemId() == R.id.app_bar_sort) {
             String sortText = getString(mProductViewModel.sort());
             item.setTitle(sortText);
-            Toast.makeText(getActivity(), sortText, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.sorting_by, sortText), Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
