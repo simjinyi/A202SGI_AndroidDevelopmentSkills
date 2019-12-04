@@ -52,6 +52,7 @@ public class StoreAccountFragment extends AccountFormFragment {
                 if (aBoolean) {
                     Toast.makeText(getActivity(), getString(R.string.unmatched_original_password), Toast.LENGTH_SHORT).show();
                     mStoreAccountViewModel.clearUnmatchedPasswordFlag();
+                    mLoadingScreen.end();
                 }
             }
         });
@@ -121,7 +122,7 @@ public class StoreAccountFragment extends AccountFormFragment {
                     Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
                 }
 
-                mLoadingScreenHelper.end();
+                mLoadingScreen.end();
             }
         });
 
@@ -153,7 +154,7 @@ public class StoreAccountFragment extends AccountFormFragment {
 
     @Override
     public void submit() {
-        mLoadingScreenHelper.start();
+        mLoadingScreen.start();
         mStoreAccountViewModel.updateStore(getData());
     }
 

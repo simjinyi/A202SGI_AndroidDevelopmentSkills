@@ -10,18 +10,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.helper.ConfirmationDialogHelper;
-import com.example.pointofsales.repository.ProductInterface;
+import com.example.pointofsales.utility.ConfirmationDialog;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.product.ProductFragment;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.repository.ProductRepository;
-import com.example.pointofsales.viewmodel.ProductViewModelFactory;
-import com.example.pointofsales.viewmodel.UserViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.util.Map;
 
 public class EditProductFragment extends ProductFormFragment {
 
@@ -41,7 +35,7 @@ public class EditProductFragment extends ProductFormFragment {
         mBtnDelete.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
+                ConfirmationDialog.getConfirmationDialog(getActivity(),
                         getResources().getString(R.string.delete_product_confirmation),
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -66,11 +60,11 @@ public class EditProductFragment extends ProductFormFragment {
 
     @Override
     public void submit() {
-        mLoadingScreenHelper.start();
+        mLoadingScreen.start();
         mProductViewModel.updateProduct(mOriProduct, getProductObject(), new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                mLoadingScreenHelper.end();
+                mLoadingScreen.end();
                 if (o == null) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.product_updated_successfully), Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();

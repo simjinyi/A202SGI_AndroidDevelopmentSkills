@@ -3,9 +3,7 @@ package com.example.pointofsales.view.register;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Pair;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,15 +12,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Store;
-import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
-import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
-import com.example.pointofsales.viewmodel.UserViewModel;
 
 public class StoreAccountFragment extends AccountFormFragment {
 
@@ -100,7 +95,7 @@ public class StoreAccountFragment extends AccountFormFragment {
                     mStoreAccountViewModel.clearUserUpdatedFlag();
                 }
 
-                mLoadingScreenHelper.end();
+                mLoadingScreen.end();
             }
         });
 
@@ -124,7 +119,7 @@ public class StoreAccountFragment extends AccountFormFragment {
 
     @Override
     public void submit() {
-        mLoadingScreenHelper.start();
+        mLoadingScreen.start();
         mStoreAccountViewModel.insertStore(getData());
     }
 

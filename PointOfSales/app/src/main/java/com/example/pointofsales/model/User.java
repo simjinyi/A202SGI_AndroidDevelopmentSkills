@@ -8,6 +8,7 @@ public class User {
 
     private String mEmail;
     private String mName;
+    private String mPasswordSalt;
     private String mPassword;
     private UserType mType;
 
@@ -41,6 +42,13 @@ public class User {
     }
     public void setName(String name) {
         mName = name;
+    }
+
+    public String getPasswordSalt() {
+        return mPasswordSalt;
+    }
+    public void setPasswordSalt(String passwordSalt) {
+        mPasswordSalt = passwordSalt;
     }
 
     public String getPassword() {

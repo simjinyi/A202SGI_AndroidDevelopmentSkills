@@ -101,6 +101,7 @@ public class UserDatabase {
             hashMap.put("id", user.getId());
             hashMap.put("email", user.getEmail());
             hashMap.put("name", user.getName());
+            hashMap.put("passwordSalt", user.getPasswordSalt());
             hashMap.put("password", user.getPassword());
             hashMap.put("type", user.getType().name());
 
@@ -119,6 +120,7 @@ public class UserDatabase {
             user.setId(userId);
             user.setName(map.get("name").toString());
             user.setEmail(map.get("email").toString());
+            user.setPasswordSalt(map.get("passwordSalt").toString());
             user.setPassword(map.get("password").toString());
 
             if (user instanceof Store) {

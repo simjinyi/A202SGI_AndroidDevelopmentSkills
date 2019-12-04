@@ -1,14 +1,7 @@
 package com.example.pointofsales.view.account;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,18 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.database.UserDatabase;
-import com.example.pointofsales.helper.LoadingScreenHelper;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
-import com.example.pointofsales.repository.CartRepository;
-import com.example.pointofsales.repository.ProductRepository;
-import com.example.pointofsales.repository.UserRepository;
-import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
-import com.example.pointofsales.view.login.LoginActivity;
-import com.example.pointofsales.viewmodel.UserViewModel;
 
 public abstract class AccountFormFragment extends Fragment implements Observer<AccountFormEnableState> {
 
@@ -55,7 +41,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     protected Button mBtnCancel;
     protected ProgressBar mPbLoading;
 
-    protected LoadingScreenHelper mLoadingScreenHelper;
+    protected LoadingScreen mLoadingScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -84,7 +70,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
         mBtnSubmit = getView().findViewById(R.id.btnSubmit);
         mPbLoading = getView().findViewById(R.id.pbLoading);
 
-        mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
+        mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }
 
     @Override

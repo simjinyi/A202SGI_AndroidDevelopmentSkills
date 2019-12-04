@@ -22,11 +22,11 @@ public class AddProductFragment extends ProductFormFragment {
 
     @Override
     public void submit() {
-        mLoadingScreenHelper.start();
+        mLoadingScreen.start();
         mProductViewModel.insertProduct(getProductObject(), new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                mLoadingScreenHelper.end();
+                mLoadingScreen.end();
                 if (o == null) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.product_added_successfully), Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();

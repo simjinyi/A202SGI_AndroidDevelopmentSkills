@@ -1,7 +1,5 @@
 package com.example.pointofsales.view.product;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,8 +25,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.helper.ConfirmationDialogHelper;
-import com.example.pointofsales.helper.LoadingScreenHelper;
+import com.example.pointofsales.utility.ConfirmationDialog;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.User;
@@ -38,7 +36,6 @@ import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.state.ProductLoadState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
-import com.example.pointofsales.viewmodel.ProductViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -65,7 +62,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     private CardView mCvNoProduct;
 //    private ImageButton mIbSettings;
 
-    private LoadingScreenHelper mLoadingScreenHelper;
+    private LoadingScreen mLoadingScreen;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +86,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mCvNoProduct = getView().findViewById(R.id.cvNoProduct);
 //        mIbSettings = getView().findViewById(R.id.ibSettings);
 
-        mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
+        mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }
 
     @Override
@@ -100,24 +97,24 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel);
         mProductAdapter.setHasStableIds(true);
-        mLoadingScreenHelper.start();
+        mLoadingScreen.start();
 
         mProductViewModel.getProductLoadState().observe(getViewLifecycleOwner(), new Observer<ProductLoadState>() {
             @Override
             public void onChanged(ProductLoadState productLoadState) {
                 switch (productLoadState) {
                     case LOADING:
-                        mLoadingScreenHelper.start();
+                        mLoadingScreen.start();
                         mCvNoProduct.setVisibility(View.GONE);
                         break;
 
                     case LOADED:
-                        mLoadingScreenHelper.end();
+                        mLoadingScreen.end();
                         mCvNoProduct.setVisibility(View.GONE);
                         break;
 
                     default:
-                        mLoadingScreenHelper.end();
+                        mLoadingScreen.end();
                         mCvNoProduct.setVisibility(View.VISIBLE);
                 }
             }
@@ -144,7 +141,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mIbCancelCart.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
+                ConfirmationDialog.getConfirmationDialog(getActivity(),
                         getResources().getString(R.string.clear_cart_confirmation),
                         new DialogInterface.OnClickListener() {
                             @Override

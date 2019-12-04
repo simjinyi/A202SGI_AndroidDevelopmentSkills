@@ -16,12 +16,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.helper.LoadingScreenHelper;
-import com.example.pointofsales.model.Store;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.state.LoginFormState;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
-import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.register.RegisterActivity;
@@ -38,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mPbLoading;
     private Button mBtnRegister;
 
-    private LoadingScreenHelper mLoadingScreenHelper;
+    private LoadingScreen mLoadingScreen;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         mPbLoading = findViewById(R.id.pbLoading);
         mBtnRegister = findViewById(R.id.btnRegister);
 
-        mLoadingScreenHelper = new LoadingScreenHelper(this, mPbLoading);
+        mLoadingScreen = new LoadingScreen(this, mPbLoading);
 
         mLoginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -99,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
-                mLoadingScreenHelper.end();
+                mLoadingScreen.end();
             }
         });
 
@@ -127,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSingleClick(View v) {
                 mLoginViewModel.login(mEtEmail.getText().toString(), mEtPassword.getText().toString());
-                mLoadingScreenHelper.start();
+                mLoadingScreen.start();
             }
         });
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.User;
+import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.login.LoginInterface;
 import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,7 +71,7 @@ public class UserRepository implements LoginInterface {
                 User user = UserDatabase.Converter
                         .mapToUser(dataSnapshot.getKey().toString(), (Map<String, Object>) dataSnapshot.getValue());
 
-                if (user.getPassword().equals(password)) {
+                if (PasswordHasher.hash(password, user.getPasswordSalt()).equals(user.getPassword())) {
                     user.setLoggedIn(true);
                     mUser.setValue(user);
                 }

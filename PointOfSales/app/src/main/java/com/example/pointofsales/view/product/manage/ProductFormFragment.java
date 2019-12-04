@@ -25,7 +25,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.helper.LoadingScreenHelper;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.ProductFormState;
 import com.example.pointofsales.view.OnSingleClickListener;
@@ -53,7 +53,7 @@ public abstract class ProductFormFragment extends Fragment {
     private ProgressBar mPbLoading;
     protected Button mBtnDelete;
 
-    protected LoadingScreenHelper mLoadingScreenHelper;
+    protected LoadingScreen mLoadingScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -78,7 +78,7 @@ public abstract class ProductFormFragment extends Fragment {
         mPbLoading = getView().findViewById(R.id.pbLoading);
         mBtnDelete = getView().findViewById(R.id.btnDelete);
 
-        mLoadingScreenHelper = new LoadingScreenHelper(getActivity(), mPbLoading);
+        mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class ProductFormFragment extends Fragment {
             @Override
             public void onSingleClick(View v) {
 
-//                ConfirmationDialogHelper.getConfirmationDialog(getActivity(),
+//                ConfirmationDialog.getConfirmationDialog(getActivity(),
 //                        getResources().getString(R.string.quit_manage_confirmation),
 //                        new DialogInterface.OnClickListener() {
 //                            @Override

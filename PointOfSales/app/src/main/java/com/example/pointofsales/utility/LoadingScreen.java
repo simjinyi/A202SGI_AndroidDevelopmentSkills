@@ -1,16 +1,16 @@
-package com.example.pointofsales.helper;
+package com.example.pointofsales.utility;
 
 import android.app.Activity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
-public class LoadingScreenHelper {
+public class LoadingScreen {
 
     private Activity mActivity;
     private ProgressBar mProgressBar;
 
-    public LoadingScreenHelper(Activity activity, ProgressBar progressBar) {
+    public LoadingScreen(Activity activity, ProgressBar progressBar) {
         mActivity = activity;
         mProgressBar = progressBar;
     }

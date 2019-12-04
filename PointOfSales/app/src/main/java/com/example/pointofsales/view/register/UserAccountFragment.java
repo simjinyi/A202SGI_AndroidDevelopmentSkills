@@ -3,7 +3,6 @@ package com.example.pointofsales.view.register;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,7 +18,6 @@ import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
-import com.example.pointofsales.viewmodel.UserViewModel;
 
 public class UserAccountFragment extends AccountFormFragment {
 
@@ -89,7 +87,7 @@ public class UserAccountFragment extends AccountFormFragment {
                     mUserAccountViewModel.clearUserUpdatedFlag();
                 }
 
-                mLoadingScreenHelper.end();
+                mLoadingScreen.end();
             }
         });
 
@@ -113,7 +111,7 @@ public class UserAccountFragment extends AccountFormFragment {
 
     @Override
     public void submit() {
-        mLoadingScreenHelper.start();
+        mLoadingScreen.start();
         mUserAccountViewModel.insertUser(getData());
     }
 

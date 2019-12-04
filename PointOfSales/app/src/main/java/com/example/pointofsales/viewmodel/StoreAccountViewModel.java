@@ -16,6 +16,7 @@ import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.repository.UserRepository;
+import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -73,12 +74,20 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         store.setId(oriStore.getId());
 
         if (!mAccountFormEnableState.getValue().isChangePasswordEnabled()) {
+
             store.setPassword(oriStore.getPassword());
             mUserRepository.update(store, this);
+
         } else {
-            if (!pair.second.equals(oriStore.getPassword())) {
+
+            String hashedPassword = PasswordHasher.hash(pair.second, oriStore.getPasswordSalt());
+
+            if (!hashedPassword.equals(oriStore.getPassword())) {
                 mUnmatchedPassword.setValue(true);
             } else {
+
+                store.setPasswordSalt(PasswordHasher.generateRandomSalt());
+                store.setPassword(PasswordHasher.hash(store.getPassword(), store.getPasswordSalt()));
 
                 mUserRepository.update(store, this);
             }
@@ -86,7 +95,11 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     }
 
     public void insertStore(final Store store) {
+
         store.setEmail(store.getEmail().toLowerCase());
+        store.setPasswordSalt(PasswordHasher.generateRandomSalt());
+        store.setPassword(PasswordHasher.hash(store.getPassword(), store.getPasswordSalt()));
+
         mUserRepository.get(store.getEmail(), new RegisterInterface() {
             @Override
             public void isUsernameValid(boolean isValid) {
