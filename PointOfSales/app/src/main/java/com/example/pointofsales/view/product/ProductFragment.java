@@ -35,6 +35,7 @@ import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.state.ProductLoadState;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.ValidationActivity;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -189,7 +190,17 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ProductInventoryQuantityChangeState productInventoryQuantityChangeState) {
                 if (productInventoryQuantityChangeState.getProductNames().size() > 0) {
-                    Toast.makeText(getActivity(), productInventoryQuantityChangeState.toString(), Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.product_quantity_changed))
+                            .setMessage(getString(R.string.product_quantity_changed_description, productInventoryQuantityChangeState.toString()))
+                            .setIcon(R.drawable.ic_info_24dp)
+                            .setCancelable(false)
+                            .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
                     mProductViewModel.clearProductInventoryQuantityChangeFlag();
                 }
             }
@@ -199,7 +210,17 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(CartRemovalState cartRemovalState) {
                 if (cartRemovalState.getProductNames().size() > 0) {
-                    Toast.makeText(getActivity(), cartRemovalState.toString(), Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.product_removed_from_cart))
+                            .setMessage(getString(R.string.product_removed_from_cart_description, cartRemovalState.toString()))
+                            .setIcon(R.drawable.ic_info_24dp)
+                            .setCancelable(false)
+                            .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
                     mProductViewModel.clearCartRemovalFlag();
                 }
             }
