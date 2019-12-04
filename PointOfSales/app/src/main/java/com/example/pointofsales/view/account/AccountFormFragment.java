@@ -149,24 +149,4 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
 
     public abstract void submit();
     public abstract Object getData();
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        getActivity().getMenuInflater().inflate(R.menu.logout_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.app_bar_logout) {
-            UserViewModel.logout();
-            Intent i = new Intent(getActivity(), LoginActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-            getActivity().finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

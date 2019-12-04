@@ -24,6 +24,7 @@ import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.register.RegisterActivity;
 import com.example.pointofsales.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -133,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         mBtnRegister.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
     }

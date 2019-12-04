@@ -1,12 +1,17 @@
 package com.example.pointofsales.view.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +21,7 @@ import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
+import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
@@ -149,5 +155,25 @@ public class StoreAccountFragment extends AccountFormFragment {
         store.setPassword(mEtNewPassword.getText().toString());
 
         return new Pair<>(store, mEtOriginalPassword.getText().toString());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.logout_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.app_bar_logout) {
+            UserViewModel.logout();
+            Intent i = new Intent(getActivity(), LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            getActivity().finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
