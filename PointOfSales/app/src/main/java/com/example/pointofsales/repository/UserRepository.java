@@ -4,15 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.User;
-import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.login.LoginInterface;
 import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
 
-import java.util.Map;
-
-public class UserRepository implements LoginInterface {
+public class UserRepository {
 
     private MutableLiveData<User> mUser;
 
@@ -57,28 +53,8 @@ public class UserRepository implements LoginInterface {
         UserDatabase.getInstance().get(username, registerInterface);
     }
 
-    public void login(String username, String password) {
-        UserDatabase.getInstance().get(username, password, this);
-    }
-
-    @Override
-    public void onLogin(boolean status, DataSnapshot dataSnapshot, String password) {
-        if (status) {
-            if (dataSnapshot.exists()) {
-
-                dataSnapshot = dataSnapshot.getChildren().iterator().next();
-
-                User user = UserDatabase.Converter
-                        .mapToUser(dataSnapshot.getKey().toString(), (Map<String, Object>) dataSnapshot.getValue());
-
-                if (PasswordHasher.hash(password, user.getPasswordSalt()).equals(user.getPassword())) {
-                    user.setLoggedIn(true);
-                    mUser.setValue(user);
-                }
-            }
-        }
-
-        notifyObservers();
+    public void login(String username, String password, LoginInterface loginInterface) {
+        UserDatabase.getInstance().get(username, password, loginInterface);
     }
 
     public void notifyObservers() {
@@ -91,5 +67,6 @@ public class UserRepository implements LoginInterface {
 
     public static void clearInstance() {
         sUserRepository = null;
+        UserDatabase.clearInstance();
     }
 }

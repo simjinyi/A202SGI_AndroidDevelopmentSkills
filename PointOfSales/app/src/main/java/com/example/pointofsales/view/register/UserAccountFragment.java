@@ -122,7 +122,7 @@ public class UserAccountFragment extends AccountFormFragment {
 
         user.setName(mEtName.getText().toString());
         user.setEmail(mEtEmail.getText().toString());
-        user.setType(UserType.SELLER);
+        user.setType(UserType.CUSTOMER);
         user.setPassword(mEtPassword.getText().toString());
 
         return user;

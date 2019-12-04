@@ -1,8 +1,9 @@
 package com.example.pointofsales.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -11,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
@@ -48,5 +50,12 @@ public class MainActivity extends UserValidationActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void invalidateLoginState() {
+        SharedPreferences sp = getSharedPreferences(LoginActivity.SP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().apply();
+        editor.commit();
     }
 }

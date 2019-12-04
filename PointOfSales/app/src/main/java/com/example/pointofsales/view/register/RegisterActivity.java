@@ -20,6 +20,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        getSupportActionBar().setTitle(R.string.title_activity_register);
         RegisterTabAdapter tabsPagerAdapter = new RegisterTabAdapter(getSupportFragmentManager(), 0, this);
 
         mVpRegister = findViewById(R.id.vpRegister);

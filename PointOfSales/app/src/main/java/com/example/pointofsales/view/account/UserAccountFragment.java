@@ -22,6 +22,7 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.UserAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
+import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
@@ -156,7 +157,7 @@ public class UserAccountFragment extends AccountFormFragment {
 
         user.setName(mEtName.getText().toString());
         user.setEmail(mEtEmail.getText().toString());
-        user.setType(UserType.SELLER);
+        user.setType(UserType.CUSTOMER);
         user.setPassword(mEtNewPassword.getText().toString());
 
         return new Pair<>(user, mEtOriginalPassword.getText().toString());
@@ -171,11 +172,15 @@ public class UserAccountFragment extends AccountFormFragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_logout) {
+
+            ((MainActivity) getActivity()).invalidateLoginState();
             UserViewModel.logout();
+
             Intent i = new Intent(getActivity(), LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             getActivity().finish();
+
             return true;
         }
 

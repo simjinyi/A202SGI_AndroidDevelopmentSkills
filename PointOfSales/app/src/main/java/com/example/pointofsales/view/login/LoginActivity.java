@@ -1,6 +1,8 @@
 package com.example.pointofsales.view.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,6 +29,9 @@ import com.example.pointofsales.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String SP_NAME = "com.example.pointofsales.view.login.SP_NAME";
+    public static final String SP_USERNAME = "com.example.pointofsales.view.login.SP_USERNAME";
+
     private LoginViewModel mLoginViewModel;
 
     private EditText mEtEmail;
@@ -43,7 +48,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().setTitle(R.string.title_activity_login);
         mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+
+        String emailSaved = null;
+        if ((emailSaved = getLoginEmailState()) != null)
+            mLoginViewModel.loginFromRemember(emailSaved);
 
         mEtEmail = findViewById(R.id.etEmail);
         mEtPassword = findViewById(R.id.etPassword);
@@ -73,31 +83,30 @@ public class LoginActivity extends AppCompatActivity {
         mLoginViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if (!(mEtEmail.getText().toString().isEmpty() && mEtPassword.getText().toString().isEmpty())) {
-                    if (user.isLoggedIn()) {
+                if (user.isLoggedIn()) {
 
-                        Intent i = null;
+                    if (mCbRememberMe.isChecked())
+                        persistLoginState(mEtEmail.getText().toString());
 
-                        if (user.getType().equals(UserType.CUSTOMER)) {
+                    Intent i = null;
 
-                            i = new Intent(LoginActivity.this, MainActivity.class);
+                    if (user.getType().equals(UserType.CUSTOMER)) {
 
-                        } else {
-
-                            i = new Intent(LoginActivity.this, MainActivity.class);
-                            Toast.makeText(LoginActivity.this, getString(R.string.welcome) + user.getName(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                        finish();
+                        i = new Intent(LoginActivity.this, MainActivity.class);
 
                     } else {
-                        Toast.makeText(LoginActivity.this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-                    }
-                }
 
-                mLoadingScreen.end();
+                        i = new Intent(LoginActivity.this, MainActivity.class);
+                        Toast.makeText(LoginActivity.this, getString(R.string.welcome) + user.getName(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
+
+                } else if (!(mEtEmail.getText().toString().isEmpty() && mEtPassword.getText().toString().isEmpty())) {
+                    Toast.makeText(LoginActivity.this, getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -125,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSingleClick(View v) {
                 mLoginViewModel.login(mEtEmail.getText().toString(), mEtPassword.getText().toString());
-                mLoadingScreen.start();
             }
         });
 
@@ -135,5 +143,27 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
+
+        mLoginViewModel.getLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean)
+                    mLoadingScreen.start();
+                else
+                    mLoadingScreen.end();
+            }
+        });
+    }
+
+    public void persistLoginState(String email) {
+        SharedPreferences sp = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(SP_USERNAME, email);
+        editor.apply();
+    }
+
+    public String getLoginEmailState() {
+        SharedPreferences sp = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        return sp.getString(SP_USERNAME, null);
     }
 }
