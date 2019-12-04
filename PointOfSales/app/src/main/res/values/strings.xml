@@ -125,4 +125,6 @@
     <string name="user_inserted">User registered successfully</string>
     <string name="user_details_updated">User details updated</string>
     <string name="username_exists">Email already exists</string>
+    <string name="btnMember">Member</string>
+    <string name="tvNoMemberAdded">No Member Added</string>
 </resources>
