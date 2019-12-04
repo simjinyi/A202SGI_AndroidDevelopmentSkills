@@ -93,7 +93,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                 if (isValid)
                     mUserRepository.insert(store, StoreAccountViewModel.this);
                 else
-                    onSuccess(false);
+                    mUserUpdated.setValue(UserUpdatedState.FAILED);
             }
         });
     }
@@ -199,8 +199,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
     @Override
     public void onSuccess(Object o) {
-        if (o instanceof Boolean)
-            mUserUpdated.setValue(UserUpdatedState.FAILED);
-        mUserUpdated.setValue(UserUpdatedState.SUCCESS);
+        if (o instanceof String)
+            mUserUpdated.setValue(UserUpdatedState.SUCCESS);
     }
 }

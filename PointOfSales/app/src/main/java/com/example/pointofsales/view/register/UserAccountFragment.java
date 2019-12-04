@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.UserAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
@@ -86,6 +88,8 @@ public class UserAccountFragment extends AccountFormFragment {
                     Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
                     mUserAccountViewModel.clearUserUpdatedFlag();
                 }
+
+                mLoadingScreenHelper.end();
             }
         });
 
@@ -97,12 +101,19 @@ public class UserAccountFragment extends AccountFormFragment {
         mEtOriginalPassword.addTextChangedListener(afterTextChangedListener);
         mEtNewPassword.addTextChangedListener(afterTextChangedListener);
 
+        mBtnCancel.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
         mUserAccountViewModel.getAccountFormEnableState().observe(getViewLifecycleOwner(), this);
-        setData(UserViewModel.getUser());
     }
 
     @Override
     public void submit() {
+        mLoadingScreenHelper.start();
         mUserAccountViewModel.insertUser(getData());
     }
 

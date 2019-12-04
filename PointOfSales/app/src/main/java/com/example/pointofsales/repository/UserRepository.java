@@ -37,7 +37,7 @@ public class UserRepository implements LoginInterface {
             @Override
             public void onSuccess(Object o) {
                 mUser.setValue(user);
-                onSuccessListener.onSuccess(o);
+                onSuccessListener.onSuccess("success");
             }
         });
     }
@@ -47,7 +47,7 @@ public class UserRepository implements LoginInterface {
             @Override
             public void onSuccess(Object o) {
                 mUser.setValue(user);
-                onSuccessListener.onSuccess(o);
+                onSuccessListener.onSuccess("success");
             }
         });
     }

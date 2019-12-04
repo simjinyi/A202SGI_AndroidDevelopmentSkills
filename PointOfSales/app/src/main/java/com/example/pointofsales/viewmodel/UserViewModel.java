@@ -1,5 +1,7 @@
 package com.example.pointofsales.viewmodel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.User;
@@ -8,6 +10,16 @@ import com.example.pointofsales.repository.ProductRepository;
 import com.example.pointofsales.repository.UserRepository;
 
 public class UserViewModel extends ViewModel {
+
+    private MutableLiveData<User> mUser;
+
+    private UserRepository mUserRepository;
+
+    public UserViewModel() {
+        mUserRepository = UserRepository.getInstance();
+        mUser = mUserRepository.getUser();
+    }
+
     public static boolean isLoggedIn() {
         return UserRepository.getInstance().getUser().getValue().isLoggedIn();
     }
@@ -24,5 +36,9 @@ public class UserViewModel extends ViewModel {
         CartRepository.clearInstance();
         ProductRepository.clearInstance();
         UserRepository.clearInstance();
+    }
+
+    public LiveData<User> getUserLiveData() {
+        return mUser;
     }
 }

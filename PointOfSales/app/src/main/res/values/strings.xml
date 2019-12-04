@@ -2,7 +2,7 @@
     <string name="app_name">Point Of Sales</string>
     <string name="title_product">Products</string>
     <string name="app_bar_image">Main header background</string>
-    <string name="tvGreeting">Good Evening</string>
+    <string name="tvGreeting">Welcome</string>
     <string name="tvUsername">ABC Bakery</string>
     <string name="ibAccount">Account icon</string>
     <string name="ivBackground">Main background</string>

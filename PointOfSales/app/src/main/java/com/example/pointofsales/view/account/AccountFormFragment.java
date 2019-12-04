@@ -52,10 +52,10 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     protected Switch mSwChangePassword;
     private CardView mCvStorePasswordHolder;
     protected Button mBtnSubmit;
-    private Button mBtnCancel;
+    protected Button mBtnCancel;
     protected ProgressBar mPbLoading;
 
-    private LoadingScreenHelper mLoadingScreenHelper;
+    protected LoadingScreenHelper mLoadingScreenHelper;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -90,14 +90,6 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mBtnCancel.setOnClickListener(new OnSingleClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
         mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {

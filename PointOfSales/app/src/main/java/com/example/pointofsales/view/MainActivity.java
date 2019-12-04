@@ -2,8 +2,8 @@ package com.example.pointofsales.view;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;

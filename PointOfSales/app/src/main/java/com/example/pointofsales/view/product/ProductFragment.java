@@ -31,6 +31,7 @@ import com.example.pointofsales.helper.ConfirmationDialogHelper;
 import com.example.pointofsales.helper.LoadingScreenHelper;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
+import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
@@ -49,8 +50,10 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     public static final String STORE_ID_FRAGMENT_ARG = "com.example.pointofsales.view.product.STORE_ID_FRAGMENT_ARG";
 
     private ProductViewModel mProductViewModel;
+    private UserViewModel mUserViewModel;
     private ProductAdapter mProductAdapter;
 
+    private TextView mTvUsername;
     private ImageButton mIbAccount;
     private RecyclerView mRvProductList;
     private FloatingActionButton mFabAddProduct;
@@ -74,6 +77,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mTvUsername = getView().findViewById(R.id.tvUsername);
         mIbAccount = getView().findViewById(R.id.ibAccount);
         mRvProductList = getView().findViewById(R.id.rvProductList);
         mFabAddProduct = getView().findViewById(R.id.fabAddProduct);
@@ -93,6 +97,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel);
         mProductAdapter.setHasStableIds(true);
         mLoadingScreenHelper.start();
@@ -222,6 +227,13 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         ItemTouchHelper.Callback callback = new ProductItemTouchHelper(mProductAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRvProductList);
+
+        mUserViewModel.getUserLiveData().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mTvUsername.setText(user.getName());
+            }
+        });
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
@@ -118,6 +120,8 @@ public class StoreAccountFragment extends AccountFormFragment {
                 } else if (userUpdatedState.equals(UserUpdatedState.FAILED)) {
                     Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
                 }
+
+                mLoadingScreenHelper.end();
             }
         });
 
@@ -128,6 +132,13 @@ public class StoreAccountFragment extends AccountFormFragment {
         mEtPointsPerPrice.addTextChangedListener(afterTextChangedListener);
         mEtOriginalPassword.addTextChangedListener(afterTextChangedListener);
         mEtNewPassword.addTextChangedListener(afterTextChangedListener);
+
+        mBtnCancel.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
 
         mStoreAccountViewModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
@@ -142,6 +153,7 @@ public class StoreAccountFragment extends AccountFormFragment {
 
     @Override
     public void submit() {
+        mLoadingScreenHelper.start();
         mStoreAccountViewModel.updateStore(getData());
     }
 

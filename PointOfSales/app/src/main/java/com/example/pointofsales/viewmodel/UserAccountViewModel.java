@@ -78,7 +78,6 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
             if (!pair.second.equals(oriUser.getPassword())) {
                 mUnmatchedPassword.setValue(true);
             } else {
-
                 mUserRepository.update(user, this);
             }
         }
@@ -92,7 +91,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
                 if (isValid)
                     mUserRepository.insert(user, UserAccountViewModel.this);
                 else
-                    onSuccess(false);
+                    mUserUpdated.setValue(UserUpdatedState.FAILED);
             }
         });
     }
@@ -176,8 +175,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
 
     @Override
     public void onSuccess(Object o) {
-        if (o instanceof Boolean)
-            mUserUpdated.setValue(UserUpdatedState.FAILED);
-        mUserUpdated.setValue(UserUpdatedState.SUCCESS);
+        if (o instanceof String)
+            mUserUpdated.setValue(UserUpdatedState.SUCCESS);
     }
 }

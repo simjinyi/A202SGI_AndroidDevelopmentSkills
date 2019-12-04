@@ -47,7 +47,7 @@ public class UserDatabase {
     public void get(String username, final RegisterInterface registerInterface) {
         mDatabaseReference.orderByChild("email")
                 .equalTo(username)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         registerInterface.isUsernameValid(!dataSnapshot.exists());
