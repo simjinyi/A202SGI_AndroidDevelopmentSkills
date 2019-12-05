@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
@@ -25,6 +28,7 @@ import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
@@ -49,6 +53,9 @@ public class CheckoutFragment extends Fragment {
     private Button mBtnCancel;
     private Button mBtnMember;
     private Button mBtnSubmit;
+    private ProgressBar mPbLoading;
+
+    private LoadingScreen mLoadingScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -71,6 +78,9 @@ public class CheckoutFragment extends Fragment {
         mBtnCancel = getView().findViewById(R.id.btnCancel);
         mBtnMember = getView().findViewById(R.id.btnMember);
         mBtnSubmit = getView().findViewById(R.id.btnSubmit);
+        mPbLoading = getView().findViewById(R.id.pbLoading);
+
+        mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }
 
     @Override
@@ -100,7 +110,17 @@ public class CheckoutFragment extends Fragment {
         mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.checkout_confirmation))
+                        .setMessage(getString(R.string.checkout_description))
+                        .setIcon(R.drawable.ic_warning_24dp)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mCheckoutViewModel.checkout();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
 
@@ -213,6 +233,27 @@ public class CheckoutFragment extends Fragment {
                                 }
                             }).show();
                     mCheckoutViewModel.clearMemberPointChangedState();
+                }
+            }
+        });
+
+        mCheckoutViewModel.getCheckoutLoading().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean)
+                    mLoadingScreen.start();
+                else
+                    mLoadingScreen.end();
+            }
+        });
+
+        mCheckoutViewModel.getCheckoutDone().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(getActivity(), getString(R.string.transaction_saved_successfully), Toast.LENGTH_SHORT).show();
+                    mCheckoutViewModel.clearCheckoutDone();
+                    getFragmentManager().popBackStack();
                 }
             }
         });

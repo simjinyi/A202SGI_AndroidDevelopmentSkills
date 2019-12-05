@@ -156,4 +156,7 @@
     <string name="point_redeem_error">A maximum of %1$d points can be redeemed</string>
     <string name="member_point_changed">Member Point Changed</string>
     <string name="member_point_changed_description">The points redeemed has changed either due to a change in the cart items or the points were used.</string>
+    <string name="checkout_description">Please ensure that the data is accurate before checking out, the transaction saved will not be editable.</string>
+    <string name="checkout_confirmation">Checkout Confirmation</string>
+    <string name="transaction_saved_successfully">Transaction Saved Successfully</string>
 </resources>

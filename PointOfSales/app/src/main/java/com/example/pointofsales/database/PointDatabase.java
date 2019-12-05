@@ -1,19 +1,12 @@
 package com.example.pointofsales.database;
 
-import androidx.annotation.NonNull;
-
 import com.example.pointofsales.model.Point;
-import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
-import com.example.pointofsales.view.checkout.ScanListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +48,8 @@ public class PointDatabase {
     }
 
     public void update(Map<String, Object> point, OnSuccessListener onSuccessListener) {
-        mDatabaseReference.setValue(point)
+        mDatabaseReference.child(point.get("pointId").toString())
+                .setValue(point)
                 .addOnSuccessListener(onSuccessListener);
     }
 

@@ -1,5 +1,9 @@
 package com.example.pointofsales.viewmodel;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,17 +12,31 @@ import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.PointsRedeemedAndAwarded;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.Transaction;
+import com.example.pointofsales.model.TransactionItem;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
+import com.example.pointofsales.repository.CartInterface;
 import com.example.pointofsales.repository.PointRepository;
+import com.example.pointofsales.repository.ProductRepository;
+import com.example.pointofsales.repository.TransactionRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.checkout.ScanListener;
 import com.example.pointofsales.view.checkout.UpdatePointInterface;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CheckoutViewModel extends ViewModel implements UpdatePointInterface {
 
+    private MutableLiveData<Boolean> mCheckoutLoading;
+    private MutableLiveData<Boolean> mCheckoutDone;
     private MutableLiveData<Integer> mPointsRedeemedError;
     private MutableLiveData<Boolean> mScanUserNotFound;
     private MutableLiveData<Point> mPoint;
@@ -30,14 +48,20 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
     private PointRepository mPointRepository;
     private UserRepository mUserRepository;
+    private TransactionRepository mTransactionRepository;
 
     private ProductViewModel mProductViewModel;
 
 
     public CheckoutViewModel(ProductViewModel productViewModel) {
+        init(productViewModel);
+    }
+
+    private void init(ProductViewModel productViewModel) {
 
         mPointRepository = PointRepository.getInstance(UserViewModel.getUser(), this);
         mUserRepository = UserRepository.getInstance();
+        mTransactionRepository = TransactionRepository.getInstance();
 
         mScanUserNotFound = new MutableLiveData<>();
         mScanUserNotFound.setValue(false);
@@ -55,6 +79,12 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         mMemberPointChangedState = new MutableLiveData<>();
         mMemberPointChangedState.setValue(false);
+
+        mCheckoutLoading = new MutableLiveData<>();
+        mCheckoutLoading.setValue(false);
+
+        mCheckoutDone = new MutableLiveData<>();
+        mCheckoutDone.setValue(false);
 
         mProductViewModel = productViewModel;
     }
@@ -175,6 +205,10 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         mScanUserNotFound.setValue(false);
     }
 
+    public void clearCheckoutDone() {
+        mCheckoutDone.setValue(false);
+    }
+
     public int calculatePointAwarded() {
         int total = 0;
         ArrayList<Product> cartList = mProductViewModel.getCartList().getValue();
@@ -183,6 +217,83 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
             total += product.getPointPerItem() * product.getCartQuantity();
 
         return total;
+    }
+
+    public void checkout() {
+
+        mCheckoutLoading.setValue(true);
+
+        ArrayList<Product> cartList = mProductViewModel.getCartList().getValue();
+        Transaction transaction = new Transaction();
+
+        if (mPoint.getValue() == null) {
+            transaction.setUserName(null);
+            transaction.setUserId(null);
+
+            transaction.setPointsRedeemed(null);
+            transaction.setPointsAwarded(null);
+        } else {
+            transaction.setUserName(mPoint.getValue().getUserName());
+            transaction.setUserId(mPoint.getValue().getUserId());
+
+            transaction.setPointsRedeemed(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint());
+            transaction.setPointsAwarded(mPointsRedeemedAndAwarded.getValue().getPointAwarded());
+        }
+
+        transaction.setStoreName(mStore.getName());
+        transaction.setStoreId(mStore.getId());
+
+        transaction.setTimestamp(new Date().getTime());
+        transaction.setSubtotal(mProductViewModel.getCart().getValue().getSubtotal());
+
+        transaction.setSubtotal(mProductViewModel.getCart().getValue().getSubtotal());
+        transaction.setDiscount(mProductViewModel.getCart().getValue().getDiscount());
+
+        transaction.setTransactionItems(new ArrayList<TransactionItem>());
+
+        for (Product product : cartList) {
+
+            TransactionItem transactionItem = new TransactionItem();
+
+            transactionItem.setName(product.getName());
+            transactionItem.setPrice(product.getPrice());
+            transactionItem.setQuantity(product.getCartQuantity());
+
+            transaction.getTransactionItems().add(transactionItem);
+
+            product.setInventoryQuantity(product.getInventoryQuantity() - product.getCartQuantity());
+            product.setTotalSales(product.getTotalSales() + product.getCartQuantity());
+
+            mProductViewModel.updateProduct(product, product, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+                    // ignore
+                }
+            });
+        }
+
+        if (mPoint.getValue() != null) {
+            Point point = mPoint.getValue();
+            point.setPoints(point.getPoints() + mPointsRedeemedAndAwarded.getValue().getPointAwarded() - mPointsRedeemedAndAwarded.getValue().getRedeemedPoint());
+            mPointRepository.update(point, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+
+                }
+            });
+        }
+
+        mTransactionRepository.insert(transaction, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+
+                mCheckoutLoading.setValue(false);
+                mCheckoutDone.setValue(true);
+                init(mProductViewModel);
+                mProductViewModel.resetCart();
+                clearPoint();
+            }
+        });
     }
 
     public void notifyPointChanged() {
@@ -216,6 +327,12 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
     }
     public LiveData<Boolean> getMemberChangedState() {
         return mMemberPointChangedState;
+    }
+    public LiveData<Boolean> getCheckoutLoading() {
+        return mCheckoutLoading;
+    }
+    public LiveData<Boolean> getCheckoutDone() {
+        return mCheckoutDone;
     }
 
     @Override

@@ -9,10 +9,10 @@ public class Transaction {
     private String mStoreName;
     private String mStoreId;
 
-    private int mTimestamp;
+    private long mTimestamp;
     private float mSubtotal;
-    private int mPointsRedeemed;
-    private int mPointsAwarded;
+    private Integer mPointsRedeemed;
+    private Integer mPointsAwarded;
     private float mDiscount;
 
     private ArrayList<TransactionItem> mTransactionItems;
@@ -31,10 +31,10 @@ public class Transaction {
         mUserName = userName;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return mTimestamp;
     }
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(long timestamp) {
         mTimestamp = timestamp;
     }
 
@@ -59,17 +59,17 @@ public class Transaction {
         mSubtotal = subtotal;
     }
 
-    public int getPointsRedeemed() {
+    public Integer getPointsRedeemed() {
         return mPointsRedeemed;
     }
-    public void setPointsRedeemed(int pointsRedeemed) {
+    public void setPointsRedeemed(Integer pointsRedeemed) {
         mPointsRedeemed = pointsRedeemed;
     }
 
-    public int getPointsAwarded() {
+    public Integer getPointsAwarded() {
         return mPointsAwarded;
     }
-    public void setPointsAwarded(int pointsAwarded) {
+    public void setPointsAwarded(Integer pointsAwarded) {
         mPointsAwarded = pointsAwarded;
     }
 

@@ -146,6 +146,7 @@
                         android:backgroundTint="@color/primaryDarkColor"
                         android:ems="10"
                         android:hint="@string/etName"
+                        android:enabled="false"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:textColor="@color/primaryDarkColor"
