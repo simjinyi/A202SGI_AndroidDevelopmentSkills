@@ -71,8 +71,8 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
     public void updateStore(Pair<Store, String> pair) {
 
-        Store oriStore = (Store) mUserRepository.getUserValue();
-        Store store = pair.first;
+        final Store oriStore = (Store) mUserRepository.getUserValue();
+        final Store store = pair.first;
         store.setId(oriStore.getId());
 
         if (!mAccountFormEnableState.getValue().isChangePasswordEnabled()) {
@@ -84,7 +84,8 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                 public void onSuccess(Object o) {
 
                     if (mCheckOutViewModel != null)
-                        mCheckOutViewModel.updatePoint(null, true);
+                        if (oriStore.getPointsPerPrice() != store.getPointsPerPrice())
+                            mCheckOutViewModel.updatePoint(null, true);
 
                     StoreAccountViewModel.this.onSuccess(o);
                 }
