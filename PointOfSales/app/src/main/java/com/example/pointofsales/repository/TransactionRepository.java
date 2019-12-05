@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.TransactionDatabase;
+import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class TransactionRepository implements ChildEventListener {
@@ -46,6 +48,36 @@ public class TransactionRepository implements ChildEventListener {
     public void insert(Transaction transaction, OnSuccessListener onSuccessListener) {
         TransactionDatabase.getInstance()
                 .insert(TransactionDatabase.Converter.transactionToMap(transaction), onSuccessListener);
+    }
+
+    public void sortDateAsc() {
+        Collections.sort(mTransactions.getValue(), Transaction.dateAscComparator);
+        notifyObservers();
+    }
+
+    public void sortDateDesc() {
+        Collections.sort(mTransactions.getValue(), Transaction.dateDescComparator);
+        notifyObservers();
+    }
+
+    public void sortPriceAsc() {
+        Collections.sort(mTransactions.getValue(), Transaction.priceAscComparator);
+        notifyObservers();
+    }
+
+    public void sortPriceDesc() {
+        Collections.sort(mTransactions.getValue(), Transaction.priceDescComparator);
+        notifyObservers();
+    }
+
+    public void sortCustomerAsc() {
+        Collections.sort(mTransactions.getValue(), Transaction.customerAscComparator);
+        notifyObservers();
+    }
+
+    public void sortCustomerDesc() {
+        Collections.sort(mTransactions.getValue(), Transaction.customerDescComparator);
+        notifyObservers();
     }
 
     public void notifyObservers() {

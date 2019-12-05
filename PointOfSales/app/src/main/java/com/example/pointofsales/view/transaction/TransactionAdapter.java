@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.product.ProductFilter;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> implements Filterable {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -30,6 +35,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         private TextView mTvTransactionDate;
         private TextView mTvTransactionPrice;
+        private TextView mTvCustomer;
         private ImageButton mIbViewDetails;
 
         public TransactionHolder(@NonNull View itemView) {
@@ -37,13 +43,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
             mTvTransactionDate = itemView.findViewById(R.id.tvTransactionDate);
             mTvTransactionPrice = itemView.findViewById(R.id.tvTransactionPrice);
+            mTvCustomer = itemView.findViewById(R.id.tvCustomer);
             mIbViewDetails = itemView.findViewById(R.id.ibViewDetails);
         }
 
         public void bindData(Transaction transaction) {
 
-            mTvTransactionDate.setText(String.valueOf(transaction.getTimestamp()));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+            mTvTransactionDate.setText(simpleDateFormat.format(new Date(transaction.getTimestamp())));
             mTvTransactionPrice.setText(String.valueOf(transaction.getTotal()));
+
+            if (transaction.getUserName() != null)
+                mTvCustomer.setText(transaction.getUserName());
+            else
+                mTvCustomer.setText("-");
+
             mIbViewDetails.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -74,5 +89,19 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public int getItemCount() {
         return mTransactions.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mTransactions.get(position).hashCode();
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        mTransactions = transactions;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new TransactionFilter(mTransactionViewModel, this);
     }
 }

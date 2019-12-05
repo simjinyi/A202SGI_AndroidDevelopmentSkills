@@ -1,6 +1,7 @@
 package com.example.pointofsales.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Transaction {
 
@@ -14,6 +15,74 @@ public class Transaction {
     private Integer mPointsRedeemed;
     private Integer mPointsAwarded;
     private float mDiscount;
+
+    public static Comparator<Transaction> dateAscComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return Long.compare(o1.getTimestamp(), o2.getTimestamp());
+        }
+    };
+
+    public static Comparator<Transaction> dateDescComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return Long.compare(o2.getTimestamp(), o1.getTimestamp());
+        }
+    };
+
+    public static Comparator<Transaction> priceAscComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return Float.compare(o1.getTotal(), o2.getTotal());
+        }
+    };
+
+    public static Comparator<Transaction> priceDescComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return Float.compare(o2.getTotal(), o1.getTotal());
+        }
+    };
+
+    public static Comparator<Transaction> customerAscComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+
+            String first = "", second = "";
+
+            if (o1.getUserName() == null)
+                first = "-";
+            else
+                first = o1.getUserName();
+
+            if (o2.getUserName() == null)
+                second = "-";
+            else
+                second = o2.getUserName();
+
+            return first.toLowerCase().compareTo(second.toLowerCase());
+        }
+    };
+
+    public static Comparator<Transaction> customerDescComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+
+            String first = "", second = "";
+
+            if (o1.getUserName() == null)
+                first = "-";
+            else
+                first = o1.getUserName();
+
+            if (o2.getUserName() == null)
+                second = "-";
+            else
+                second = o2.getUserName();
+
+            return second.toLowerCase().compareTo(first.toLowerCase());
+        }
+    };
 
     private ArrayList<TransactionItem> mTransactionItems;
 

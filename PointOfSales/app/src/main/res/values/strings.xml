@@ -164,6 +164,13 @@
     <string name="tvTransactionPrice">50.00</string>
     <string name="view_details">View details</string>
     <string name="tvTransactionDateHeader">Date</string>
-    <string name="tvTransactionPriceHeader">Price</string>
+    <string name="tvTransactionPriceHeader">Price (MYR)</string>
     <string name="tvViewDetailsHeader">Details</string>
+    <string name="tvCustomer">Customer</string>
+    <string name="tvCustomerHeader">Customer</string>
+    <string name="dateAscending">Date (Ascending)</string>
+    <string name="dateDescending">Date (Descending)</string>
+    <string name="customerAscending">Customer (Ascending)</string>
+    <string name="customerDescending">Customer (Descending)</string>
+    <string name="transaction_query_hint">Search date, price or customer…</string>
 </resources>

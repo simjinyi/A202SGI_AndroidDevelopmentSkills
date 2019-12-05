@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="@dimen/negative_table_border"
+    android:insetTop="@dimen/negative_table_border">
+
+    <ripple
+        android:color="@android:color/darker_gray">
+
+        <item>
+            <shape>
+                <stroke
+                    android:width="@dimen/table_border"
+                    android:color="@color/primaryColor" />
+
+                <corners
+                    android:radius="@dimen/cardview_dimen" />
+
+                <solid
+                    android:color="@color/white95" />
+            </shape>
+        </item>
+
+        <item android:id="@android:id/mask">
+            <shape android:shape="rectangle">
+                <solid android:color="@android:color/darker_gray" />
+                <corners android:radius="@dimen/button_ripple_effect" />
+            </shape>
+        </item>
+
+        <item android:id="@android:id/background">
+            <shape android:shape="rectangle">
+                <solid android:color="@android:color/transparent"/>
+                <corners android:radius="5dp" />
+            </shape>
+        </item>
+    </ripple>
+</inset>

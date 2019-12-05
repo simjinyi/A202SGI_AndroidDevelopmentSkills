@@ -22,11 +22,22 @@
         android:id="@+id/tvTransactionPrice"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:background="@drawable/table_body_cell"
         android:gravity="start|center_vertical"
         android:padding="@dimen/small_margin"
         android:text="@string/tvTransactionPrice"
+        android:textColor="@color/primaryColor" />
+
+    <TextView
+        android:id="@+id/tvCustomer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="@drawable/table_body_cell"
+        android:padding="@dimen/small_margin"
+        android:gravity="start|center_vertical"
+        android:text="@string/tvCustomer"
         android:textColor="@color/primaryColor" />
 
     <ImageButton
@@ -34,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/table_body_cell"
+        android:background="@drawable/table_body_cell_ripple"
         android:contentDescription="@string/view_details"
         android:minWidth="@dimen/min_clickable"
         android:minHeight="@dimen/min_clickable"

@@ -48,11 +48,22 @@
             android:id="@+id/tvTransactionPriceHeader"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:background="@drawable/table_header_cell"
             android:gravity="center"
             android:padding="@dimen/small_margin"
             android:text="@string/tvTransactionPriceHeader"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tvCustomerHeader"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@drawable/table_header_cell"
+            android:gravity="center"
+            android:padding="@dimen/small_margin"
+            android:text="@string/tvCustomerHeader"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -63,7 +74,6 @@
             android:background="@drawable/table_header_cell"
             android:gravity="center"
             android:padding="@dimen/small_margin"
-            android:text="@string/tvViewDetailsHeader"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -73,7 +83,6 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
