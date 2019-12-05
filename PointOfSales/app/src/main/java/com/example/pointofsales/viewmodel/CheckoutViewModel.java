@@ -61,7 +61,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         mPointRepository = PointRepository.getInstance(UserViewModel.getUser(), this);
         mUserRepository = UserRepository.getInstance();
-        mTransactionRepository = TransactionRepository.getInstance();
+        mTransactionRepository = TransactionRepository.getInstance(UserViewModel.getUser());
 
         mScanUserNotFound = new MutableLiveData<>();
         mScanUserNotFound.setValue(false);

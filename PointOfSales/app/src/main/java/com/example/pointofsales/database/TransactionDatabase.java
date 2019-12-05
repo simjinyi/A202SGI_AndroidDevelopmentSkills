@@ -86,10 +86,19 @@ public class TransactionDatabase {
 
             transaction.setStoreId(map.get("storeId").toString());
 
-            transaction.setTimestamp(Integer.parseInt(map.get("timestamp").toString()));
+            transaction.setTimestamp(Long.parseLong(map.get("timestamp").toString()));
             transaction.setSubtotal(Float.parseFloat(map.get("subTotal").toString()));
-            transaction.setPointsRedeemed(Integer.parseInt(map.get("pointsRedeemed").toString()));
-            transaction.setPointsAwarded(Integer.parseInt(map.get("pointsAwarded").toString()));
+
+            if (map.get("pointsRedeemed") != null)
+                transaction.setPointsRedeemed(Integer.parseInt(map.get("pointsRedeemed").toString()));
+            else
+                transaction.setPointsRedeemed(null);
+
+            if (map.get("pointsAwarded") != null)
+                transaction.setPointsAwarded(Integer.parseInt(map.get("pointsAwarded").toString()));
+            else
+                transaction.setPointsAwarded(null);
+
             transaction.setDiscount(Float.parseFloat(map.get("discount").toString()));
 
             transaction.setTransactionItems(new ArrayList<TransactionItem>());

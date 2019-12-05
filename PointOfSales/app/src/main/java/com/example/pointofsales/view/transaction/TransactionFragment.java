@@ -19,7 +19,7 @@ import com.example.pointofsales.viewmodel.TransactionViewModel;
 
 public class TransactionFragment extends Fragment {
 
-    private TransactionViewModel mViewModel;
+    private TransactionViewModel mTransactionViewModel;
 
     private RecyclerView mRvTransaction;
 
@@ -40,10 +40,10 @@ public class TransactionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
         mRvTransaction.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRvTransaction.setAdapter(new TransactionAdapter(getActivity()));
+        mRvTransaction.setAdapter(new TransactionAdapter(getActivity(), mTransactionViewModel));
     }
 
 }

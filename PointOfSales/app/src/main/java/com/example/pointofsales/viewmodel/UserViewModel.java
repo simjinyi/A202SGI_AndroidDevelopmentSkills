@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.repository.CartRepository;
+import com.example.pointofsales.repository.PointRepository;
 import com.example.pointofsales.repository.ProductRepository;
+import com.example.pointofsales.repository.TransactionRepository;
 import com.example.pointofsales.repository.UserRepository;
 
 public class UserViewModel extends ViewModel {
@@ -36,6 +39,8 @@ public class UserViewModel extends ViewModel {
         CartRepository.clearInstance();
         ProductRepository.clearInstance();
         UserRepository.clearInstance();
+        PointRepository.clearInstance();
+        TransactionRepository.clearInstance();
     }
 
     public LiveData<User> getUserLiveData() {
