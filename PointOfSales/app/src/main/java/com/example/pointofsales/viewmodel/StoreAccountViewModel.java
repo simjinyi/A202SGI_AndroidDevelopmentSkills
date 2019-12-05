@@ -75,6 +75,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
         if (!mAccountFormEnableState.getValue().isChangePasswordEnabled()) {
 
+            store.setPasswordSalt(oriStore.getPasswordSalt());
             store.setPassword(oriStore.getPassword());
             mUserRepository.update(store, this);
 

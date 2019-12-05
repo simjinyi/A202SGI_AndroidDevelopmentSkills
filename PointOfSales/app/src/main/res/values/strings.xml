@@ -55,15 +55,15 @@
     <string name="invalid_password">Password must be > 7 characters</string>
     <string name="login_failed">Invalid credentials</string>
     <string name="tvSubtotalLabel">Subtotal</string>
-    <string name="tvSubtotal">MYR 50.00</string>
+    <string name="tvSubtotal">MYR %1$.2f</string>
     <string name="tvMembership">Membership</string>
-    <string name="tvMemberName">Sim Jin Yi</string>
-    <string name="tvPointsRedeemed">300 Points Redeemed</string>
-    <string name="tvPointsAwarded">100 Points Awarded</string>
+    <string name="tvMemberName">None</string>
+    <string name="tvPointsRedeemed">%1$i Points Redeemed</string>
+    <string name="tvPointsAwarded">%1$i Points Awarded</string>
     <string name="tvDiscountLabel">Discount</string>
-    <string name="tvDiscount">MYR 5.00</string>
+    <string name="tvDiscount">MYR %1$.2f</string>
     <string name="tvTotalLabel">Total</string>
-    <string name="tvTotal">MYR 45.00</string>
+    <string name="tvTotal">MYR %1$.2f</string>
     <string name="tvRealTime">RealTime</string>
     <string name="tvPos">Point of Sales System</string>
     <string name="tvRememberMe">Remember Me</string>
@@ -136,5 +136,6 @@
     <string name="product_quantity_changed_description">The cart quantity for the following product(s) have changed as the inventory quantity was updated.\n\n%1$s</string>
     <string name="product_removed_from_cart">Product Removed From Cart</string>
     <string name="product_removed_from_cart_description">The following product(s) were removed from the cart as the product(s) were deleted.\n\n%1$s</string>
-    <string name="sorting_by">Sorting by: %1$s</string>
+    <string name="sorting_by">Sorting By %1$s</string>
+    <string name="clear_cart_description">Are you sure you want to clear all the items in the cart?</string>
 </resources>

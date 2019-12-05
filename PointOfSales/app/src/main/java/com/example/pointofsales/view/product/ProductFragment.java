@@ -144,7 +144,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             public void onSingleClick(View v) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.clear_cart))
-                        .setMessage(getString(R.string.clear_cart))
+                        .setMessage(getString(R.string.clear_cart_description))
                         .setIcon(R.drawable.ic_warning_24dp)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override

@@ -74,6 +74,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
 
         if (!mAccountFormEnableState.getValue().isChangePasswordEnabled()) {
 
+            user.setPasswordSalt(oriUser.getPasswordSalt());
             user.setPassword(oriUser.getPassword());
             mUserRepository.update(user, this);
 

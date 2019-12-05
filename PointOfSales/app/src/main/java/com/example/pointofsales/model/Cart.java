@@ -5,11 +5,10 @@ public class Cart {
     private int mCartQuantity;
     private float mSubtotal;
     private float mDiscount;
-    private float mTotal;
 
     public Cart() {
         mCartQuantity = 0;
-        mSubtotal = mDiscount = mTotal = 0;
+        mSubtotal = mDiscount = 0;
     }
 
     public int getCartQuantity() {
@@ -34,9 +33,6 @@ public class Cart {
     }
 
     public float getTotal() {
-        return mTotal;
-    }
-    public void setTotal(float total) {
-        mTotal = total;
+        return mSubtotal - mDiscount;
     }
 }
