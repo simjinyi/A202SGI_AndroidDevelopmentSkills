@@ -294,6 +294,12 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     }
     // END PRODUCT HANDLER
 
+    // CHECKOUT HANDLER
+    public void checkout(){
+        mCartList.getValue().size();
+    }
+    // END CHECKOUT HANDLER
+
     public LiveData<ArrayList<Product>> getProductList() {
         return mProductList;
     }
