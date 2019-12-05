@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.PointsRedeemedAndAwarded;
+import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
@@ -13,6 +14,8 @@ import com.example.pointofsales.repository.PointRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.checkout.ScanListener;
 import com.example.pointofsales.view.checkout.UpdatePointInterface;
+
+import java.util.ArrayList;
 
 public class CheckoutViewModel extends ViewModel implements UpdatePointInterface {
 
@@ -65,16 +68,19 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         float discount = (float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice;
 
         if (discount > subTotal) {
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, 0));
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
-            mProductViewModel.notifyCartObservers();
             mMemberPointChangedState.setValue(true);
+            mProductViewModel.notifyCartObservers();
         } else if (point != null) {
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, 0));
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
-            mProductViewModel.notifyCartObservers();
             mMemberPointChangedState.setValue(true);
+            mProductViewModel.notifyCartObservers();
         }
+
+        mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint(), calculatePointAwarded()));
+        notifyPointChanged();
     }
 
     public void assignPoint(final String userId) {
@@ -87,22 +93,20 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
                     if (mPoint.getValue() != null)
                         clearPoint();
 
-                    mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded());
+                    mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, calculatePointAwarded()));
                     mPoint.setValue(findPointByUser(user));
                 }
             }
         });
     }
-    
-    public void removePoint() {
-        mPointRepository.clearPoint();
-    }
 
     public int updateDiscount(int pointsRedeemed) {
+        if (mPoint.getValue() == null)
+            return -1;
 
         if (pointsRedeemed == 0) {
 
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount(0.0f);
             mProductViewModel.notifyCartObservers();
             return -1;
@@ -116,7 +120,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         if (maxPointsAvailable < pointsRedeemed) {
 
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, calculatePointAwarded()));
             mEditTextValue.setValue(0);
             mProductViewModel.getCart().getValue().setDiscount(0.0f);
             mProductViewModel.notifyCartObservers();
@@ -124,7 +128,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         } else if (discount > subTotal) {
 
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, calculatePointAwarded()));
             mEditTextValue.setValue(0);
             mProductViewModel.getCart().getValue().setDiscount(0.0f);
             mProductViewModel.notifyCartObservers();
@@ -132,7 +136,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         } else {
 
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(pointsRedeemed, 0));
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(pointsRedeemed, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount(discount);
             mProductViewModel.notifyCartObservers();
             return -1;
@@ -157,6 +161,8 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
     }
 
     public void clearPoint() {
+        mProductViewModel.getCart().getValue().setDiscount(0.0f);
+        mProductViewModel.notifyCartObservers();
         mPointRepository.clearPoint();
         mPointRepository.clearInstance();
     }
@@ -167,6 +173,20 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
     public void clearScanUserNotFoundFlag() {
         mScanUserNotFound.setValue(false);
+    }
+
+    public int calculatePointAwarded() {
+        int total = 0;
+        ArrayList<Product> cartList = mProductViewModel.getCartList().getValue();
+
+        for (Product product : cartList)
+            total += product.getPointPerItem() * product.getCartQuantity();
+
+        return total;
+    }
+
+    public void notifyPointChanged() {
+        mPoint.setValue(mPoint.getValue());
     }
 
     private Point findPointByUser(User user) {

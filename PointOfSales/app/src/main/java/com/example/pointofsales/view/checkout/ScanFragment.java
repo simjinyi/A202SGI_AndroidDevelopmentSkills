@@ -122,13 +122,15 @@ public class ScanFragment extends Fragment {
             @Override
             public void onChanged(Point point) {
                 if (point != null) {
+
                     mClNoMember.setVisibility(View.GONE);
                     mEtName.setText(point.getUserName());
                     mEtAvailablePoints.setText(String.valueOf(point.getPoints()));
                     mEtPointsRedeem.setEnabled(true);
                     mEtPointsRedeem.requestFocus();
-                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
                 } else {
+
                     mClNoMember.setVisibility(View.VISIBLE);
                     mEtName.getText().clear();
                     mEtAvailablePoints.getText().clear();
@@ -230,8 +232,9 @@ public class ScanFragment extends Fragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mCheckoutViewModel.removePoint();
+                                mCheckoutViewModel.clearPoint();
                                 Toast.makeText(getActivity(), getResources().getString(R.string.member_cleared_successfully), Toast.LENGTH_SHORT).show();
+                                getFragmentManager().popBackStack();
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();

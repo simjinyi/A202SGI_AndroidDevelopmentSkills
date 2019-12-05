@@ -59,7 +59,7 @@
     <string name="tvMembership">Membership</string>
     <string name="tvMemberName">None</string>
     <string name="tvPointsRedeemed">%1$d Points Redeemed</string>
-    <string name="tvPointsAwarded">%1$d Points Awarded</string>
+    <string name="tvPointsAwarded">%1$d Points Will Be Awarded</string>
     <string name="tvDiscountLabel">Discount</string>
     <string name="tvDiscount">MYR %1$.2f</string>
     <string name="tvTotalLabel">Total</string>
