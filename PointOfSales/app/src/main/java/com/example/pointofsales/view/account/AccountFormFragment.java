@@ -86,6 +86,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
 
     @Override
     public void onChanged(AccountFormEnableState accountFormEnableState) {
+        mEtName.setEnabled(accountFormEnableState.isNameEnabled());
         mEtEmail.setEnabled(accountFormEnableState.isEmailEnabled());
 
         mTvPasswordLabel.setVisibility(accountFormEnableState.isPasswordVisible() ? View.VISIBLE : View.GONE);

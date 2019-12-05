@@ -37,7 +37,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUserAccountFormState.setValue(new UserAccountFormState(false));
 
         mAccountFormEnableState = new MutableLiveData<>();
-        mAccountFormEnableState.setValue(new AccountFormEnableState(true, true, false, false, false, false));
+        mAccountFormEnableState.setValue(new AccountFormEnableState(true, true, true, false, false, false, false));
 
         mUnmatchedPassword = new MutableLiveData<>();
         mUnmatchedPassword.setValue(false);
@@ -55,7 +55,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUserAccountFormState.setValue(new StoreAccountFormState(false));
 
         mAccountFormEnableState = new MutableLiveData<>();
-        mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, true, false));
+        mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, false, true, false));
 
         mUnmatchedPassword = new MutableLiveData<>();
         mUnmatchedPassword.setValue(false);
@@ -145,9 +145,9 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
 
     public void setEnableChangePassword(boolean changePasswordEnabled) {
         if (mUserId != null && changePasswordEnabled)
-            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, true, true));
+            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, false, true, true));
         else
-            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, true, false));
+            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, false, true, false));
     }
 
     private boolean isEmailValid(String username) {

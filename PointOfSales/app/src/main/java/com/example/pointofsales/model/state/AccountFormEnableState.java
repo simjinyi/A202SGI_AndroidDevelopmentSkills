@@ -2,6 +2,7 @@ package com.example.pointofsales.model.state;
 
 public class AccountFormEnableState {
 
+    private boolean mIsNameEnabled;
     private boolean mIsEmailEnabled;
     private boolean mIsPasswordVisible;
     private boolean mIsAddressVisible;
@@ -9,13 +10,18 @@ public class AccountFormEnableState {
     private boolean mIsChangePasswordVisible;
     private boolean mIsChangePasswordEnabled;
 
-    public AccountFormEnableState(boolean isEmailEnabled, boolean isPasswordVisible, boolean isAddressVisible, boolean isPointsPerPriceVisible, boolean isChangePasswordVisible, boolean isChangePasswordEnabled) {
+    public AccountFormEnableState(boolean isNameEnabled, boolean isEmailEnabled, boolean isPasswordVisible, boolean isAddressVisible, boolean isPointsPerPriceVisible, boolean isChangePasswordVisible, boolean isChangePasswordEnabled) {
+        mIsNameEnabled = isNameEnabled;
         mIsEmailEnabled = isEmailEnabled;
         mIsPasswordVisible = isPasswordVisible;
         mIsAddressVisible = isAddressVisible;
         mIsPointsPerPriceVisible = isPointsPerPriceVisible;
         mIsChangePasswordVisible = isChangePasswordVisible;
         mIsChangePasswordEnabled = isChangePasswordEnabled;
+    }
+
+    public boolean isNameEnabled() {
+        return mIsNameEnabled;
     }
 
     public boolean isEmailEnabled() {
