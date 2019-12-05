@@ -11,6 +11,7 @@ import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
+import com.example.pointofsales.view.checkout.ScanListener;
 import com.example.pointofsales.view.login.LoginInterface;
 import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -75,6 +76,26 @@ public class UserDatabase {
                         loginInterface.onLogin(false, null, password);
                     }
                 });
+    }
+
+    public void get(final String userId, final UserType userType, final ScanListener scanListener) {
+        mDatabaseReference.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    User user = Converter.mapToUser(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+
+                    if (user.getType().equals(userType))
+                        scanListener.getUser(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                scanListener.getUser(null);
+            }
+        });
     }
 
     public void insert(Map<String, Object> user, OnSuccessListener onSuccessListener) {

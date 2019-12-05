@@ -1,11 +1,19 @@
 package com.example.pointofsales.database;
 
+import androidx.annotation.NonNull;
+
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
+import com.example.pointofsales.view.checkout.ScanListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,15 +37,21 @@ public class PointDatabase {
         return sPointDatabase;
     }
 
-    public void get(String userId, UserType userType, ChildEventListener childEventListener) {
-        if (userType.equals(UserType.SELLER))
+    public void get(User user, ChildEventListener childEventListener) {
+        if (user.getType().equals(UserType.SELLER))
             mDatabaseReference.orderByChild("storeId")
-                    .equalTo(userId)
+                    .equalTo(user.getId())
                     .addChildEventListener(childEventListener);
         else
             mDatabaseReference.orderByChild("userId")
-                    .equalTo(userId)
+                    .equalTo(user.getId())
                     .addChildEventListener(childEventListener);
+    }
+
+    public void insert(Map<String, Object> point, OnSuccessListener onSuccessListener) {
+        mDatabaseReference.push()
+                .setValue(point)
+                .addOnSuccessListener(onSuccessListener);
     }
 
     public void update(Map<String, Object> point, OnSuccessListener onSuccessListener) {
@@ -50,8 +64,11 @@ public class PointDatabase {
 
             Map<String, Object> hashMap = new HashMap<>();
 
+            hashMap.put("pointId", point.getPointId());
             hashMap.put("userId", point.getUserId());
+            hashMap.put("userName", point.getUserName());
             hashMap.put("storeId", point.getStoreId());
+            hashMap.put("storeName", point.getStoreName());
             hashMap.put("points", point.getPoints());
 
             return hashMap;
@@ -61,8 +78,11 @@ public class PointDatabase {
 
             Point point = new Point();
 
+            point.setPointId(pointId);
             point.setUserId(map.get("userId").toString());
+            point.setUserName(map.get("userName").toString());
             point.setStoreId(map.get("storeId").toString());
+            point.setStoreName(map.get("storeName").toString());
             point.setPoints(Integer.parseInt(map.get("points").toString()));
 
             return point;

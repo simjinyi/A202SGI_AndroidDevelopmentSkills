@@ -14,8 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.pointofsales.R;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.ProductViewModel;
-import com.example.pointofsales.viewmodel.ProductViewModelFactory;
-import com.example.pointofsales.viewmodel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends UserValidationActivity {
@@ -26,7 +24,7 @@ public class MainActivity extends UserValidationActivity {
     protected void onCreateLoginValidated(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
-        mProductViewModel = ViewModelProviders.of(this, new ProductViewModelFactory(UserViewModel.getUserId())).get(ProductViewModel.class);
+        mProductViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

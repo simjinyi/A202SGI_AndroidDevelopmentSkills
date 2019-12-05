@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
@@ -26,10 +26,6 @@ import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductViewModel;
-import com.example.pointofsales.viewmodel.ProductViewModelFactory;
-import com.example.pointofsales.viewmodel.UserViewModel;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -85,6 +81,13 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onSingleClick(View v) {
                 getFragmentManager().popBackStack();
+            }
+        });
+
+        mBtnMember.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_navigation_checkout_to_navigation_scan);
             }
         });
 

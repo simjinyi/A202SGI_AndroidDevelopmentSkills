@@ -44,7 +44,15 @@
         android:id="@+id/navigation_checkout"
         android:name="com.example.pointofsales.view.checkout.CheckoutFragment"
         android:label="@string/title_checkout"
-        tools:layout="@layout/fragment_checkout" />
+        tools:layout="@layout/fragment_checkout" >
+        <action
+            android:id="@+id/action_navigation_checkout_to_navigation_scan"
+            app:destination="@id/navigation_scan"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_add_product"
@@ -63,4 +71,10 @@
         android:name="com.example.pointofsales.view.account.StoreAccountFragment"
         android:label="@string/title_manage_store"
         tools:layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/navigation_scan"
+        android:name="com.example.pointofsales.view.checkout.ScanFragment"
+        android:label="@string/title_scan"
+        tools:layout="@layout/fragment_scan" />
 </navigation>

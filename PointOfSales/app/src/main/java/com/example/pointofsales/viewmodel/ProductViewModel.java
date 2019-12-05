@@ -49,9 +49,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private ProductRepository mProductRepository;
     private CartRepository mCartRepository;
 
-    public ProductViewModel(String storeId) {
+    public ProductViewModel() {
 
-        mStoreId = storeId;
+        mStoreId = UserViewModel.getUserId();
         mProductSort = new ProductSort();
 
         mProductRepository = ProductRepository.getInstance(mStoreId, this, this);
@@ -293,12 +293,6 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
         mProductRemoved.setValue(false);
     }
     // END PRODUCT HANDLER
-
-    // CHECKOUT HANDLER
-    public void checkout(){
-        mCartList.getValue().size();
-    }
-    // END CHECKOUT HANDLER
 
     public LiveData<ArrayList<Product>> getProductList() {
         return mProductList;

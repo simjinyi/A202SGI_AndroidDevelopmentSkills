@@ -1,12 +1,20 @@
 package com.example.pointofsales.repository;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.User;
+import com.example.pointofsales.model.UserType;
+import com.example.pointofsales.view.checkout.ScanListener;
 import com.example.pointofsales.view.login.LoginInterface;
 import com.example.pointofsales.view.register.RegisterInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 public class UserRepository {
 
@@ -51,6 +59,10 @@ public class UserRepository {
 
     public void get(String username, RegisterInterface registerInterface) {
         UserDatabase.getInstance().get(username, registerInterface);
+    }
+
+    public void get(final String userId, final UserType userType, final ScanListener scanListener) {
+        UserDatabase.getInstance().get(userId, userType, scanListener);
     }
 
     public void login(String username, String password, LoginInterface loginInterface) {

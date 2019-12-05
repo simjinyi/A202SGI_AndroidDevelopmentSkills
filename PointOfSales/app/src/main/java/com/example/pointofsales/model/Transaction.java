@@ -83,6 +83,7 @@ public class Transaction {
     public float getTotal() {
         return mSubtotal - mDiscount;
     }
+    public int getPointsPerPrice() { return (int) (mPointsRedeemed / mDiscount); }
 
     public ArrayList<TransactionItem> getTransactionItems() {
         return mTransactionItems;
