@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.PointsRedeemedAndAwarded;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
@@ -89,12 +90,14 @@ public class ScanFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
-        mCheckoutViewModel = ViewModelProviders.of(getParentFragment(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
 
         mIntentIntegrator = IntentIntegrator.forSupportFragment(this);
         mIntentIntegrator.setBeepEnabled(false);
         mIntentIntegrator.setOrientationLocked(false);
         mIntentIntegrator.setCaptureActivity(PortraitCaptureActivity.class);
+
+        mCheckoutViewModel.updateEditText();
 
         mCheckoutViewModel.getPointsRedeemedError().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
@@ -134,6 +137,13 @@ public class ScanFragment extends Fragment {
                 }
 
                 mLoadingScreen.end();
+            }
+        });
+
+        mCheckoutViewModel.getEditTextValue().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                mEtPointsRedeem.setText(String.valueOf(integer));
             }
         });
 
@@ -207,6 +217,8 @@ public class ScanFragment extends Fragment {
                 }
             }
         });
+
+
 
         mBtnClearMember.setOnClickListener(new OnSingleClickListener() {
             @Override

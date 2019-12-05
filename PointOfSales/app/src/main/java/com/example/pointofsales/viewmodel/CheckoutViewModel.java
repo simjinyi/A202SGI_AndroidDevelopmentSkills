@@ -1,9 +1,5 @@
 package com.example.pointofsales.viewmodel;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,18 +10,16 @@ import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.repository.PointRepository;
-import com.example.pointofsales.repository.ProductRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.checkout.ScanListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.example.pointofsales.view.checkout.UpdatePointInterface;
 
-public class CheckoutViewModel extends ViewModel implements ChildEventListener {
+public class CheckoutViewModel extends ViewModel implements UpdatePointInterface {
 
     private MutableLiveData<Integer> mPointsRedeemedError;
     private MutableLiveData<Boolean> mScanUserNotFound;
     private MutableLiveData<Point> mPoint;
+    private MutableLiveData<Integer> mEditTextValue;
     private MutableLiveData<PointsRedeemedAndAwarded> mPointsRedeemedAndAwarded;
 
     private Store mStore;
@@ -46,14 +40,14 @@ public class CheckoutViewModel extends ViewModel implements ChildEventListener {
 
         mStore = (Store) UserRepository.getInstance().getUser().getValue();
 
-        mScanUserNotFound = new MutableLiveData<>();
-        mScanUserNotFound.setValue(false);
-
         mPoint = mPointRepository.getPoint();
         mPointsRedeemedAndAwarded = mPointRepository.getPointsRedeemedAndAwarded();
 
         mPointsRedeemedError = new MutableLiveData<>();
         mPointsRedeemedError.setValue(null);
+
+        mEditTextValue = new MutableLiveData<>();
+        mEditTextValue.setValue(0);
 
         mProductViewModel = productViewModel;
     }
@@ -76,41 +70,59 @@ public class CheckoutViewModel extends ViewModel implements ChildEventListener {
         mPointRepository.clearPoint();
     }
 
+    public int updateDiscount(int pointsRedeemed) {
+
+        if (pointsRedeemed == 0) {
+
+            mProductViewModel.getCart().getValue().setDiscount(0.0f);
+            mProductViewModel.notifyCartObservers();
+            return -1;
+        }
+
+        int pointsPerPrice = ((Store) UserViewModel.getUser()).getPointsPerPrice();
+        float subTotal = mProductViewModel.getCart().getValue().getSubtotal();
+        int maxPointsAvailable = mPoint.getValue().getPoints();
+
+        float discount = (float) pointsRedeemed / pointsPerPrice;
+
+        if (discount > subTotal) {
+
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
+            mProductViewModel.getCart().getValue().setDiscount(0.0f);
+            mProductViewModel.notifyCartObservers();
+            return (int) subTotal * pointsPerPrice;
+
+        } else if (maxPointsAvailable < pointsRedeemed) {
+
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
+            mProductViewModel.getCart().getValue().setDiscount(0.0f);
+            mProductViewModel.notifyCartObservers();
+            return mPoint.getValue().getPoints();
+
+        } else {
+
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(pointsRedeemed, 0));
+            mProductViewModel.getCart().getValue().setDiscount(discount);
+            mProductViewModel.notifyCartObservers();
+            return -1;
+        }
+    }
+
     public void redeemPointChanged(String pointsRedeemed) {
         if (pointsRedeemed.isEmpty())
             pointsRedeemed = "0";
 
-        int pointsPerPrice = ((Store) UserViewModel.getUser()).getPointsPerPrice();
-        float subTotal = mProductViewModel.getCart().getValue().getSubtotal();
-        Integer pointsRedeemedParsed = Integer.parseInt(pointsRedeemed);
-        int maxPointsAvailable = mPoint.getValue().getPoints();
-
-        if (pointsRedeemedParsed == 0) {
-            mProductViewModel.getCart().getValue().setDiscount(0.0f);
-            mPointsRedeemedError.setValue(null);
-            mProductViewModel.notifyCartObservers();
-            return;
-        }
-
-        float discount = (float) pointsRedeemedParsed / pointsPerPrice;
-
-        if (discount > subTotal) {
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
-            mProductViewModel.getCart().getValue().setDiscount(0.0f);
-            mPointsRedeemedError.setValue((int) subTotal * pointsPerPrice);
-            mProductViewModel.notifyCartObservers();
-        } else if (maxPointsAvailable < pointsRedeemedParsed) {
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(0, 0));
-            mProductViewModel.getCart().getValue().setDiscount(0.0f);
-            mPointsRedeemedError.setValue(mPoint.getValue().getPoints());
-            mProductViewModel.notifyCartObservers();
+        int returned = -1;
+        if ((returned = updateDiscount(Integer.parseInt(pointsRedeemed))) != -1) {
+            mPointsRedeemedError.setValue(returned);
         } else {
-
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(pointsRedeemedParsed, 0));
-            mProductViewModel.getCart().getValue().setDiscount(discount);
             mPointsRedeemedError.setValue(null);
-            mProductViewModel.notifyCartObservers();
         }
+    }
+
+    public void updateEditText() {
+        if (mPointsRedeemedAndAwarded.getValue() != null)
+            mEditTextValue.setValue(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint());
     }
 
     public void clearPoint() {
@@ -144,29 +156,17 @@ public class CheckoutViewModel extends ViewModel implements ChildEventListener {
     public LiveData<Integer> getPointsRedeemedError() {
         return mPointsRedeemedError;
     }
-
-    @Override
-    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+    public LiveData<Integer> getEditTextValue() {
+        return mEditTextValue;
     }
 
     @Override
-    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+    public void onPointChanged(Point point) {
+        mEditTextValue.setValue(point.getPoints());
     }
 
     @Override
-    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-
+    public void onPointDeleted() {
+        clearPoint();
     }
 }

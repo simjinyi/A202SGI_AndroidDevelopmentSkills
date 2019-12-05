@@ -78,8 +78,9 @@ public class CheckoutFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
-        mCheckoutViewModel = ViewModelProviders.of(this, new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
         mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
+
         mCartAdapter.setHasStableIds(true);
 
         mBtnCancel.setOnClickListener(new OnSingleClickListener() {
