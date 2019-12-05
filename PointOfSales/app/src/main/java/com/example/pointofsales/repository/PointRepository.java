@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.PointDatabase;
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.PointsRedeemedAndAwarded;
 import com.example.pointofsales.model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -18,9 +19,10 @@ import java.util.Map;
 public class PointRepository implements ChildEventListener {
 
     private User mUser;
-    private ChildEventListener mChildEventListener;
     private MutableLiveData<Point> mPoint;
+    private MutableLiveData<PointsRedeemedAndAwarded> mPointsRedeemedAndAwarded;
     private MutableLiveData<ArrayList<Point>> mPoints;
+    private ChildEventListener mChildEventListener;
 
     private static PointRepository sPointRepository;
 
@@ -35,6 +37,9 @@ public class PointRepository implements ChildEventListener {
         mPoint = new MutableLiveData<>();
         mPoint.setValue(null);
 
+        mPointsRedeemedAndAwarded = new MutableLiveData<>();
+        mPointsRedeemedAndAwarded.setValue(null);
+
         PointDatabase.getInstance().get(mUser, this);
     }
 
@@ -46,6 +51,7 @@ public class PointRepository implements ChildEventListener {
 
     public void clearPoint() {
         mPoint.setValue(null);
+        mPointsRedeemedAndAwarded.setValue(null);
     }
 
     public void insert(Point point, OnSuccessListener onSuccessListener) {
@@ -62,13 +68,14 @@ public class PointRepository implements ChildEventListener {
 
     public static void clearInstance() {
         sPointRepository = null;
+        PointDatabase.clearInstance();
     }
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         mPoints.getValue().add(PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue()));
-        mChildEventListener.onChildAdded(dataSnapshot, s);
         notifyObservers();
+        mChildEventListener.onChildAdded(dataSnapshot, s);
     }
 
     @Override
@@ -78,22 +85,25 @@ public class PointRepository implements ChildEventListener {
         if (changedPoint.getPointId().equals(mPoint.getValue().getPointId()))
             mPoint.setValue(changedPoint);
 
+        if (mPoint.getValue().getPoints() < mPointsRedeemedAndAwarded.getValue().getRedeemedPoint())
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPoint.getValue().getPoints(), mPointsRedeemedAndAwarded.getValue().getPointAwarded()));
+
         mPoints.getValue().set(getPointIndexFromPointId(changedPoint.getPointId()), changedPoint);
-        mChildEventListener.onChildChanged(dataSnapshot, s);
         notifyObservers();
+        mChildEventListener.onChildChanged(dataSnapshot, s);
     }
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
         Point removedPoint = PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         mPoints.getValue().remove(getPointIndexFromPointId(removedPoint.getPointId()));
-        mChildEventListener.onChildRemoved(dataSnapshot);
         notifyObservers();
+        mChildEventListener.onChildRemoved(dataSnapshot);
     }
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        mChildEventListener.onChildMoved(dataSnapshot, s);
+        mChildEventListener.onChildRemoved(dataSnapshot);
     }
 
     @Override
@@ -112,5 +122,8 @@ public class PointRepository implements ChildEventListener {
     public MutableLiveData<Point> getPoint() { return mPoint; }
     public MutableLiveData<ArrayList<Point>> getPoints() {
         return mPoints;
+    }
+    public MutableLiveData<PointsRedeemedAndAwarded> getPointsRedeemedAndAwarded() {
+        return mPointsRedeemedAndAwarded;
     }
 }

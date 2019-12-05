@@ -362,4 +362,8 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     public String getStoreId() {
         return mStoreId;
     }
+
+    public void notifyCartObservers() {
+        mCart.setValue(mCart.getValue());
+    }
 }

@@ -184,7 +184,7 @@
                     android:padding="4dp"
                     android:text="@string/tvMemberName"
                     android:textColor="@color/primaryColor"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/tvSubtotal" />
@@ -197,7 +197,7 @@
                     android:padding="4dp"
                     android:text="@string/tvPointsRedeemed"
                     android:textColor="@color/primaryColor"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/tvMemberName" />
@@ -210,7 +210,7 @@
                     android:padding="4dp"
                     android:text="@string/tvPointsAwarded"
                     android:textColor="@color/primaryColor"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline"

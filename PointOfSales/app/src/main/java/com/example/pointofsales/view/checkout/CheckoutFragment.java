@@ -20,11 +20,14 @@ import android.widget.TextView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
+import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
+import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import java.util.ArrayList;
 public class CheckoutFragment extends Fragment {
 
     private ProductViewModel mProductViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
     private CartAdapter mCartAdapter;
 
     private RecyclerView mRvCart;
@@ -74,6 +78,7 @@ public class CheckoutFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(this, new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
         mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
         mCartAdapter.setHasStableIds(true);
 
@@ -111,8 +116,10 @@ public class CheckoutFragment extends Fragment {
         mProductViewModel.getCartOpenableState().observe(getViewLifecycleOwner(), new Observer<CartOpenableState>() {
             @Override
             public void onChanged(CartOpenableState cartOpenableState) {
-                if (cartOpenableState.equals(CartOpenableState.DISABLED))
+                if (cartOpenableState.equals(CartOpenableState.DISABLED)) {
+                    mCheckoutViewModel.clearPoint();
                     getFragmentManager().popBackStack();
+                }
             }
         });
 
@@ -162,6 +169,15 @@ public class CheckoutFragment extends Fragment {
                 mTvSubTotal.setText(getString(R.string.tvSubtotal, cart.getSubtotal()));
                 mTvDiscount.setText(getString(R.string.tvDiscount, cart.getDiscount()));
                 mTvTotal.setText(getString(R.string.tvTotal, cart.getTotal()));
+            }
+        });
+
+        mCheckoutViewModel.getPoint().observe(getViewLifecycleOwner(), new Observer<Point>() {
+            @Override
+            public void onChanged(Point point) {
+                if (point != null) {
+                    mTvMemberName.setText(point.getUserName());
+                }
             }
         });
     }

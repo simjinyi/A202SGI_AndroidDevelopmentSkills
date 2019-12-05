@@ -26,7 +26,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -401,31 +401,10 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/button_ripple_holo_red"
-        android:drawableEnd="@drawable/ic_cancel_24dp"
-        android:maxHeight="@dimen/min_clickable"
-        android:paddingStart="@dimen/default_dimen"
-        android:paddingEnd="@dimen/default_dimen"
-        android:text="@string/btnCancel"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
         android:id="@+id/btnSubmit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
+        android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="2dp"
         android:background="@drawable/button_ripple_holo_green"
@@ -435,11 +414,9 @@
         android:paddingEnd="@dimen/default_dimen"
         android:text="@string/btnSubmit"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/btnCancel"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCancel"
-        app:layout_constraintTop_toTopOf="@+id/btnCancel" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/pbLoading"

@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.utility.LoadingScreen;
@@ -45,7 +48,6 @@ public class ScanFragment extends Fragment {
     private EditText mEtTotal;
     private ConstraintLayout mClNoMember;
     private Button mBtnScanQRCode;
-    private Button mBtnCancel;
     private Button mBtnSubmit;
     private Button mBtnClearMember;
     private ProgressBar mPbLoading;
@@ -75,7 +77,6 @@ public class ScanFragment extends Fragment {
         mEtTotal = getView().findViewById(R.id.etTotal);
         mClNoMember = getView().findViewById(R.id.clNoMember);
         mBtnScanQRCode = getView().findViewById(R.id.btnScanQRCode);
-        mBtnCancel = getView().findViewById(R.id.btnCancel);
         mBtnSubmit = getView().findViewById(R.id.btnSubmit);
         mBtnClearMember = getView().findViewById(R.id.btnClearMember);
         mPbLoading = getView().findViewById(R.id.pbLoading);
@@ -88,12 +89,24 @@ public class ScanFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
-        mCheckoutViewModel = ViewModelProviders.of(this, new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(getParentFragment(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
 
         mIntentIntegrator = IntentIntegrator.forSupportFragment(this);
         mIntentIntegrator.setBeepEnabled(false);
         mIntentIntegrator.setOrientationLocked(false);
         mIntentIntegrator.setCaptureActivity(PortraitCaptureActivity.class);
+
+        mCheckoutViewModel.getPointsRedeemedError().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer != null) {
+                    mBtnSubmit.setEnabled(false);
+                    mEtPointsRedeem.setError(getString(R.string.point_redeem_error, integer.toString()));
+                } else {
+                    mBtnSubmit.setEnabled(true);
+                }
+            }
+        });
 
         mBtnScanQRCode.setOnClickListener(new OnSingleClickListener() {
             @Override
@@ -182,6 +195,58 @@ public class ScanFragment extends Fragment {
                             }).show();
                     mProductViewModel.clearCartRemovalFlag();
                 }
+            }
+        });
+
+        mProductViewModel.getCartOpenableState().observe(getViewLifecycleOwner(), new Observer<CartOpenableState>() {
+            @Override
+            public void onChanged(CartOpenableState cartOpenableState) {
+                if (cartOpenableState.equals(CartOpenableState.DISABLED)) {
+                    mCheckoutViewModel.clearPoint();
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
+
+        mBtnClearMember.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.clear_member))
+                        .setMessage(getString(R.string.clear_member_description))
+                        .setIcon(R.drawable.ic_warning_24dp)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mCheckoutViewModel.removePoint();
+                                Toast.makeText(getActivity(), getResources().getString(R.string.member_cleared_successfully), Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+        });
+
+        mEtPointsRedeem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // ignore
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ignore
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mCheckoutViewModel.redeemPointChanged(mEtPointsRedeem.getText().toString());
+            }
+        });
+
+        mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                getFragmentManager().popBackStack();
             }
         });
     }
