@@ -6,10 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.pointofsales.database.UserDatabase;
-import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Point;
-import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
@@ -20,11 +17,9 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-import java.util.ArrayList;
-
 public class CheckoutViewModel extends ViewModel {
 
-    private MutableLiveData<ArrayList<Point>> mPoints;
+    private MutableLiveData<Boolean> mScanUserNotFound;
     private MutableLiveData<Point> mPoint;
 
     private Store mStore;
@@ -65,10 +60,15 @@ public class CheckoutViewModel extends ViewModel {
         });
         mUserRepository = UserRepository.getInstance();
 
+        mScanUserNotFound = new MutableLiveData<>();
+        mScanUserNotFound.setValue(false);
+
         mStore = (Store) UserRepository.getInstance().getUser().getValue();
 
+        mScanUserNotFound = new MutableLiveData<>();
+        mScanUserNotFound.setValue(false);
+
         mPoint = mPointRepository.getPoint();
-        mPoints = mPointRepository.getPoints();
 
         mProductViewModel = productViewModel;
     }
@@ -77,9 +77,16 @@ public class CheckoutViewModel extends ViewModel {
         mUserRepository.get(userId, UserType.CUSTOMER, new ScanListener() {
             @Override
             public void getUser(User user) {
-                mPoint.setValue(findPointByUser(user));
+                if (user == null)
+                    mScanUserNotFound.setValue(true);
+                else
+                    mPoint.setValue(findPointByUser(user));
             }
         });
+    }
+
+    public void clearScanUserNotFoundFlag() {
+        mScanUserNotFound.setValue(false);
     }
 
     private Point findPointByUser(User user) {
@@ -94,5 +101,8 @@ public class CheckoutViewModel extends ViewModel {
 
     public LiveData<Point> getPoint() {
         return mPoint;
+    }
+    public LiveData<Boolean> getScanUserNotFound() {
+        return mScanUserNotFound;
     }
 }

@@ -79,21 +79,37 @@ public class UserDatabase {
     }
 
     public void get(final String userId, final UserType userType, final ScanListener scanListener) {
-        mDatabaseReference.child(userId).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.hasChild(userId)) {
+                    mDatabaseReference.child(userId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
 
-                    User user = Converter.mapToUser(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+                                User user = Converter.mapToUser(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
 
-                    if (user.getType().equals(userType))
-                        scanListener.getUser(user);
+                                if (user.getType().equals(userType))
+                                    scanListener.getUser(user);
+                                else
+                                    scanListener.getUser(null);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            scanListener.getUser(null);
+                        }
+                    });
+                } else {
+                    scanListener.getUser(null);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                scanListener.getUser(null);
+
             }
         });
     }

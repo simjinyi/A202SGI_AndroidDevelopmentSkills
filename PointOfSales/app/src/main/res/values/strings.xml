@@ -152,4 +152,5 @@
     <string name="member_cleared">Member Cleared</string>
     <string name="tvNoMemberDescription">Scan Code to Proceed</string>
     <string name="ivNoMember">No member icon</string>
+    <string name="user_not_found">User Not Found</string>
 </resources>

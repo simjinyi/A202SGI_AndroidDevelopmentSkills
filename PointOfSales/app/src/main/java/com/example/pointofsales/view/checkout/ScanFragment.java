@@ -106,23 +106,33 @@ public class ScanFragment extends Fragment {
             @Override
             public void onChanged(Point point) {
                 if (point != null) {
-
                     mClNoMember.setVisibility(View.GONE);
                     mEtName.setText(point.getUserName());
                     mEtAvailablePoints.setText(String.valueOf(point.getPoints()));
                     mEtPointsRedeem.setEnabled(true);
                     mEtPointsRedeem.requestFocus();
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
                 } else {
-
                     mClNoMember.setVisibility(View.VISIBLE);
                     mEtName.getText().clear();
                     mEtAvailablePoints.getText().clear();
                     mEtPointsRedeem.setEnabled(false);
                     mEtPointsRedeem.getText().clear();
-
                 }
+
+                mLoadingScreen.end();
+            }
+        });
+
+        mCheckoutViewModel.getScanUserNotFound().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                    mCheckoutViewModel.clearScanUserNotFoundFlag();
+                }
+
+                mLoadingScreen.end();
             }
         });
 
@@ -182,8 +192,10 @@ public class ScanFragment extends Fragment {
 
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-            if (result != null)
+            if (result != null) {
                 mCheckoutViewModel.assignPoint(result.getContents());
+                mLoadingScreen.start();
+            }
         }
     }
 }
