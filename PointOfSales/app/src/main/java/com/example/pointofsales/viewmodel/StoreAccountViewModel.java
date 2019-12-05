@@ -30,6 +30,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
     private MutableLiveData<User> mUserData;
 
     private UserRepository mUserRepository;
+    private CheckoutViewModel mCheckOutViewModel;
 
     public StoreAccountViewModel() {
         mUserRepository = UserRepository.getInstance();
@@ -47,10 +48,11 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
-    public StoreAccountViewModel(String storeId) {
+    public StoreAccountViewModel(CheckoutViewModel checkoutViewModel) {
         mUserRepository = UserRepository.getInstance();
+        mCheckOutViewModel = checkoutViewModel;
 
-        mStoreId = storeId;
+        mStoreId = UserViewModel.getUserId();
 
         mStoreAccountFormState = new MutableLiveData<>();
         mStoreAccountFormState.setValue(new StoreAccountFormState(false));
@@ -77,7 +79,16 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
             store.setPasswordSalt(oriStore.getPasswordSalt());
             store.setPassword(oriStore.getPassword());
-            mUserRepository.update(store, this);
+            mUserRepository.update(store, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+
+                    if (mCheckOutViewModel != null)
+                        mCheckOutViewModel.updatePoint(null, true);
+
+                    StoreAccountViewModel.this.onSuccess(o);
+                }
+            });
 
         } else {
 
@@ -90,7 +101,16 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                 store.setPasswordSalt(PasswordHasher.generateRandomSalt());
                 store.setPassword(PasswordHasher.hash(store.getPassword(), store.getPasswordSalt()));
 
-                mUserRepository.update(store, this);
+                mUserRepository.update(store, new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+
+                        if (mCheckOutViewModel != null)
+                            mCheckOutViewModel.updatePoint(null, true);
+
+                        this.onSuccess(o);
+                    }
+                });
             }
         }
     }

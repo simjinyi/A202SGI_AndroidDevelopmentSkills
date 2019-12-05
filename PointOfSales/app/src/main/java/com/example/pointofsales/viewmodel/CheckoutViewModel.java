@@ -89,7 +89,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         mProductViewModel = productViewModel;
     }
 
-    public void updatePoint(Point point) {
+    public void updatePoint(Point point, boolean pointsPerPriceChanged) {
         if (mPointsRedeemedAndAwarded.getValue() == null)
             return;
 
@@ -97,13 +97,13 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         float subTotal = mProductViewModel.getCart().getValue().getSubtotal();
         float discount = (float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice;
 
-        if (discount > subTotal) {
+        if (discount > subTotal || point != null) {
             mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
             mMemberPointChangedState.setValue(true);
             mProductViewModel.notifyCartObservers();
-        } else if (point != null) {
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, calculatePointAwarded()));
+        } else if (pointsPerPriceChanged) {
+            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint(), calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
             mMemberPointChangedState.setValue(true);
             mProductViewModel.notifyCartObservers();
@@ -337,7 +337,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
     @Override
     public void onPointChanged(Point point) {
-        updatePoint(point);
+        updatePoint(point, false);
         mEditTextValue.setValue(point.getPoints());
     }
 

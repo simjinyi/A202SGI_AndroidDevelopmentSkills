@@ -26,19 +26,28 @@ import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.login.LoginActivity;
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
+import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
+import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
+import com.example.pointofsales.viewmodel.UserAccountViewModel;
+import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
 
 public class StoreAccountFragment extends AccountFormFragment {
 
     private StoreAccountViewModel mStoreAccountViewModel;
+    private ProductViewModel mProductViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mStoreAccountViewModel = ViewModelProviders.of(this, new StoreAccountViewModelFactory(UserViewModel.getUserId())).get(StoreAccountViewModel.class);
+        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
+        mStoreAccountViewModel = ViewModelProviders.of(this, new StoreAccountViewModelFactory(mCheckoutViewModel)).get(StoreAccountViewModel.class);
 
         mSwChangePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

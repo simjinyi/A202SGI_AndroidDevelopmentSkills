@@ -131,7 +131,7 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mCartAdapter.notifyDataSetChanged();
-                mCheckoutViewModel.updatePoint(null);
+                mCheckoutViewModel.updatePoint(null, false);
             }
         });
 

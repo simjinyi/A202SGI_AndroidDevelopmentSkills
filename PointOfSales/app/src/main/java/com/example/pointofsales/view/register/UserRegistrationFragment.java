@@ -18,6 +18,7 @@ import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
+import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
 
 public class UserRegistrationFragment extends AccountFormFragment {
 
@@ -27,7 +28,7 @@ public class UserRegistrationFragment extends AccountFormFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mUserAccountViewModel = ViewModelProviders.of(this).get(UserAccountViewModel.class);
+        mUserAccountViewModel = ViewModelProviders.of(this, new UserAccountViewModelFactory(null)).get(UserAccountViewModel.class);
 
         mUserAccountViewModel.getUserAccountFormState().observe(getViewLifecycleOwner(), new Observer<UserAccountFormState>() {
             @Override

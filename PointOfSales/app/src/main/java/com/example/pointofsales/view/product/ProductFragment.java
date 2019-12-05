@@ -129,7 +129,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
-                mCheckoutViewModel.updatePoint(null);
+                mCheckoutViewModel.updatePoint(null, false);
             }
         });
 

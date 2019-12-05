@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
@@ -29,6 +30,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
     private MutableLiveData<User> mUserData;
 
     private UserRepository mUserRepository;
+    private CheckoutViewModel mCheckOutViewModel;
 
     public UserAccountViewModel() {
         mUserRepository = UserRepository.getInstance();
@@ -46,10 +48,11 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
-    public UserAccountViewModel(String userId) {
+    public UserAccountViewModel(CheckoutViewModel checkoutViewModel) {
         mUserRepository = UserRepository.getInstance();
+        mCheckOutViewModel = checkoutViewModel;
 
-        mUserId = userId;
+        mUserId = UserViewModel.getUserId();
 
         mUserAccountFormState = new MutableLiveData<>();
         mUserAccountFormState.setValue(new StoreAccountFormState(false));

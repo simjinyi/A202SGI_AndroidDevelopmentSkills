@@ -71,7 +71,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 @Override
                 public void onSingleClick(View v) {
                     mProductViewModel.addCartQuantity(mProducts.get(position));
-                    mCheckoutViewModel.updatePoint(null);
+                    mCheckoutViewModel.updatePoint(null, false);
                 }
             });
 
@@ -79,7 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 @Override
                 public void onSingleClick(View v) {
                     mProductViewModel.minusCartQuantity(mProducts.get(position));
-                    mCheckoutViewModel.updatePoint(null);
+                    mCheckoutViewModel.updatePoint(null, false);
                 }
             });
 
