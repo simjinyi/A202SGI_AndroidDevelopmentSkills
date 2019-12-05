@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     private Context mContext;
     private ProductViewModel mProductViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
     private LayoutInflater mLayoutInflater;
     private EditButtonClick mEditButtonClick;
     private ArrayList<Product> mProducts;
@@ -69,6 +71,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 @Override
                 public void onSingleClick(View v) {
                     mProductViewModel.addCartQuantity(mProducts.get(position));
+                    mCheckoutViewModel.updatePoint(null);
                 }
             });
 
@@ -76,6 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 @Override
                 public void onSingleClick(View v) {
                     mProductViewModel.minusCartQuantity(mProducts.get(position));
+                    mCheckoutViewModel.updatePoint(null);
                 }
             });
 
@@ -88,11 +92,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         }
     }
 
-    public ProductAdapter(Context context, EditButtonClick editButtonClick, ProductViewModel productViewModel) {
+    public ProductAdapter(Context context, EditButtonClick editButtonClick, ProductViewModel productViewModel, CheckoutViewModel checkoutViewModel) {
         mContext = context;
         mEditButtonClick = editButtonClick;
         mLayoutInflater = LayoutInflater.from(context);
         mProductViewModel = productViewModel;
+        mCheckoutViewModel = checkoutViewModel;
         mProducts = mProductViewModel.getProductList().getValue();
     }
 

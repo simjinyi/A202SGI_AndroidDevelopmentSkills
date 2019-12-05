@@ -343,7 +343,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/button_ripple_primary"
+                android:background="@drawable/button_ripple_secondary"
                 android:drawableEnd="@drawable/ic_camera_alt_24dp"
                 android:paddingStart="@dimen/default_dimen"
                 android:paddingEnd="@dimen/default_dimen"

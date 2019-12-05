@@ -154,4 +154,6 @@
     <string name="clear_member_description">Are you sure you want to clear the member for this transaction?</string>
     <string name="member_cleared_successfully">Member Cleared Successfully</string>
     <string name="point_redeem_error">A maximum of %1$s points can be redeemed</string>
+    <string name="member_point_changed">Member Point Changed</string>
+    <string name="member_point_changed_description">The points redeemed has changed either due to a change in the cart items or the points were used.</string>
 </resources>

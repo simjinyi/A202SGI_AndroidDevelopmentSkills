@@ -36,6 +36,8 @@ import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.state.ProductLoadState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.ValidationActivity;
+import com.example.pointofsales.viewmodel.CheckoutViewModel;
+import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,6 +51,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
 
     private ProductViewModel mProductViewModel;
     private UserViewModel mUserViewModel;
+    private CheckoutViewModel mCheckoutViewModel;
     private ProductAdapter mProductAdapter;
 
     private TextView mTvUsername;
@@ -95,8 +98,9 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         super.onActivityCreated(savedInstanceState);
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
+        mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel);
+        mProductAdapter = new ProductAdapter(getActivity(), this, mProductViewModel, mCheckoutViewModel);
         mProductAdapter.setHasStableIds(true);
         mLoadingScreen.start();
 
@@ -125,6 +129,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mProductAdapter.notifyDataSetChanged();
+                mCheckoutViewModel.updatePoint(null);
             }
         });
 
@@ -175,6 +180,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
                 } else {
                     mIbCheckout.setEnabled(false);
                     mIbCancelCart.setEnabled(false);
+                    mCheckoutViewModel.clearPoint();
                 }
             }
         });
@@ -253,6 +259,25 @@ public class ProductFragment extends Fragment implements EditButtonClick {
             @Override
             public void onChanged(User user) {
                 mTvUsername.setText(user.getName());
+            }
+        });
+
+        mCheckoutViewModel.getMemberChangedState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.member_point_changed))
+                            .setMessage(getString(R.string.member_point_changed_description))
+                            .setIcon(R.drawable.ic_info_24dp)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                    mCheckoutViewModel.clearMemberPointChangedState();
+                }
             }
         });
     }

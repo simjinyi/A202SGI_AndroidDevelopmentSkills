@@ -79,7 +79,7 @@ public class CheckoutFragment extends Fragment {
 
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
         mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
-        mCartAdapter = new CartAdapter(getActivity(), mProductViewModel);
+        mCartAdapter = new CartAdapter(getActivity(), mProductViewModel, mCheckoutViewModel);
 
         mCartAdapter.setHasStableIds(true);
 
@@ -111,6 +111,7 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Product> products) {
                 mCartAdapter.notifyDataSetChanged();
+                mCheckoutViewModel.updatePoint(null);
             }
         });
 
@@ -178,6 +179,25 @@ public class CheckoutFragment extends Fragment {
             public void onChanged(Point point) {
                 if (point != null) {
                     mTvMemberName.setText(point.getUserName());
+                }
+            }
+        });
+
+        mCheckoutViewModel.getMemberChangedState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getString(R.string.member_point_changed))
+                            .setMessage(getString(R.string.member_point_changed_description))
+                            .setIcon(R.drawable.ic_info_24dp)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                    mCheckoutViewModel.clearMemberPointChangedState();
                 }
             }
         });
