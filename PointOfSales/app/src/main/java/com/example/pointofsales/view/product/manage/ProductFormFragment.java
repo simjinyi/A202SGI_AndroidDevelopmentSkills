@@ -51,7 +51,7 @@ public abstract class ProductFormFragment extends Fragment {
     private Button mBtnSubmit;
     private Switch mSwEnabled;
     private ProgressBar mPbLoading;
-    protected Button mBtnDelete;
+    protected ImageButton mBtnDelete;
 
     protected LoadingScreen mLoadingScreen;
 
@@ -76,7 +76,7 @@ public abstract class ProductFormFragment extends Fragment {
         mBtnSubmit = getView().findViewById(R.id.btnSubmit);
         mSwEnabled = getView().findViewById(R.id.swEnabled);
         mPbLoading = getView().findViewById(R.id.pbLoading);
-        mBtnDelete = getView().findViewById(R.id.btnDelete);
+        mBtnDelete = getView().findViewById(R.id.ibDelete);
 
         mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }

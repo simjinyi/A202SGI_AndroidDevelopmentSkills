@@ -68,6 +68,16 @@
                     android:background="@drawable/button_ripple_transparent"
                     android:contentDescription="@string/ibEditProduct"
                     android:src="@drawable/ic_edit_primary_24dp" />
+
+                <ImageButton
+                    android:id="@+id/ibDelete"
+                    android:layout_width="@dimen/min_clickable"
+                    android:layout_height="@dimen/min_clickable"
+                    android:layout_gravity="top|start"
+                    android:background="@drawable/button_ripple_transparent"
+                    android:src="@drawable/ic_delete_forever_holo_red_24dp"
+                    android:contentDescription="@string/ibDelete"
+                    android:visibility="gone" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -251,29 +261,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/btnDelete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_ripple_holo_red"
-                android:drawableEnd="@drawable/ic_delete_forever_24dp"
-                android:maxHeight="@dimen/min_clickable"
-                android:paddingStart="@dimen/default_dimen"
-                android:paddingEnd="@dimen/default_dimen"
-                android:text="@string/btnDelete"
-                android:textColor="@android:color/white"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvProductDetailsHolder"
-                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
