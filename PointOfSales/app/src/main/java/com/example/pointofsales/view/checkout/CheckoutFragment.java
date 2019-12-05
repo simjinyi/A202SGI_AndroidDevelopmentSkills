@@ -178,7 +178,22 @@ public class CheckoutFragment extends Fragment {
             @Override
             public void onChanged(Point point) {
                 if (point != null) {
+
+                    mTvMemberName.setVisibility(View.VISIBLE);
+                    mTvPointsRedeemed.setVisibility(View.VISIBLE);
+                    mTvPointsAwarded.setVisibility(View.VISIBLE);
+                    mTvNoMemberAdded.setVisibility(View.GONE);
+
                     mTvMemberName.setText(point.getUserName());
+                    mTvPointsRedeemed.setText(getString(R.string.tvPointsRedeemed, mCheckoutViewModel.getPointsRedeemedAndAwarded().getValue().getRedeemedPoint()));
+                    mTvPointsAwarded.setText(getString(R.string.tvPointsAwarded, mCheckoutViewModel.getPointsRedeemedAndAwarded().getValue().getPointAwarded()));
+
+                } else {
+
+                    mTvMemberName.setVisibility(View.GONE);
+                    mTvPointsRedeemed.setVisibility(View.GONE);
+                    mTvPointsAwarded.setVisibility(View.GONE);
+                    mTvNoMemberAdded.setVisibility(View.VISIBLE);
                 }
             }
         });

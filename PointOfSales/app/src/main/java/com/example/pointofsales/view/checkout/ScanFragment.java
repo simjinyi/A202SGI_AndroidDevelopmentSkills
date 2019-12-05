@@ -104,7 +104,7 @@ public class ScanFragment extends Fragment {
             public void onChanged(Integer integer) {
                 if (integer != null) {
                     mBtnSubmit.setEnabled(false);
-                    mEtPointsRedeem.setError(getString(R.string.point_redeem_error, integer.toString()));
+                    mEtPointsRedeem.setError(getString(R.string.point_redeem_error, integer));
                 } else {
                     mBtnSubmit.setEnabled(true);
                 }
