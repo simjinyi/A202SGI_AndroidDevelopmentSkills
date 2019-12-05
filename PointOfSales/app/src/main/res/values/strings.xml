@@ -159,4 +159,5 @@
     <string name="checkout_description">Please ensure that the data is accurate before checking out, the transaction saved will not be editable.</string>
     <string name="checkout_confirmation">Checkout Confirmation</string>
     <string name="transaction_saved_successfully">Transaction Saved Successfully</string>
+    <string name="title_transaction">Transaction</string>
 </resources>

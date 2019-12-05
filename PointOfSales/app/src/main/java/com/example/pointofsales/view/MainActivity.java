@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -13,7 +12,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.view.login.LoginActivity;
-import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends UserValidationActivity {
@@ -27,7 +25,7 @@ public class MainActivity extends UserValidationActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_product)
+                R.id.navigation_product, R.id.navigation_transaction)
                 // R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
 
