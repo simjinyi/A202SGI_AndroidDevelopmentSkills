@@ -42,8 +42,8 @@ public class ProductDatabase {
     }
 
     /**
-     *
-     * @param valueEventListener
+     * Check if there's at least one product exists for the seller
+     * @param valueEventListener callback on result from the database
      */
     public void check(ValueEventListener valueEventListener) {
         mDatabaseReference.orderByChild("storeId")
@@ -51,18 +51,32 @@ public class ProductDatabase {
                 .addListenerForSingleValueEvent(valueEventListener);
     }
 
+    /**
+     * Get the product from the database for the seller
+     * @param childEventListener callback for as the database returns data and listens to any changes
+     */
     public void get(ChildEventListener childEventListener) {
         mDatabaseReference.orderByChild("storeId")
                 .equalTo(mStoreId)
                 .addChildEventListener(childEventListener);
     }
 
+    /**
+     * Insert product into database
+     * @param product product to be inserted
+     * @param onSuccessListener callback listener on successful operation
+     */
     public void insert(Map<String, Object> product, OnSuccessListener onSuccessListener) {
         mDatabaseReference.push()
                 .setValue(product)
                 .addOnSuccessListener(onSuccessListener);
     }
 
+    /**
+     * Update product in the database
+     * @param product product to be updated
+     * @param onSuccessListener callback listener on successful operation
+     */
     public void update(Map<String, Object> product, OnSuccessListener onSuccessListener) {
         mDatabaseReference
                 .child(product.get("id").toString())
@@ -70,16 +84,32 @@ public class ProductDatabase {
                 .addOnSuccessListener(onSuccessListener);
     }
 
+    /**
+     * Delete product from the database
+     * @param product product to be deleted
+     * @param completionListener callback to remove listener
+     */
     public void delete(Map<String, Object> product, DatabaseReference.CompletionListener completionListener) {
         mDatabaseReference.child(product.get("id").toString()).removeValue(completionListener);
     }
 
+    /**
+     * Converter class to ease database operation
+     */
     public static class Converter {
+
+        /**
+         * Convert Product object to Map<String, Object>
+         * @param product product to be converted
+         * @return converted map object
+         */
         public static Map<String, Object> productToMap(Product product) {
 
             Map<String, Object> hashMap = new HashMap<>();
 
+            // If the product image is not null, convert the image into Base64 to be saved in the database
             if (product.getImage() != null) {
+
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 product.getImage().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
 
@@ -99,10 +129,17 @@ public class ProductDatabase {
             return hashMap;
         }
 
+        /**
+         * Convert Map<String, Object> object into Product object
+         * @param productId productId from the database
+         * @param map map to be converted
+         * @return converted Point object
+         */
         public static Product mapToProduct(String productId, Map<String, Object> map) {
 
             Product product = new Product();
 
+            // If the image is not null, decode the image from Base64 and assign into the Product object
             if (map.get("image") != null) {
                 byte[] decodedString = Base64.decode(map.get("image").toString(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -123,6 +160,9 @@ public class ProductDatabase {
         }
     }
 
+    /**
+     * Clear the database instance on logout
+     */
     public static void clearInstance() {
         sProductDatabase = null;
     }
