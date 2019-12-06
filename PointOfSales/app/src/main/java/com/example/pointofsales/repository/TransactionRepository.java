@@ -23,11 +23,13 @@ public class TransactionRepository implements ChildEventListener {
 
     private MutableLiveData<ArrayList<Transaction>> mTransactions;
     private User mUser;
+    private TransactionInterface mTransactionInterface;
 
     private static TransactionRepository sTransactionRepository;
 
-    private TransactionRepository(User user) {
+    private TransactionRepository(User user, TransactionInterface transactionInterface) {
         mUser = user;
+        mTransactionInterface = transactionInterface;
 
         mTransactions = new MutableLiveData<>();
         mTransactions.setValue(new ArrayList<Transaction>());
@@ -35,10 +37,14 @@ public class TransactionRepository implements ChildEventListener {
                 .get(mUser.getId(), mUser.getType(), this);
     }
 
-    public static TransactionRepository getInstance(User user) {
+    public static TransactionRepository getInstance(User user, TransactionInterface transactionInterface) {
         if (sTransactionRepository == null)
-            sTransactionRepository = new TransactionRepository(user);
+            sTransactionRepository = new TransactionRepository(user, transactionInterface);
         return sTransactionRepository;
+    }
+
+    public void setTransactionInterface(TransactionInterface transactionInterface) {
+        mTransactionInterface = transactionInterface;
     }
 
     public void get(String userId, UserType userType, ChildEventListener childEventListener) {
@@ -115,6 +121,10 @@ public class TransactionRepository implements ChildEventListener {
         Transaction removedTransaction = TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         int removedTransactionIndex = getTransactionIndexByTransactionId(removedTransaction.getTransactionId());
         mTransactions.getValue().remove(removedTransactionIndex);
+
+        if (mTransactionInterface != null)
+            mTransactionInterface.getDeletedIndex(removedTransactionIndex);
+
         notifyObservers();
     }
 

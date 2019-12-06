@@ -1,9 +1,5 @@
 package com.example.pointofsales.viewmodel;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,20 +12,14 @@ import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.TransactionItem;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
-import com.example.pointofsales.repository.CartInterface;
 import com.example.pointofsales.repository.PointRepository;
-import com.example.pointofsales.repository.ProductRepository;
+import com.example.pointofsales.repository.TransactionInterface;
 import com.example.pointofsales.repository.TransactionRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.checkout.ScanListener;
 import com.example.pointofsales.view.checkout.UpdatePointInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -61,7 +51,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         mPointRepository = PointRepository.getInstance(UserViewModel.getUser(), this);
         mUserRepository = UserRepository.getInstance();
-        mTransactionRepository = TransactionRepository.getInstance(UserViewModel.getUser());
+        mTransactionRepository = TransactionRepository.getInstance(UserViewModel.getUser(), null);
 
         mScanUserNotFound = new MutableLiveData<>();
         mScanUserNotFound.setValue(false);
@@ -281,6 +271,8 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
                 }
             });
+
+            mProductViewModel.resetCart();
         }
 
         mTransactionRepository.insert(transaction, new OnSuccessListener() {

@@ -53,8 +53,6 @@ public class TransactionDetailsFragment extends Fragment {
     private TextView mTvNoMemberAdded;
     private ProgressBar mPbLoading;
 
-    private LoadingScreen mLoadingScreen;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -75,8 +73,6 @@ public class TransactionDetailsFragment extends Fragment {
         mTvTotal = getView().findViewById(R.id.tvTotal);
         mTvNoMemberAdded = getView().findViewById(R.id.tvNoMemberAdded);
         mPbLoading = getView().findViewById(R.id.pbLoading);
-
-        mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }
 
     @Override
@@ -89,11 +85,13 @@ public class TransactionDetailsFragment extends Fragment {
 
         setData(mTransactionViewModel.getTransactions().getValue().get(mIndex));
 
-        mTransactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
+        mTransactionViewModel.getTransactionIndexDeleted().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(ArrayList<Transaction> transactions) {
-                setData(transactions.get(mIndex));
-                mTransactionDetailsAdapter.notifyDataSetChanged();
+            public void onChanged(Integer integer) {
+                if (integer != -1 && integer == mIndex) {
+                    Toast.makeText(getActivity(), getString(R.string.transaction_deleted), Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();
+                }
             }
         });
 
