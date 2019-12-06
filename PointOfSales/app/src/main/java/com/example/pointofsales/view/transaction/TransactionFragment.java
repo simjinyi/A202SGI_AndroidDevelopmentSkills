@@ -57,6 +57,7 @@ public class TransactionFragment extends Fragment {
 
         mTransactionAdapter = new TransactionAdapter(getActivity(), mTransactionViewModel);
         mTransactionAdapter.setHasStableIds(true);
+        mRvTransaction.addItemDecoration(new TransactionDecoration(getResources().getDimension(R.dimen.default_dimen), mTransactionViewModel));
         mRvTransaction.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvTransaction.setAdapter(mTransactionAdapter);
 

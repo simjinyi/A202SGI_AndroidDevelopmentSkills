@@ -161,7 +161,7 @@
     <string name="transaction_saved_successfully">Transaction Saved Successfully</string>
     <string name="title_transaction">Transaction</string>
     <string name="tvTransactionDate">Dec 6, 2019 15:00</string>
-    <string name="tvTransactionPrice">50.00</string>
+    <string name="tvTransactionPrice">%1$.2f</string>
     <string name="view_details">View details</string>
     <string name="tvTransactionDateHeader">Date</string>
     <string name="tvTransactionPriceHeader">Price (MYR)</string>
@@ -173,4 +173,5 @@
     <string name="customerAscending">Customer (Ascending)</string>
     <string name="customerDescending">Customer (Descending)</string>
     <string name="transaction_query_hint">Search date, price or customer…</string>
+    <string name="default_customer">-</string>
 </resources>

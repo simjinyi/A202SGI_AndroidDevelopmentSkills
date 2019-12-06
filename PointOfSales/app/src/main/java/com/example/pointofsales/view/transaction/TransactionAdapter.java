@@ -52,12 +52,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
             mTvTransactionDate.setText(simpleDateFormat.format(new Date(transaction.getTimestamp())));
-            mTvTransactionPrice.setText(String.valueOf(transaction.getTotal()));
+            mTvTransactionPrice.setText(mContext.getString(R.string.tvTransactionPrice, transaction.getTotal()));
 
             if (transaction.getUserName() != null)
                 mTvCustomer.setText(transaction.getUserName());
             else
-                mTvCustomer.setText("-");
+                mTvCustomer.setText(mContext.getString(R.string.default_customer));
 
             mIbViewDetails.setOnClickListener(new OnSingleClickListener() {
                 @Override

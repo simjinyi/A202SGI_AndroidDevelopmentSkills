@@ -6,10 +6,12 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pointofsales.viewmodel.TransactionViewModel;
+
 public class TransactionDecoration extends RecyclerView.ItemDecoration {
 
     private int mDimen;
-    private int mTotalItems;
+    private TransactionViewModel mTransactionViewModel;
 
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -17,13 +19,13 @@ public class TransactionDecoration extends RecyclerView.ItemDecoration {
 
         int position = parent.getChildAdapterPosition(view);
 
-        if (position == mTotalItems - 1)
+        if (position == mTransactionViewModel.getTransactions().getValue().size() - 1)
             outRect.bottom = mDimen;
     }
 
-    public TransactionDecoration(float dimen, int totalItems) {
+    public TransactionDecoration(float dimen, TransactionViewModel transactionViewModel) {
         mDimen = (int) dimen;
-        mTotalItems = totalItems;
+        mTransactionViewModel = transactionViewModel;
     }
 }
 
