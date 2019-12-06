@@ -11,7 +11,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         app:cardCornerRadius="@dimen/cardview_dimen"
         app:cardElevation="@dimen/cardview_dimen"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,14 +32,15 @@
                 app:layout_constraintGuide_percent="0.2" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/ivStoreIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline3"
-                app:srcCompat="@drawable/ic_store_24dp" />
+                app:srcCompat="@drawable/ic_store_24dp"
+                android:contentDescription="@string/ivStoreIcon" />
 
             <TextView
                 android:id="@+id/tvStoreName"

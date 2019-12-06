@@ -192,6 +192,6 @@
     <string name="ivStoreIcon">Store icon</string>
     <string name="tvStoreName">ABC Bakery</string>
     <string name="tvStoreAddress">9, Solok Trengganu, 10460 Penang, Malaysia</string>
-    <string name="tvPoints">100 Points</string>
-    <string name="tvPointsPerPrice">50 Points Per Price</string>
+    <string name="tvPoints">%1$d Points</string>
+    <string name="tvPointsPerPrice">%1$d Points Per Price</string>
 </resources>
