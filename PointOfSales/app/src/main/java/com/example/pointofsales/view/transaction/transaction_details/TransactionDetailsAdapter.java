@@ -13,8 +13,6 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.model.TransactionItem;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 
-import java.util.ArrayList;
-
 public class TransactionDetailsAdapter extends RecyclerView.Adapter<TransactionDetailsAdapter.TransactionDetailsHolder> {
 
     private Context mContext;

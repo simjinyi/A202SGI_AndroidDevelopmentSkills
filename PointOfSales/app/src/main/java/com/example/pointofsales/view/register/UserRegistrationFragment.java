@@ -18,7 +18,6 @@ import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.account.AccountFormFragment;
 import com.example.pointofsales.viewmodel.UserAccountViewModel;
-import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
 
 public class UserRegistrationFragment extends AccountFormFragment {
 

@@ -23,7 +23,6 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
-import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.UserValidationActivity;
 import com.example.pointofsales.view.login.LoginActivity;
@@ -32,8 +31,6 @@ import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
 import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModel;
 import com.example.pointofsales.viewmodel.StoreAccountViewModelFactory;
-import com.example.pointofsales.viewmodel.UserAccountViewModel;
-import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
 
 public class StoreAccountFragment extends AccountFormFragment {

@@ -2,14 +2,9 @@ package com.example.pointofsales.view.transaction.transaction_details;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,16 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.state.TransactionLoadState;
-import com.example.pointofsales.utility.LoadingScreen;
-import com.example.pointofsales.view.product.ProductFragment;
-import com.example.pointofsales.view.transaction.TransactionAdapter;
-import com.example.pointofsales.view.transaction.TransactionDecoration;
 import com.example.pointofsales.view.transaction.TransactionFragment;
-import com.example.pointofsales.view.transaction.ViewDetailsButtonClick;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class TransactionDetailsFragment extends Fragment {

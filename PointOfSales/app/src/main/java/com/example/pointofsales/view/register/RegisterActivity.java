@@ -1,9 +1,9 @@
 package com.example.pointofsales.view.register;
 
-import androidx.viewpager.widget.ViewPager;
-
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.view.ValidationActivity;

@@ -2,14 +2,12 @@ package com.example.pointofsales.viewmodel;
 
 import android.util.Pair;
 import android.util.Patterns;
-import android.widget.Button;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;

@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.User;
@@ -34,8 +33,8 @@ import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;
 import com.example.pointofsales.model.state.ProductLoadState;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.view.OnSingleClickListener;
-import com.example.pointofsales.view.ValidationActivity;
 import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
 import com.example.pointofsales.viewmodel.ProductViewModel;

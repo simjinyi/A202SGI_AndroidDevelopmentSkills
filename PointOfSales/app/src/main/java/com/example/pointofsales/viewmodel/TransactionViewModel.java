@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
-import com.example.pointofsales.model.state.TransactionLoadState;
 import com.example.pointofsales.model.sort.TransactionSort;
+import com.example.pointofsales.model.state.TransactionLoadState;
 import com.example.pointofsales.repository.TransactionInterface;
 import com.example.pointofsales.repository.TransactionRepository;
 import com.google.firebase.database.ChildEventListener;

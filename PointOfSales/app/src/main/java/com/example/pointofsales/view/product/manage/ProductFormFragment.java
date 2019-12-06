@@ -25,9 +25,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.state.ProductFormState;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.ProductFormViewModel;
 import com.squareup.picasso.Picasso;

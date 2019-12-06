@@ -2,7 +2,6 @@ package com.example.pointofsales.view.transaction;
 
 import android.widget.Filter;
 
-import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 

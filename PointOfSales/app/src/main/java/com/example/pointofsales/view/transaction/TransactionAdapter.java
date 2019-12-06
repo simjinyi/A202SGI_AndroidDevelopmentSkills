@@ -8,7 +8,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,6 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.OnSingleClickListener;
-import com.example.pointofsales.view.product.ProductFilter;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
 

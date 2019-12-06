@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.model.sort.MembershipSort;
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.sort.MembershipSort;
 import com.example.pointofsales.model.state.PointLoadState;
 import com.example.pointofsales.repository.MembershipRepository;
 import com.example.pointofsales.repository.PointInterface;

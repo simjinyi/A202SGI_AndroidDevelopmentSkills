@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.ProductDatabase;
-import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;

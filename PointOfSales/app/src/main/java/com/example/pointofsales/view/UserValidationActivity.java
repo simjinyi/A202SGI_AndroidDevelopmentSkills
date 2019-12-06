@@ -7,15 +7,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.example.pointofsales.model.Store;
-import com.example.pointofsales.model.User;
-import com.example.pointofsales.model.UserType;
-import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.login.LoginActivity;
-import com.example.pointofsales.viewmodel.LoginViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
 
 public abstract class UserValidationActivity extends ValidationActivity {

@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.view.OnSingleClickListener;
 
 public abstract class AccountFormFragment extends Fragment implements Observer<AccountFormEnableState> {

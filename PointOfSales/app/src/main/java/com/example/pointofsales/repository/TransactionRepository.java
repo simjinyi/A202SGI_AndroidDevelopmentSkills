@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.pointofsales.database.ProductDatabase;
 import com.example.pointofsales.database.TransactionDatabase;
-import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;

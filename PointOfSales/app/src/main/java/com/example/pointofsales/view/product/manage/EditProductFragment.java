@@ -11,10 +11,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.model.Product;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.product.ProductFragment;
 import com.example.pointofsales.viewmodel.ProductViewModel;
-import com.example.pointofsales.model.Product;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class EditProductFragment extends ProductFormFragment {

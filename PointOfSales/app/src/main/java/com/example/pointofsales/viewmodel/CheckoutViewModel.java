@@ -13,7 +13,6 @@ import com.example.pointofsales.model.TransactionItem;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.repository.PointRepository;
-import com.example.pointofsales.repository.TransactionInterface;
 import com.example.pointofsales.repository.TransactionRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.view.checkout.ScanListener;

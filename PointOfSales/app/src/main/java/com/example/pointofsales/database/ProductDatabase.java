@@ -3,10 +3,8 @@ package com.example.pointofsales.database;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.repository.ProductInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;

@@ -9,16 +9,13 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.UserType;
-import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.MembershipViewModel;
 import com.example.pointofsales.viewmodel.UserViewModel;
-import com.google.android.gms.common.internal.service.Common;
 
 import java.util.ArrayList;
 

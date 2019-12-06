@@ -2,7 +2,6 @@ package com.example.pointofsales.database;
 
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.TransactionItem;
-import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
