@@ -25,7 +25,7 @@ public class MainActivity extends UserValidationActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_product, R.id.navigation_transaction)
+                R.id.navigation_product, R.id.navigation_membership, R.id.navigation_transaction)
                 // R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
 

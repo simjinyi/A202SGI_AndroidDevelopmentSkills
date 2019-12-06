@@ -42,6 +42,20 @@ public class Point {
         }
     };
 
+    public static Comparator<Point> customerNameAsc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return o1.getUserName().toLowerCase().compareTo(o2.getUserName().toLowerCase());
+        }
+    };
+
+    public static Comparator<Point> customerNameDesc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return o2.getUserName().toLowerCase().compareTo(o1.getUserName().toLowerCase());
+        }
+    };
+
     public static Comparator<Point> pointAsc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {

@@ -1,6 +1,4 @@
-package com.example.pointofsales.model.state;
-
-import com.example.pointofsales.model.ProductSortType;
+package com.example.pointofsales.model.sort;
 
 public class TransactionSort {
 

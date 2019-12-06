@@ -14,26 +14,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.MembershipViewModel;
+import com.example.pointofsales.viewmodel.UserViewModel;
+import com.google.android.gms.common.internal.service.Common;
 
 import java.util.ArrayList;
 
-public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.MembershipHolder> implements Filterable {
+public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private MembershipViewModel mMembershipViewModel;
     private ArrayList<Point> mPoints;
 
-    public class MembershipHolder extends RecyclerView.ViewHolder {
+    public class MembershipCustomerHolder extends RecyclerView.ViewHolder implements CommonViewHolder {
 
         private TextView mTvStoreName;
         private TextView mTvPoints;
         private TextView mTvStoreAddress;
         private TextView mTvPointsPerPrice;
 
-        public MembershipHolder(@NonNull View itemView) {
+        public MembershipCustomerHolder(@NonNull View itemView) {
             super(itemView);
 
             mTvStoreName = itemView.findViewById(R.id.tvStoreName);
@@ -50,6 +53,24 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.Me
         }
     }
 
+    public class MembershipSellerHolder extends RecyclerView.ViewHolder implements CommonViewHolder {
+
+        private TextView mTvMemberName;
+        private TextView mTvPoints;
+
+        public MembershipSellerHolder(@NonNull View itemView) {
+            super(itemView);
+
+            mTvMemberName = itemView.findViewById(R.id.tvMemberName);
+            mTvPoints = itemView.findViewById(R.id.tvPoints);
+        }
+
+        public void bindData(Point point, final int position) {
+            mTvMemberName.setText(point.getUserName());
+            mTvPoints.setText(mContext.getString(R.string.tvPoints, point.getPoints()));
+        }
+    }
+
     public MembershipAdapter(Context context, MembershipViewModel membershipViewModel) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
@@ -59,13 +80,16 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.Me
 
     @NonNull
     @Override
-    public MembershipHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MembershipHolder(mLayoutInflater.inflate(R.layout.list_item_membership, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (UserViewModel.getUser().getType().equals(UserType.SELLER))
+            return new MembershipSellerHolder(mLayoutInflater.inflate(R.layout.list_item_membership_store, parent, false));
+        else
+            return new MembershipCustomerHolder(mLayoutInflater.inflate(R.layout.list_item_membership, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MembershipHolder holder, int position) {
-        holder.bindData(mPoints.get(position), position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ((CommonViewHolder) holder).bindData(mPoints.get(position), position);
     }
 
     @Override

@@ -8,9 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
-import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.TransactionLoadState;
-import com.example.pointofsales.model.state.TransactionSort;
+import com.example.pointofsales.model.sort.TransactionSort;
 import com.example.pointofsales.repository.TransactionInterface;
 import com.example.pointofsales.repository.TransactionRepository;
 import com.google.firebase.database.ChildEventListener;
@@ -63,9 +62,15 @@ public class TransactionViewModel extends ViewModel implements TransactionInterf
             case CUSTOMER_ASC:
                 mTransactionRepository.sortCustomerAsc();
                 return R.string.customerAscending;
-            default:
+            case CUSTOMER_DESC:
                 mTransactionRepository.sortCustomerDesc();
                 return R.string.customerDescending;
+            case SELLER_ASC:
+                mTransactionRepository.sortSellerAsc();
+                return R.string.sellerAscending;
+            default:
+                mTransactionRepository.sortSellerDesc();
+                return R.string.sellerDescending;
         }
     }
 

@@ -36,10 +36,15 @@ public class PointDatabase {
         return sPointDatabase;
     }
 
-    public void check(String userId, ValueEventListener valueEventListener) {
-        mDatabaseReference.orderByChild("userId")
-                .equalTo(userId)
-                .addListenerForSingleValueEvent(valueEventListener);
+    public void check(User user, ValueEventListener valueEventListener) {
+        if (user.getType().equals(UserType.SELLER))
+            mDatabaseReference.orderByChild("storeId")
+                    .equalTo(user.getId())
+                    .addListenerForSingleValueEvent(valueEventListener);
+        else
+            mDatabaseReference.orderByChild("userId")
+                    .equalTo(user.getId())
+                    .addListenerForSingleValueEvent(valueEventListener);
     }
 
     public void get(User user, ChildEventListener childEventListener) {

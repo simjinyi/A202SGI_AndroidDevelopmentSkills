@@ -1,4 +1,4 @@
-package com.example.pointofsales.model;
+package com.example.pointofsales.model.sort;
 
 public class MembershipSort {
 

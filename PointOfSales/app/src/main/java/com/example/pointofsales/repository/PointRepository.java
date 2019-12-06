@@ -85,9 +85,9 @@ public class PointRepository implements ChildEventListener {
         PointDatabase.clearInstance();
     }
 
-    public void check(String userId, final PointInterface pointInterface) {
+    public void check(User user, final PointInterface pointInterface) {
         PointDatabase.getInstance()
-                .check(userId, new ValueEventListener() {
+                .check(user, new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         pointInterface.pointExistCallback(dataSnapshot.exists());

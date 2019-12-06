@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Cart;
 import com.example.pointofsales.model.Product;
-import com.example.pointofsales.model.ProductSort;
+import com.example.pointofsales.model.sort.ProductSort;
 import com.example.pointofsales.model.state.CartOpenableState;
 import com.example.pointofsales.model.state.CartRemovalState;
 import com.example.pointofsales.model.state.ProductInventoryQuantityChangeState;

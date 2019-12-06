@@ -44,9 +44,9 @@ public class MembershipRepository implements ChildEventListener {
         return mPoints;
     }
 
-    public void checkPointExists(String userId, final PointInterface pointInterface) {
+    public void checkPointExists(User user, final PointInterface pointInterface) {
         PointDatabase.getInstance()
-                .check(userId, new ValueEventListener() {
+                .check(user, new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         pointInterface.pointExistCallback(dataSnapshot.exists());
@@ -66,6 +66,16 @@ public class MembershipRepository implements ChildEventListener {
 
     public void sortStoreNameDesc() {
         Collections.sort(mPoints.getValue(), Point.storeNameDesc);
+        notifyObservers();
+    }
+
+    public void sortCustomerNameAsc() {
+        Collections.sort(mPoints.getValue(), Point.customerNameAsc);
+        notifyObservers();
+    }
+
+    public void sortCustomerNameDesc() {
+        Collections.sort(mPoints.getValue(), Point.customerNameDesc);
         notifyObservers();
     }
 

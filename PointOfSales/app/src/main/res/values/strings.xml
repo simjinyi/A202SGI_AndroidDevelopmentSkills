@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Point Of Sales</string>
+    <string name="app_name">RealTime POS</string>
     <string name="title_product">Products</string>
     <string name="app_bar_image">Main header background</string>
     <string name="tvGreeting">Welcome</string>
@@ -172,7 +172,7 @@
     <string name="dateDescending">Date (Descending)</string>
     <string name="customerAscending">Customer (Ascending)</string>
     <string name="customerDescending">Customer (Descending)</string>
-    <string name="transaction_query_hint">Search date, price, seller or customer…</string>
+    <string name="transaction_query_hint">Search date, price, customer or seller…</string>
     <string name="default_customer">-</string>
     <string name="checkout_no_member_confirmation">Checkout Without Adding Member?</string>
     <string name="checkout_no_member_description">Are you sure you want to checkout without adding member?</string>
@@ -198,7 +198,7 @@
     <string name="tvNoMembership">No Membership</string>
     <string name="tvAddMembership">Perform some transactions</string>
     <string name="no_transaction_available">No Transaction Available</string>
-    <string name="membership_query_hint">Search store name, address, points or points per price…</string>
+    <string name="membership_query_hint">Search customer name, store name, address, points or points per price…</string>
     <string name="storeNameAscending">Store Name (Ascending)</string>
     <string name="storeNameDescending">Store Name (Descending)</string>
     <string name="pointAscending">Point (Ascending)</string>
@@ -209,4 +209,9 @@
     <string name="tvSellerName">Seller</string>
     <string name="tvSellerNameLabel">Seller</string>
     <string name="tvSeller">Seller</string>
+    <string name="ivMemberIcon">Member icon</string>
+    <string name="sellerAscending">Seller (Ascending)</string>
+    <string name="sellerDescending">Seller (Descending)</string>
+    <string name="customerNameAscending">Customer Name (Ascending)</string>
+    <string name="customerNameDescending">Customer Name (Descending)</string>
 </resources>

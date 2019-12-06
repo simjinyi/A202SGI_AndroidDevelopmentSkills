@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
-import com.example.pointofsales.model.MembershipSort;
+import com.example.pointofsales.model.sort.MembershipSort;
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.state.PointLoadState;
 import com.example.pointofsales.repository.MembershipRepository;
@@ -39,7 +39,7 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
     }
 
     private void checkPointExists() {
-        mMembershipRepository.checkPointExists(UserViewModel.getUserId(), this);
+        mMembershipRepository.checkPointExists(UserViewModel.getUser(), this);
     }
 
     public LiveData<ArrayList<Point>> getPoints() {
@@ -87,6 +87,12 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
             case STORE_NAME_DESC:
                 mMembershipRepository.sortStoreNameDesc();
                 return R.string.storeNameDescending;
+            case CUSTOMER_NAME_ASC:
+                mMembershipRepository.sortCustomerNameAsc();
+                return R.string.customerNameAscending;
+            case CUSTOMER_NAME_DESC:
+                mMembershipRepository.sortCustomerNameDesc();
+                return R.string.customerNameDescending;
             case POINT_ASC:
                 mMembershipRepository.sortPointAsc();
                 return R.string.pointAscending;

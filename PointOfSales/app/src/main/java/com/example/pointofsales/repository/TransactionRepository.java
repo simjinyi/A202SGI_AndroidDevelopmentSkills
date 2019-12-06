@@ -110,6 +110,16 @@ public class TransactionRepository implements ChildEventListener {
         notifyObservers();
     }
 
+    public void sortSellerAsc() {
+        Collections.sort(mTransactions.getValue(), Transaction.sellerAscComparator);
+        notifyObservers();
+    }
+
+    public void sortSellerDesc() {
+        Collections.sort(mTransactions.getValue(), Transaction.sellerDescComparator);
+        notifyObservers();
+    }
+
     public void notifyObservers() {
         mTransactions.setValue(mTransactions.getValue());
     }

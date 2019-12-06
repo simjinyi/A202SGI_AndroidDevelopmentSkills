@@ -85,6 +85,20 @@ public class Transaction {
         }
     };
 
+    public static Comparator<Transaction> sellerAscComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return o1.getStoreName().toLowerCase().compareTo(o2.getStoreName().toLowerCase());
+        }
+    };
+
+    public static Comparator<Transaction> sellerDescComparator = new Comparator<Transaction>() {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return o2.getStoreName().toLowerCase().compareTo(o1.getStoreName().toLowerCase());
+        }
+    };
+
     public String getTransactionId() {
         return mTransactionId;
     }

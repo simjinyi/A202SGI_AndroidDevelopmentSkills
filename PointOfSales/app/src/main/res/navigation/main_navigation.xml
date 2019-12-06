@@ -97,4 +97,10 @@
         android:name="com.example.pointofsales.view.transaction.transaction_details.TransactionDetailsFragment"
         android:label="@string/title_transaction_details"
         tools:layout="@layout/fragment_transaction_details" />
+
+    <fragment
+        android:id="@+id/navigation_membership"
+        android:name="com.example.pointofsales.view.membership.MembershipFragment"
+        android:label="@string/title_membership"
+        tools:layout="@layout/fragment_membership" />
 </navigation>

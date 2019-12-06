@@ -29,6 +29,7 @@ public class MembershipFilter extends Filter {
         else
             for (Point point : points)
                 if (point.getStoreName().toLowerCase().contains(searchString.toLowerCase()) ||
+                        point.getUserName().toLowerCase().contains(searchString.toLowerCase()) ||
                         point.getStoreAddress().toLowerCase().contains(searchString.toLowerCase()) ||
                         searchString.toLowerCase().contains(String.valueOf(point.getPoints())) ||
                         searchString.toLowerCase().contains(String.valueOf(point.getStorePointsPerPrice())))
