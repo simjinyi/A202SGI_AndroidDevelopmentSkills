@@ -1,5 +1,8 @@
 package com.example.pointofsales.model.state;
 
+/**
+ * Model class to store the login form fields validation
+ */
 public class LoginFormState {
 
     private Integer mEmailError;

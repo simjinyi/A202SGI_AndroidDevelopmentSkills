@@ -1,5 +1,8 @@
 package com.example.pointofsales.model.state;
 
+/**
+ * Model class to store the account form fields enable state
+ */
 public class AccountFormEnableState {
 
     private boolean mIsNameEnabled;

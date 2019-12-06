@@ -1,5 +1,8 @@
 package com.example.pointofsales.model;
 
+/**
+ * Model class to store the customer details
+ */
 public class User {
 
     private boolean mIsLoggedIn;

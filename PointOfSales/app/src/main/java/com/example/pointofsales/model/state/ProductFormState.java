@@ -1,5 +1,8 @@
 package com.example.pointofsales.model.state;
 
+/**
+ * Model class to store the product form validation cases
+ */
 public class ProductFormState {
 
     private Integer mNameError;

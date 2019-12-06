@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Model class to store the removed items in the cart
+ */
 public class CartRemovalState {
 
     private ArrayList<String> mProductNames;

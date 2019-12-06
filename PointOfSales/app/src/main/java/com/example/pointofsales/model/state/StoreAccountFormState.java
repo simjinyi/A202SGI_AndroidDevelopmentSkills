@@ -1,5 +1,8 @@
 package com.example.pointofsales.model.state;
 
+/**
+ * Model class to store the profile form validation cases
+ */
 public class StoreAccountFormState extends UserAccountFormState {
 
     private Integer mAddressError;

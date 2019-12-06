@@ -3,6 +3,9 @@ package com.example.pointofsales.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Model class to store the transaction details
+ */
 public class Transaction {
 
     private String mTransactionId;
@@ -17,6 +20,8 @@ public class Transaction {
     private Integer mPointsAwarded;
     private float mDiscount;
 
+    // Comparators to be used in sorting the transactions
+    // Date added ascending
     public static Comparator<Transaction> dateAscComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
@@ -24,6 +29,7 @@ public class Transaction {
         }
     };
 
+    // Date added descending
     public static Comparator<Transaction> dateDescComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
@@ -31,6 +37,7 @@ public class Transaction {
         }
     };
 
+    // Total price ascending
     public static Comparator<Transaction> priceAscComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
@@ -38,6 +45,7 @@ public class Transaction {
         }
     };
 
+    // Total price descending
     public static Comparator<Transaction> priceDescComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
@@ -45,12 +53,14 @@ public class Transaction {
         }
     };
 
+    // Customer name ascending
     public static Comparator<Transaction> customerAscComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
 
             String first = "", second = "";
 
+            // Ensure that the names are not null before comparing
             if (o1.getUserName() == null)
                 first = "-";
             else
@@ -65,12 +75,14 @@ public class Transaction {
         }
     };
 
+    // Customer name descending
     public static Comparator<Transaction> customerDescComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
 
             String first = "", second = "";
 
+            // Ensure that the names are not null before comparing
             if (o1.getUserName() == null)
                 first = "-";
             else
@@ -85,6 +97,7 @@ public class Transaction {
         }
     };
 
+    // Seller name ascending
     public static Comparator<Transaction> sellerAscComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
@@ -92,12 +105,14 @@ public class Transaction {
         }
     };
 
+    // Seller name descending
     public static Comparator<Transaction> sellerDescComparator = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction o1, Transaction o2) {
             return o2.getStoreName().toLowerCase().compareTo(o1.getStoreName().toLowerCase());
         }
     };
+    // END Comparators
 
     public String getTransactionId() {
         return mTransactionId;

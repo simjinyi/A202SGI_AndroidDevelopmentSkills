@@ -2,6 +2,9 @@ package com.example.pointofsales.model;
 
 import java.util.Comparator;
 
+/**
+ * Model class to store the membership point details
+ */
 public class Point {
 
     private String pointId;
@@ -28,6 +31,8 @@ public class Point {
         mPoints = points;
     }
 
+    // Comparator used in sorting the membership points
+    // Store Name (Ascending)
     public static Comparator<Point> storeNameAsc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -35,6 +40,7 @@ public class Point {
         }
     };
 
+    // Store Name (Descending)
     public static Comparator<Point> storeNameDesc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -42,6 +48,7 @@ public class Point {
         }
     };
 
+    // Customer Name (Ascending)
     public static Comparator<Point> customerNameAsc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -49,6 +56,7 @@ public class Point {
         }
     };
 
+    // Customer Name (Descending)
     public static Comparator<Point> customerNameDesc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -56,6 +64,7 @@ public class Point {
         }
     };
 
+    // Membership Points (Ascending)
     public static Comparator<Point> pointAsc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -63,6 +72,7 @@ public class Point {
         }
     };
 
+    // Membership Points (Descending)
     public static Comparator<Point> pointDesc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -70,6 +80,7 @@ public class Point {
         }
     };
 
+    // Points Per Price (Ascending)
     public static Comparator<Point> pointsPerPriceAsc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
@@ -77,12 +88,14 @@ public class Point {
         }
     };
 
+    // Points Per Price (Descending)
     public static Comparator<Point> pointsPerPriceDesc = new Comparator<Point>() {
         @Override
         public int compare(Point o1, Point o2) {
             return Integer.compare(o2.getStorePointsPerPrice(), o1.getStorePointsPerPrice());
         }
     };
+    // END Comparators
 
     public String getPointId() {
         return pointId;

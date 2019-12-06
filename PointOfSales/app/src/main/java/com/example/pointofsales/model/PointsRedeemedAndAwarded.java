@@ -1,5 +1,8 @@
 package com.example.pointofsales.model;
 
+/**
+ * Model class to store the temporary points redeemed and awarded prior to insertion into database
+ */
 public class PointsRedeemedAndAwarded {
 
     private int mRedeemedPoint;

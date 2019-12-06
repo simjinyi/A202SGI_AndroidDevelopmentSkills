@@ -4,6 +4,10 @@ import android.graphics.Bitmap;
 
 import java.util.Comparator;
 
+
+/**
+ * Model class to store the product details
+ */
 public class Product {
 
     private String mId;
@@ -19,6 +23,8 @@ public class Product {
     private int mCartQuantity;
     private float mCartExtension;
 
+    // Comparators to be used in sorting the products
+    // Name ascending
     public static Comparator<Product> nameAscComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -26,6 +32,7 @@ public class Product {
         }
     };
 
+    // Name descending
     public static Comparator<Product> nameDescComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -33,6 +40,7 @@ public class Product {
         }
     };
 
+    // Price ascending
     public static Comparator<Product> priceAscComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -40,6 +48,7 @@ public class Product {
         }
     };
 
+    // Price descending
     public static Comparator<Product> priceDescComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -47,6 +56,7 @@ public class Product {
         }
     };
 
+    // Inventory quantity ascending
     public static Comparator<Product> inventoryAscComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -54,6 +64,7 @@ public class Product {
         }
     };
 
+    // Inventory quantity descending
     public static Comparator<Product> inventoryDescComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -61,6 +72,7 @@ public class Product {
         }
     };
 
+    // Cart quantity ascending
     public static Comparator<Product> cartAscComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
@@ -68,12 +80,14 @@ public class Product {
         }
     };
 
+    // Cart quantity descending
     public static Comparator<Product> cartDescComparator = new Comparator<Product>() {
         @Override
         public int compare(Product product1, Product product2) {
             return Integer.compare(product2.getCartQuantity(), product1.getCartQuantity());
         }
     };
+    // END Comparators
 
     public Product() {
         mCartQuantity = 0;

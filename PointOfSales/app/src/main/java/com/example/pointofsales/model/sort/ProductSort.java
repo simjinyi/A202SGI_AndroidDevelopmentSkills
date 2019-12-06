@@ -1,5 +1,8 @@
 package com.example.pointofsales.model.sort;
 
+/**
+ * Class to obtain the sorting method for the product
+ */
 public class ProductSort {
 
     private int index = 0;

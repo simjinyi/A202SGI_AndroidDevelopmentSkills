@@ -1,5 +1,8 @@
 package com.example.pointofsales.model;
 
+/**
+ * Model class to store the cart details
+ */
 public class Cart {
 
     private int mCartQuantity;

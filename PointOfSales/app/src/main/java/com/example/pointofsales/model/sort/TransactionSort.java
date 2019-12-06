@@ -1,5 +1,8 @@
 package com.example.pointofsales.model.sort;
 
+/**
+ * Class to obtain the sorting method for the transactions
+ */
 public class TransactionSort {
 
     private int index = 0;

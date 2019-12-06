@@ -1,5 +1,8 @@
 package com.example.pointofsales.model;
 
+/**
+ * Model class to store the seller details
+ */
 public class Store extends User {
 
     private String mAddress;

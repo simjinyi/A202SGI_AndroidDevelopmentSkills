@@ -1,5 +1,8 @@
 package com.example.pointofsales.model;
 
+/**
+ * Model class to store the transaction items composited by the Transaction class
+ */
 public class TransactionItem {
 
     private String mName;

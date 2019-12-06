@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+/**
+ * Model class to store the products when the inventory quantity was updated
+ */
 public class ProductInventoryQuantityChangeState {
 
     private ArrayList<String> mProductNames;
