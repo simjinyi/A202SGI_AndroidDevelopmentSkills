@@ -1,5 +1,7 @@
 package com.example.pointofsales.model;
 
+import java.util.Comparator;
+
 public class Point {
 
     private String pointId;
@@ -25,6 +27,48 @@ public class Point {
         mStorePointsPerPrice = storePointsPerPrice;
         mPoints = points;
     }
+
+    public static Comparator<Point> storeNameAsc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return o1.getStoreName().toLowerCase().compareTo(o2.getStoreName().toLowerCase());
+        }
+    };
+
+    public static Comparator<Point> storeNameDesc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return o2.getStoreName().toLowerCase().compareTo(o1.getStoreName().toLowerCase());
+        }
+    };
+
+    public static Comparator<Point> pointAsc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return Integer.compare(o1.getPoints(), o2.getPoints());
+        }
+    };
+
+    public static Comparator<Point> pointDesc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return Integer.compare(o2.getPoints(), o1.getPoints());
+        }
+    };
+
+    public static Comparator<Point> pointsPerPriceAsc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return Integer.compare(o1.getStorePointsPerPrice(), o2.getStorePointsPerPrice());
+        }
+    };
+
+    public static Comparator<Point> pointsPerPriceDesc = new Comparator<Point>() {
+        @Override
+        public int compare(Point o1, Point o2) {
+            return Integer.compare(o2.getStorePointsPerPrice(), o1.getStorePointsPerPrice());
+        }
+    };
 
     public String getPointId() {
         return pointId;

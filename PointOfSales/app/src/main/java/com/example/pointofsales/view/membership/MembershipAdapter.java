@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,13 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.view.transaction.TransactionFilter;
 import com.example.pointofsales.viewmodel.MembershipViewModel;
 
-public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.MembershipHolder> {
+import java.util.ArrayList;
+
+public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.MembershipHolder> implements Filterable {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private MembershipViewModel mMembershipViewModel;
+    private ArrayList<Point> mPoints;
 
     public class MembershipHolder extends RecyclerView.ViewHolder {
 
@@ -47,6 +53,7 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.Me
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mMembershipViewModel = membershipViewModel;
+        mPoints = membershipViewModel.getPoints().getValue();
     }
 
     @NonNull
@@ -57,11 +64,25 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.Me
 
     @Override
     public void onBindViewHolder(@NonNull MembershipHolder holder, int position) {
-        holder.bindData(mMembershipViewModel.getPoints().getValue().get(position));
+        holder.bindData(mPoints.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mMembershipViewModel.getPoints().getValue().size();
+        return mPoints.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mPoints.get(position).hashCode();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new MembershipFilter(mMembershipViewModel, this);
+    }
+
+    public void setPoints(ArrayList<Point> points) {
+        mPoints = points;
     }
 }

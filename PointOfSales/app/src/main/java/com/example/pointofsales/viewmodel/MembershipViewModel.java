@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.pointofsales.R;
+import com.example.pointofsales.model.MembershipSort;
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.state.PointLoadState;
 import com.example.pointofsales.repository.MembershipRepository;
@@ -23,9 +25,13 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
 
     private MembershipRepository mMembershipRepository;
 
+    private MembershipSort mMembershipSort;
+
     public MembershipViewModel() {
         mMembershipRepository = MembershipRepository.getInstance(UserViewModel.getUser(), this);
         mPoints = mMembershipRepository.getPoints();
+
+        mMembershipSort = new MembershipSort();
 
         mPointLoadState = new MutableLiveData<>();
         mPointLoadState.setValue(PointLoadState.LOADING);
@@ -71,5 +77,28 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+    }
+
+    public int sort() {
+        switch (mMembershipSort.next()) {
+            case STORE_NAME_ASC:
+                mMembershipRepository.sortStoreNameAsc();
+                return R.string.storeNameAscending;
+            case STORE_NAME_DESC:
+                mMembershipRepository.sortStoreNameDesc();
+                return R.string.storeNameDescending;
+            case POINT_ASC:
+                mMembershipRepository.sortPointAsc();
+                return R.string.pointAscending;
+            case POINT_DESC:
+                mMembershipRepository.sortPointDesc();
+                return R.string.pointDescending;
+            case POINTS_PER_PRICE_ASC:
+                mMembershipRepository.sortPointsPerPriceAsc();
+                return R.string.pointsPerPriceAscending;
+            default:
+                mMembershipRepository.sortPointsPerPriceDesc();
+                return R.string.pointsPerPriceDescending;
+        }
     }
 }

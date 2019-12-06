@@ -70,8 +70,13 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
         mTransactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
             @Override
             public void onChanged(ArrayList<Transaction> transactions) {
-                mTransactionAdapter.notifyDataSetChanged();
-                mTransactionViewModel.calculateTotalTransaction(transactions);
+                if (transactions.size() > 0) {
+                    mTransactionAdapter.notifyDataSetChanged();
+                    mTransactionViewModel.calculateTotalTransaction(transactions);
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();
+                }
             }
         });
 

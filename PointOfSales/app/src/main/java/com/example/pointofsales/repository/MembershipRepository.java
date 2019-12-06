@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class MembershipRepository implements ChildEventListener {
@@ -56,6 +57,36 @@ public class MembershipRepository implements ChildEventListener {
                         pointInterface.pointExistCallback(false);
                     }
                 });
+    }
+
+    public void sortStoreNameAsc() {
+        Collections.sort(mPoints.getValue(), Point.storeNameAsc);
+        notifyObservers();
+    }
+
+    public void sortStoreNameDesc() {
+        Collections.sort(mPoints.getValue(), Point.storeNameDesc);
+        notifyObservers();
+    }
+
+    public void sortPointAsc() {
+        Collections.sort(mPoints.getValue(), Point.pointAsc);
+        notifyObservers();
+    }
+
+    public void sortPointDesc() {
+        Collections.sort(mPoints.getValue(), Point.pointDesc);
+        notifyObservers();
+    }
+
+    public void sortPointsPerPriceAsc() {
+        Collections.sort(mPoints.getValue(), Point.pointsPerPriceAsc);
+        notifyObservers();
+    }
+
+    public void sortPointsPerPriceDesc() {
+        Collections.sort(mPoints.getValue(), Point.pointsPerPriceDesc);
+        notifyObservers();
     }
 
     @Override

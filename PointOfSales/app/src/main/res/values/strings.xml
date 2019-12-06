@@ -197,4 +197,12 @@
     <string name="ivNoMembershipBackground">No membership background</string>
     <string name="tvNoMembership">No Membership</string>
     <string name="tvAddMembership">Perform some transactions</string>
+    <string name="no_transaction_available">No Transaction Available</string>
+    <string name="membership_query_hint">Search store name, address, points or points per price…</string>
+    <string name="storeNameAscending">Store Name (Ascending)</string>
+    <string name="storeNameDescending">Store Name (Descending)</string>
+    <string name="pointAscending">Point (Ascending)</string>
+    <string name="pointDescending">Point (Descending)</string>
+    <string name="pointsPerPriceAscending">Points Per Price (Ascending)</string>
+    <string name="pointsPerPriceDescending">Points Per Price (Descending)</string>
 </resources>

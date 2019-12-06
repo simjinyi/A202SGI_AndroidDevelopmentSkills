@@ -9,6 +9,7 @@ import com.example.pointofsales.database.ProductDatabase;
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.PointsRedeemedAndAwarded;
 import com.example.pointofsales.model.Store;
+import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.view.checkout.UpdatePointInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class PointRepository implements ChildEventListener {
