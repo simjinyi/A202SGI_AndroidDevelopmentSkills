@@ -28,7 +28,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     public class CartHolder extends RecyclerView.ViewHolder {
 
-        private View mRootView;
         private TextView mTvProductName;
         private TextView mTvProductPrice;
         private Button mBtnMinusProductQuantity;
@@ -39,7 +38,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
         public CartHolder(@NonNull View itemView) {
             super(itemView);
 
-            mRootView = itemView;
             mTvProductName = itemView.findViewById(R.id.tvProductName);
             mTvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             mBtnMinusProductQuantity = itemView.findViewById(R.id.btnMinusProductQuantity);
@@ -49,9 +47,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
         }
 
         public void bindCart(Product product, final int position) {
-
-//            if (product.getCartQuantity() <= 0)
-//                mRootView.setVisibility(View.GONE);
 
             mTvProductName.setText(product.getName());
             mTvProductPrice.setText(String.format("%.2f", product.getPrice()));

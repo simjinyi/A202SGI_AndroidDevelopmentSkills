@@ -105,7 +105,7 @@ public class TransactionRepository implements ChildEventListener {
     @Override
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         Transaction changedTransaction = TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
-        int changedTransactionIndex = getTransactionByTransactionId(changedTransaction.getTransactionId());
+        int changedTransactionIndex = getTransactionIndexByTransactionId(changedTransaction.getTransactionId());
         mTransactions.getValue().set(changedTransactionIndex, changedTransaction);
         notifyObservers();
     }
@@ -113,7 +113,7 @@ public class TransactionRepository implements ChildEventListener {
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
         Transaction removedTransaction = TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
-        int removedTransactionIndex = getTransactionByTransactionId(removedTransaction.getTransactionId());
+        int removedTransactionIndex = getTransactionIndexByTransactionId(removedTransaction.getTransactionId());
         mTransactions.getValue().remove(removedTransactionIndex);
         notifyObservers();
     }
@@ -128,7 +128,7 @@ public class TransactionRepository implements ChildEventListener {
 
     }
 
-    public int getTransactionByTransactionId(String transactionId) {
+    public int getTransactionIndexByTransactionId(String transactionId) {
         for (int i = 0; i < mTransactions.getValue().size(); i++)
             if (mTransactions.getValue().get(i).getTransactionId().equals(transactionId))
                 return i;

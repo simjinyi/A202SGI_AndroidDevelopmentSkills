@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvProductName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textColor="@color/primaryColor"
+        android:background="@drawable/table_body_cell_first"
+        android:gravity="start|center_vertical"
+        android:padding="@dimen/small_margin"
+        android:text="@string/tvProductName" />
+
+    <TextView
+        android:id="@+id/tvProductPrice"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textColor="@color/primaryColor"
+        android:background="@drawable/table_body_cell"
+        android:gravity="start|center_vertical"
+        android:padding="@dimen/small_margin"
+        android:text="@string/tvProductPrice" />
+
+    <TextView
+        android:id="@+id/tvProductQuantity"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textColor="@color/primaryColor"
+        android:background="@drawable/table_body_cell"
+        android:gravity="start|center_vertical"
+        android:padding="@dimen/small_margin"
+        android:text="@string/tvProductQuantity" />
+
+    <TextView
+        android:id="@+id/tvProductPriceExtension"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textColor="@color/primaryColor"
+        android:background="@drawable/table_body_cell"
+        android:gravity="start|center_vertical"
+        android:padding="@dimen/small_margin"
+        android:text="@string/tvProductPriceExtension" />
+</LinearLayout>

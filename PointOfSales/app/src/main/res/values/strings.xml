@@ -177,4 +177,6 @@
     <string name="checkout_no_member_confirmation">Checkout Without Adding Member?</string>
     <string name="checkout_no_member_description">Are you sure you want to checkout without adding member?</string>
     <string name="tvTotalTransaction">Total Transaction: MYR %1$.2f</string>
+    <string name="title_transaction_details">Transaction Details</string>
+    <string name="tvTransactionDateLabel">Date</string>
 </resources>

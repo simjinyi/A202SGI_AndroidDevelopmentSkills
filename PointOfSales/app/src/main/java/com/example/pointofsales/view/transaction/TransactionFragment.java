@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,8 @@ import com.example.pointofsales.viewmodel.TransactionViewModel;
 import java.util.ArrayList;
 
 public class TransactionFragment extends Fragment implements ViewDetailsButtonClick {
+
+    public static final String TRANSACTION_INDEX_FRAGMENT_ARG = "com.example.pointofsales.view.transaction.TRANSACTION_ID_FRAGMENT_ARG";
 
     private TransactionViewModel mTransactionViewModel;
     private TransactionAdapter mTransactionAdapter;
@@ -56,7 +59,7 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mTransactionViewModel = ViewModelProviders.of(getActivity()).get(TransactionViewModel.class);
 
         mTransactionAdapter = new TransactionAdapter(getActivity(), mTransactionViewModel, this);
         mTransactionAdapter.setHasStableIds(true);
@@ -116,6 +119,8 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
 
     @Override
     public void onViewDetailsButtonClick(Transaction transaction) {
-
+        Bundle bundle = new Bundle();
+        bundle.putInt(TRANSACTION_INDEX_FRAGMENT_ARG, mTransactionViewModel.getTransactionIndexFromTransactionId(transaction.getTransactionId()));
+        Navigation.findNavController(getView()).navigate(R.id.action_navigation_transaction_to_navigation_transaction_details, bundle);
     }
 }

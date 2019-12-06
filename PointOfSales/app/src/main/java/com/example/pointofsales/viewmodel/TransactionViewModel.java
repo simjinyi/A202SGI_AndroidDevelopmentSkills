@@ -59,6 +59,10 @@ public class TransactionViewModel extends ViewModel {
         mTotalTransaction.setValue(total);
     }
 
+    public int getTransactionIndexFromTransactionId(String transactionId) {
+        return mTransactionRepository.getTransactionIndexByTransactionId(transactionId);
+    }
+
     public LiveData<ArrayList<Transaction>> getTransactions() {
         return mTransactions;
     }
