@@ -186,7 +186,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_qr">Home</string>
     <string name="ivQRCode">QR Code</string>
-    <string name="tvInstruction">Present the QR Code to the seller to get rewarded.</string>
+    <string name="tvInstruction">Present the QR Code to the seller to get rewarded</string>
     <string name="title_manage_user">Manage Profile</string>
     <string name="title_membership">Membership</string>
     <string name="ivStoreIcon">Store icon</string>
@@ -194,4 +194,7 @@
     <string name="tvStoreAddress">9, Solok Trengganu, 10460 Penang, Malaysia</string>
     <string name="tvPoints">%1$d Points</string>
     <string name="tvPointsPerPrice">%1$d Points Per Price</string>
+    <string name="ivNoMembershipBackground">No membership background</string>
+    <string name="tvNoMembership">No Membership</string>
+    <string name="tvAddMembership">Perform some transactions</string>
 </resources>

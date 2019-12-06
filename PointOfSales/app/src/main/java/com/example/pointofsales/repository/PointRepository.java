@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.database.PointDatabase;
+import com.example.pointofsales.database.ProductDatabase;
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.PointsRedeemedAndAwarded;
 import com.example.pointofsales.model.Store;
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -79,6 +81,21 @@ public class PointRepository implements ChildEventListener {
     public static void clearInstance() {
         sPointRepository = null;
         PointDatabase.clearInstance();
+    }
+
+    public void check(String userId, final PointInterface pointInterface) {
+        PointDatabase.getInstance()
+                .check(userId, new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        pointInterface.pointExistCallback(dataSnapshot.exists());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        pointInterface.pointExistCallback(false);
+                    }
+                });
     }
 
     @Override
