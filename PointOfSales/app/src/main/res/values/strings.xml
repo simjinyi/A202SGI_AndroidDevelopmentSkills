@@ -180,4 +180,11 @@
     <string name="title_transaction_details">Transaction Details</string>
     <string name="tvTransactionDateLabel">Date</string>
     <string name="transaction_deleted">Transaction Deleted</string>
+    <string name="title_activity_customer">CustomerActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_qr">Home</string>
+    <string name="ivQRCode">QR Code</string>
+    <string name="tvInstruction">Present the QR Code to the seller to get rewarded.</string>
 </resources>

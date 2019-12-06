@@ -21,6 +21,7 @@ import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.model.state.LoginFormState;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
+import com.example.pointofsales.view.CustomerActivity;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.ValidationActivity;
@@ -88,7 +89,7 @@ public class LoginActivity extends ValidationActivity {
                         persistLoginState(mEtEmail.getText().toString());
 
                     Intent i = null;
-                    i = new Intent(LoginActivity.this, user.getType().equals(UserType.CUSTOMER) ? MainActivity.class : MainActivity.class);
+                    i = new Intent(LoginActivity.this, user.getType().equals(UserType.CUSTOMER) ? CustomerActivity.class : MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
