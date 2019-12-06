@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 public class Transaction {
 
+    private String mTransactionId;
     private String mUserName;
     private String mUserId;
     private String mStoreName;
@@ -83,6 +84,13 @@ public class Transaction {
             return second.toLowerCase().compareTo(first.toLowerCase());
         }
     };
+
+    public String getTransactionId() {
+        return mTransactionId;
+    }
+    public void setTransactionId(String transactionId) {
+        mTransactionId = transactionId;
+    }
 
     private ArrayList<TransactionItem> mTransactionItems;
 

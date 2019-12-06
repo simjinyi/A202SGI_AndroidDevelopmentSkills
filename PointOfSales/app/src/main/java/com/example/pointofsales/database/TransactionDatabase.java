@@ -53,6 +53,7 @@ public class TransactionDatabase {
 
             Map<String, Object> hashMap = new HashMap<>();
 
+            hashMap.put("transactionId", transaction.getTransactionId());
             hashMap.put("userName", transaction.getUserName());
             hashMap.put("userId", transaction.getUserId());
             hashMap.put("storeName", transaction.getStoreName());
@@ -75,6 +76,8 @@ public class TransactionDatabase {
         public static Transaction mapToTransaction(String transactionId, Map<String, Object> map) {
 
             Transaction transaction = new Transaction();
+
+            transaction.setTransactionId(transactionId);
 
             if (map.get("userId") != null) {
                 transaction.setUserId(map.get("userId").toString());

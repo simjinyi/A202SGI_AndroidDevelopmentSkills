@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pointofsales.R;
@@ -31,9 +32,10 @@ import java.util.ArrayList;
 public class TransactionFragment extends Fragment {
 
     private TransactionViewModel mTransactionViewModel;
+    private TransactionAdapter mTransactionAdapter;
 
     private RecyclerView mRvTransaction;
-    private TransactionAdapter mTransactionAdapter;
+    private TextView mTvTotalTransaction;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,6 +49,7 @@ public class TransactionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mRvTransaction = getView().findViewById(R.id.rvTransaction);
+        mTvTotalTransaction = getView().findViewById(R.id.tvTotalTransaction);
     }
 
     @Override
@@ -65,6 +68,14 @@ public class TransactionFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Transaction> transactions) {
                 mTransactionAdapter.notifyDataSetChanged();
+                mTransactionViewModel.calculateTotalTransaction(transactions);
+            }
+        });
+
+        mTransactionViewModel.getTotalTransaction().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                mTvTotalTransaction.setText(getString(R.string.tvTotalTransaction, aFloat));
             }
         });
     }

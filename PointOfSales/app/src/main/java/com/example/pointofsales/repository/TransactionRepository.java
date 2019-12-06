@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.pointofsales.database.ProductDatabase;
 import com.example.pointofsales.database.TransactionDatabase;
 import com.example.pointofsales.model.Product;
 import com.example.pointofsales.model.Transaction;
@@ -103,12 +104,18 @@ public class TransactionRepository implements ChildEventListener {
 
     @Override
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        Transaction changedTransaction = TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+        int changedTransactionIndex = getTransactionByTransactionId(changedTransaction.getTransactionId());
+        mTransactions.getValue().set(changedTransactionIndex, changedTransaction);
+        notifyObservers();
     }
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+        Transaction removedTransaction = TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
+        int removedTransactionIndex = getTransactionByTransactionId(removedTransaction.getTransactionId());
+        mTransactions.getValue().remove(removedTransactionIndex);
+        notifyObservers();
     }
 
     @Override
@@ -119,5 +126,12 @@ public class TransactionRepository implements ChildEventListener {
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+    }
+
+    public int getTransactionByTransactionId(String transactionId) {
+        for (int i = 0; i < mTransactions.getValue().size(); i++)
+            if (mTransactions.getValue().get(i).getTransactionId().equals(transactionId))
+                return i;
+        return -1;
     }
 }

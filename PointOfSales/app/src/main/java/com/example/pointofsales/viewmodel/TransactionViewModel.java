@@ -15,6 +15,7 @@ public class TransactionViewModel extends ViewModel {
 
     private TransactionSort mTransactionSort;
     private MutableLiveData<ArrayList<Transaction>> mTransactions;
+    private MutableLiveData<Float> mTotalTransaction;
 
     private TransactionRepository mTransactionRepository;
 
@@ -22,6 +23,8 @@ public class TransactionViewModel extends ViewModel {
         mTransactionRepository = TransactionRepository.getInstance(UserViewModel.getUser());
         mTransactions = mTransactionRepository.getTransactions();
         mTransactionSort = new TransactionSort();
+        mTotalTransaction = new MutableLiveData<>();
+        mTotalTransaction.setValue(0.0f);
     }
 
     public int sort() {
@@ -47,7 +50,19 @@ public class TransactionViewModel extends ViewModel {
         }
     }
 
+    public void calculateTotalTransaction(ArrayList<Transaction> transactions) {
+        float total = 0.0f;
+
+        for (Transaction transaction : transactions)
+            total += transaction.getTotal();
+
+        mTotalTransaction.setValue(total);
+    }
+
     public LiveData<ArrayList<Transaction>> getTransactions() {
         return mTransactions;
+    }
+    public LiveData<Float> getTotalTransaction() {
+        return mTotalTransaction;
     }
 }

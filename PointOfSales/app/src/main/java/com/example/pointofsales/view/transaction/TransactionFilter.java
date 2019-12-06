@@ -49,5 +49,6 @@ public class TransactionFilter extends Filter {
         ArrayList<Transaction> transactions = (ArrayList<Transaction>) results.values;
         mTransactionAdapter.setTransactions(transactions);
         mTransactionAdapter.notifyDataSetChanged();
+        mTransactionViewModel.calculateTotalTransaction(transactions);
     }
 }
