@@ -16,11 +16,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * MembershipRepository Singleton Class
+ * Implements ChildEventListener to constantly observing changes made on the membership data in the database
+ */
 public class MembershipRepository implements ChildEventListener {
 
     private User mUser;
     private ChildEventListener mChildEventListener;
-    private MutableLiveData<ArrayList<Point>> mPoints;
+    private MutableLiveData<ArrayList<Point>> mPoints; // MutableLiveData to update the view dynamically on data change
 
     private static MembershipRepository sMembershipRepository;
 
@@ -44,6 +48,11 @@ public class MembershipRepository implements ChildEventListener {
         return mPoints;
     }
 
+    /**
+     * Provide an interface between the ViewModels and the Database
+     * @param user check the existence of the points for the user
+     * @param pointInterface callback to determine if the points exist
+     */
     public void checkPointExists(User user, final PointInterface pointInterface) {
         PointDatabase.getInstance()
                 .check(user, new ValueEventListener() {
@@ -59,6 +68,8 @@ public class MembershipRepository implements ChildEventListener {
                 });
     }
 
+    // SORTER METHODS
+    // Utilizes the comparators to sort the members
     public void sortStoreNameAsc() {
         Collections.sort(mPoints.getValue(), Point.storeNameAsc);
         notifyObservers();
@@ -98,9 +109,13 @@ public class MembershipRepository implements ChildEventListener {
         Collections.sort(mPoints.getValue(), Point.pointsPerPriceDesc);
         notifyObservers();
     }
+    // END SORTER METHODS
 
+    // ChildEventListener
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        // Add data from the database into the local storage and constantly observe changes made to it
         mPoints.getValue().add(PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue()));
         mChildEventListener.onChildAdded(dataSnapshot, s);
         notifyObservers();
@@ -108,6 +123,8 @@ public class MembershipRepository implements ChildEventListener {
 
     @Override
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        // Get the updated Point object and update the local storage
         Point changedPoint = PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         mPoints.getValue().set(getPointIndexFromPointId(changedPoint.getPointId()), changedPoint);
         mChildEventListener.onChildChanged(dataSnapshot, s);
@@ -116,6 +133,8 @@ public class MembershipRepository implements ChildEventListener {
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+        // Get the removed Point object and update the local storage
         Point removedPoint = PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         mPoints.getValue().remove(getPointIndexFromPointId(removedPoint.getPointId()));
         mChildEventListener.onChildRemoved(dataSnapshot);
@@ -124,14 +143,23 @@ public class MembershipRepository implements ChildEventListener {
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        // Not used
         mChildEventListener.onChildMoved(dataSnapshot, s);
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        // Not used
         mChildEventListener.onCancelled(databaseError);
     }
 
+    /**
+     * Get the index of the Point in the ArrayList given the pointId
+     * @param pointId
+     * @return
+     */
     private int getPointIndexFromPointId(String pointId) {
         for (int i = 0; i < mPoints.getValue().size(); i++)
             if (mPoints.getValue().get(i).getPointId().equals(pointId))
@@ -140,11 +168,17 @@ public class MembershipRepository implements ChildEventListener {
         return -1;
     }
 
+    /**
+     * Clear the repository instance when the user logs out
+     */
     public static void clearInstance() {
         sMembershipRepository = null;
         PointDatabase.clearInstance();
     }
 
+    /**
+     * Notify the observers of the LiveData that the ArrayList has changed
+     */
     public void notifyObservers() {
         mPoints.setValue(mPoints.getValue());
     }

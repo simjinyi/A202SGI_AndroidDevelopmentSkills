@@ -4,10 +4,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pointofsales.model.Cart;
 
+/**
+ * CartRepository Singleton to provide an interface between the ViewModels and the Model
+ */
 public class CartRepository {
 
     private String mStoreId;
-    private MutableLiveData<Cart> mCart;
+    private MutableLiveData<Cart> mCart; // MutableLiveData so that the view can be dynamically updated when the cart details was updated
 
     private static CartRepository sCartRepository;
 
