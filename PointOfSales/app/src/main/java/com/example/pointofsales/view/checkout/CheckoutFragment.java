@@ -117,7 +117,23 @@ public class CheckoutFragment extends Fragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mCheckoutViewModel.checkout();
+                                if (mCheckoutViewModel.getPointsRedeemedAndAwarded().getValue() == null) {
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle(getString(R.string.checkout_no_member_confirmation))
+                                            .setMessage(getString(R.string.checkout_no_member_description))
+                                            .setIcon(R.drawable.ic_warning_24dp)
+                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    mCheckoutViewModel.checkout();
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .setNegativeButton(android.R.string.no, null).show();
+                                } else {
+                                    mCheckoutViewModel.checkout();
+                                    dialog.dismiss();
+                                }
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();

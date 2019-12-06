@@ -174,4 +174,6 @@
     <string name="customerDescending">Customer (Descending)</string>
     <string name="transaction_query_hint">Search date, price or customer…</string>
     <string name="default_customer">-</string>
+    <string name="checkout_no_member_confirmation">Checkout Without Adding Member?</string>
+    <string name="checkout_no_member_description">Are you sure you want to checkout without adding member?</string>
 </resources>
