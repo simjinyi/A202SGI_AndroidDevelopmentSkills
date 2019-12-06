@@ -28,7 +28,7 @@ public class UserRegistrationFragment extends AccountFormFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mUserAccountViewModel = ViewModelProviders.of(this, new UserAccountViewModelFactory(null)).get(UserAccountViewModel.class);
+        mUserAccountViewModel = ViewModelProviders.of(this).get(UserAccountViewModel.class);
 
         mUserAccountViewModel.getUserAccountFormState().observe(getViewLifecycleOwner(), new Observer<UserAccountFormState>() {
             @Override

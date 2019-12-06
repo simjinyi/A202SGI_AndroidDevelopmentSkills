@@ -59,7 +59,7 @@
     <string name="tvMembership">Membership</string>
     <string name="tvMemberName">None</string>
     <string name="tvPointsRedeemed">%1$d Points Redeemed</string>
-    <string name="tvPointsAwarded">%1$d Points Will Be Awarded</string>
+    <string name="tvPointsAwarded">%1$d Points Awarded</string>
     <string name="tvDiscountLabel">Discount</string>
     <string name="tvDiscount">MYR %1$.2f</string>
     <string name="tvTotalLabel">Total</string>
@@ -172,7 +172,7 @@
     <string name="dateDescending">Date (Descending)</string>
     <string name="customerAscending">Customer (Ascending)</string>
     <string name="customerDescending">Customer (Descending)</string>
-    <string name="transaction_query_hint">Search date, price or customer…</string>
+    <string name="transaction_query_hint">Search date, price, seller or customer…</string>
     <string name="default_customer">-</string>
     <string name="checkout_no_member_confirmation">Checkout Without Adding Member?</string>
     <string name="checkout_no_member_description">Are you sure you want to checkout without adding member?</string>
@@ -205,4 +205,8 @@
     <string name="pointDescending">Point (Descending)</string>
     <string name="pointsPerPriceAscending">Points Per Price (Ascending)</string>
     <string name="pointsPerPriceDescending">Points Per Price (Descending)</string>
+    <string name="tvSellerHeader">Seller</string>
+    <string name="tvSellerName">Seller</string>
+    <string name="tvSellerNameLabel">Seller</string>
+    <string name="tvSeller">Seller</string>
 </resources>

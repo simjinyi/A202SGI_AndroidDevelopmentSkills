@@ -34,7 +34,8 @@ public class TransactionFilter extends Filter {
             for (Transaction transaction : transactions)
                 if (simpleDateFormat.format(new Date(transaction.getTimestamp())).contains(searchString.toLowerCase()) ||
                         String.valueOf(transaction.getTotal()).contains(searchString) ||
-                        (transaction.getUserName() == null ? "-" : transaction.getUserName()).toLowerCase().contains(searchString.toLowerCase()))
+                        (transaction.getUserName() == null ? "-" : transaction.getUserName()).toLowerCase().contains(searchString.toLowerCase()) ||
+                        transaction.getStoreName().toLowerCase().contains(searchString.toLowerCase()))
                     filteredTransactions.add(transaction);
 
         FilterResults filterResults = new FilterResults();

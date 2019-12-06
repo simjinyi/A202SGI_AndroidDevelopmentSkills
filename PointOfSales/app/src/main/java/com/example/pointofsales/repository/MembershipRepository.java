@@ -130,6 +130,11 @@ public class MembershipRepository implements ChildEventListener {
         return -1;
     }
 
+    public static void clearInstance() {
+        sMembershipRepository = null;
+        PointDatabase.clearInstance();
+    }
+
     public void notifyObservers() {
         mPoints.setValue(mPoints.getValue());
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.repository.CartRepository;
+import com.example.pointofsales.repository.MembershipRepository;
 import com.example.pointofsales.repository.PointRepository;
 import com.example.pointofsales.repository.ProductRepository;
 import com.example.pointofsales.repository.TransactionRepository;
@@ -41,6 +42,7 @@ public class UserViewModel extends ViewModel {
         UserRepository.clearInstance();
         PointRepository.clearInstance();
         TransactionRepository.clearInstance();
+        MembershipRepository.clearInstance();
     }
 
     public LiveData<User> getUserLiveData() {

@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,11 +24,12 @@ public class TransactionRepository implements ChildEventListener {
 
     private MutableLiveData<ArrayList<Transaction>> mTransactions;
     private User mUser;
+    private ChildEventListener mChildEventListener;
     private TransactionInterface mTransactionInterface;
 
     private static TransactionRepository sTransactionRepository;
 
-    private TransactionRepository(User user, TransactionInterface transactionInterface) {
+    private TransactionRepository(User user, TransactionInterface transactionInterface, ChildEventListener childEventListener) {
         mUser = user;
         mTransactionInterface = transactionInterface;
 
@@ -35,16 +37,37 @@ public class TransactionRepository implements ChildEventListener {
         mTransactions.setValue(new ArrayList<Transaction>());
         TransactionDatabase.getInstance()
                 .get(mUser.getId(), mUser.getType(), this);
+
+        mChildEventListener = childEventListener;
     }
 
-    public static TransactionRepository getInstance(User user, TransactionInterface transactionInterface) {
+    public static TransactionRepository getInstance(User user, TransactionInterface transactionInterface, ChildEventListener childEventListener) {
         if (sTransactionRepository == null)
-            sTransactionRepository = new TransactionRepository(user, transactionInterface);
+            sTransactionRepository = new TransactionRepository(user, transactionInterface, childEventListener);
         return sTransactionRepository;
+    }
+
+    public void check(String userId, UserType userType, final TransactionInterface transactionInterface) {
+        TransactionDatabase.getInstance()
+                .check(userId, userType, new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        transactionInterface.transactionExistCallback(dataSnapshot.exists());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        transactionInterface.transactionExistCallback(false);
+                    }
+                });
     }
 
     public void setTransactionInterface(TransactionInterface transactionInterface) {
         mTransactionInterface = transactionInterface;
+    }
+
+    public void setChildEventListener(ChildEventListener childEventListener) {
+        mChildEventListener = childEventListener;
     }
 
     public void get(String userId, UserType userType, ChildEventListener childEventListener) {
@@ -104,6 +127,10 @@ public class TransactionRepository implements ChildEventListener {
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         if (dataSnapshot.exists()) {
             mTransactions.getValue().add(TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue()));
+
+            if (mChildEventListener != null)
+                mChildEventListener.onChildAdded(dataSnapshot, s);
+
             notifyObservers();
         }
     }
@@ -113,6 +140,10 @@ public class TransactionRepository implements ChildEventListener {
         Transaction changedTransaction = TransactionDatabase.Converter.mapToTransaction(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
         int changedTransactionIndex = getTransactionIndexByTransactionId(changedTransaction.getTransactionId());
         mTransactions.getValue().set(changedTransactionIndex, changedTransaction);
+
+        if (mChildEventListener != null)
+            mChildEventListener.onChildChanged(dataSnapshot, s);
+
         notifyObservers();
     }
 
@@ -122,6 +153,9 @@ public class TransactionRepository implements ChildEventListener {
         int removedTransactionIndex = getTransactionIndexByTransactionId(removedTransaction.getTransactionId());
         mTransactions.getValue().remove(removedTransactionIndex);
 
+        if (mChildEventListener != null)
+            mChildEventListener.onChildRemoved(dataSnapshot);
+
         if (mTransactionInterface != null)
             mTransactionInterface.getDeletedIndex(removedTransactionIndex);
 
@@ -130,12 +164,14 @@ public class TransactionRepository implements ChildEventListener {
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        if (mChildEventListener != null)
+            mChildEventListener.onChildMoved(dataSnapshot, s);
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+        if (mChildEventListener != null)
+            mChildEventListener.onCancelled(databaseError);
     }
 
     public int getTransactionIndexByTransactionId(String transactionId) {

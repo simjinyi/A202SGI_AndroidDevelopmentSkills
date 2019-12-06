@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_card_membership_black_24dp"
         android:title="@string/title_membership" />
 
+    <item
+        android:id="@+id/navigation_transaction"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:title="@string/title_transaction" />
+
 </menu>

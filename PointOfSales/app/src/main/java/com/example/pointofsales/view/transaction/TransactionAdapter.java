@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
+import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.view.product.ProductFilter;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
+import com.example.pointofsales.viewmodel.UserViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         private TextView mTvTransactionDate;
         private TextView mTvTransactionPrice;
         private TextView mTvCustomer;
+        private TextView mTvSeller;
         private ImageButton mIbViewDetails;
 
         public TransactionHolder(@NonNull View itemView) {
@@ -45,6 +48,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             mTvTransactionDate = itemView.findViewById(R.id.tvTransactionDate);
             mTvTransactionPrice = itemView.findViewById(R.id.tvTransactionPrice);
             mTvCustomer = itemView.findViewById(R.id.tvCustomer);
+            mTvSeller = itemView.findViewById(R.id.tvSeller);
             mIbViewDetails = itemView.findViewById(R.id.ibViewDetails);
         }
 
@@ -60,12 +64,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             else
                 mTvCustomer.setText(mContext.getString(R.string.default_customer));
 
+            mTvSeller.setText(transaction.getStoreName());
+
             mIbViewDetails.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mViewDetailsButtonClick.onViewDetailsButtonClick(mTransactions.get(position));
                 }
             });
+
+            if (UserViewModel.getUser().getType().equals(UserType.SELLER)) {
+                mTvSeller.setVisibility(View.GONE);
+                mTvCustomer.setVisibility(View.VISIBLE);
+            } else {
+                mTvSeller.setVisibility(View.VISIBLE);
+                mTvCustomer.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -141,6 +141,19 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvTransactionDateLabel" />
 
                 <TextView
+                    android:id="@+id/tvSellerNameLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_header_cell_first"
+                    android:gravity="start|center"
+                    android:padding="4dp"
+                    android:text="@string/tvSellerNameLabel"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSubtotalLabel" />
+
+                <TextView
                     android:id="@+id/tvSubtotal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -153,6 +166,18 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="@+id/tvSubtotalLabel" />
+
+                <TextView
+                    android:id="@+id/tvSellerName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_body_cell"
+                    android:padding="4dp"
+                    android:text="@string/tvSellerName"
+                    android:textColor="@color/primaryColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvSellerNameLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSubtotal" />
 
                 <TextView
                     android:id="@+id/tvTransactionDate"
@@ -189,7 +214,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSubtotalLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSellerNameLabel"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
@@ -215,8 +240,9 @@
                     android:textColor="@color/primaryColor"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSubtotal" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvSellerName" />
 
                 <TextView
                     android:id="@+id/tvPointsRedeemed"
@@ -228,6 +254,7 @@
                     android:textColor="@color/primaryColor"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/tvMemberName" />
 

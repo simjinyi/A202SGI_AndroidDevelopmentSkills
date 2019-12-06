@@ -9,11 +9,12 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Point;
-import com.example.pointofsales.view.transaction.TransactionFilter;
+import com.example.pointofsales.view.OnSingleClickListener;
 import com.example.pointofsales.viewmodel.MembershipViewModel;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.Me
             mTvPointsPerPrice = itemView.findViewById(R.id.tvPointsPerPrice);
         }
 
-        public void bindData(Point point) {
+        public void bindData(Point point, final int position) {
             mTvStoreName.setText(point.getStoreName());
             mTvPoints.setText(mContext.getString(R.string.tvPoints, point.getPoints()));
             mTvStoreAddress.setText(point.getStoreAddress());
@@ -64,7 +65,7 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.Me
 
     @Override
     public void onBindViewHolder(@NonNull MembershipHolder holder, int position) {
-        holder.bindData(mPoints.get(position));
+        holder.bindData(mPoints.get(position), position);
     }
 
     @Override

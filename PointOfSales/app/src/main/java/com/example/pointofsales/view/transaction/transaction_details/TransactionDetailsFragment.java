@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
+import com.example.pointofsales.model.state.TransactionLoadState;
 import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.view.product.ProductFragment;
 import com.example.pointofsales.view.transaction.TransactionAdapter;
@@ -45,6 +46,7 @@ public class TransactionDetailsFragment extends Fragment {
     private RecyclerView mRvCart;
     private TextView mTvTransactionDate;
     private TextView mTvSubTotal;
+    private TextView mTvSellerName;
     private TextView mTvMemberName;
     private TextView mTvPointsRedeemed;
     private TextView mTvPointsAwarded;
@@ -67,6 +69,7 @@ public class TransactionDetailsFragment extends Fragment {
         mTvTransactionDate = getView().findViewById(R.id.tvTransactionDate);
         mTvSubTotal = getView().findViewById(R.id.tvSubtotal);
         mTvMemberName = getView().findViewById(R.id.tvMemberName);
+        mTvSellerName = getView().findViewById(R.id.tvSellerName);
         mTvPointsRedeemed = getView().findViewById(R.id.tvPointsRedeemed);
         mTvPointsAwarded = getView().findViewById(R.id.tvPointsAwarded);
         mTvDiscount = getView().findViewById(R.id.tvDiscount);
@@ -95,6 +98,16 @@ public class TransactionDetailsFragment extends Fragment {
             }
         });
 
+        mTransactionViewModel.getTransactionLoadState().observe(getViewLifecycleOwner(), new Observer<TransactionLoadState>() {
+            @Override
+            public void onChanged(TransactionLoadState transactionLoadState) {
+                if (transactionLoadState.equals(TransactionLoadState.NO_TRANSACTION)) {
+                    Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
+
         mRvCart.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvCart.setAdapter(mTransactionDetailsAdapter);
     }
@@ -103,6 +116,7 @@ public class TransactionDetailsFragment extends Fragment {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         mTvTransactionDate.setText(simpleDateFormat.format(new Date(transaction.getTimestamp())));
+        mTvSellerName.setText(transaction.getStoreName());
 
         mTvSubTotal.setText(getString(R.string.tvSubtotal, transaction.getSubtotal()));
 
@@ -115,7 +129,7 @@ public class TransactionDetailsFragment extends Fragment {
 
             mTvMemberName.setText(transaction.getUserName());
             mTvPointsAwarded.setText(getString(R.string.tvPointsAwarded, transaction.getPointsAwarded()));
-            mTvPointsRedeemed.setText(getString(R.string.tvPointsAwarded, transaction.getPointsAwarded()));
+            mTvPointsRedeemed.setText(getString(R.string.tvPointsRedeemed, transaction.getPointsRedeemed()));
 
         } else {
 

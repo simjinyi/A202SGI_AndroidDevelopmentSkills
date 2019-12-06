@@ -20,13 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pointofsales.R;
 import com.example.pointofsales.model.Transaction;
+import com.example.pointofsales.model.User;
+import com.example.pointofsales.model.UserType;
+import com.example.pointofsales.model.state.TransactionLoadState;
+import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
+import com.example.pointofsales.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
@@ -37,8 +43,13 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     private TransactionViewModel mTransactionViewModel;
     private TransactionAdapter mTransactionAdapter;
 
+    private TextView mTvSellerHeader;
+    private TextView mTvCustomerHeader;
     private RecyclerView mRvTransaction;
     private TextView mTvTotalTransaction;
+    private ProgressBar mPbLoading;
+
+    private LoadingScreen mLoadingScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -51,8 +62,13 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mTvSellerHeader = getView().findViewById(R.id.tvSellerHeader);
+        mTvCustomerHeader = getView().findViewById(R.id.tvCustomerHeader);
         mRvTransaction = getView().findViewById(R.id.rvTransaction);
         mTvTotalTransaction = getView().findViewById(R.id.tvTotalTransaction);
+        mPbLoading = getView().findViewById(R.id.pbLoading);
+
+        mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
     }
 
     @Override
@@ -70,12 +86,36 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
         mTransactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
             @Override
             public void onChanged(ArrayList<Transaction> transactions) {
-                if (transactions.size() > 0) {
-                    mTransactionAdapter.notifyDataSetChanged();
-                    mTransactionViewModel.calculateTotalTransaction(transactions);
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
-                    getFragmentManager().popBackStack();
+                mTransactionAdapter.notifyDataSetChanged();
+                mTransactionViewModel.calculateTotalTransaction(transactions);
+            }
+        });
+
+        mTransactionViewModel.getTransactionLoadState().observe(getViewLifecycleOwner(), new Observer<TransactionLoadState>() {
+            @Override
+            public void onChanged(TransactionLoadState transactionLoadState) {
+                switch (transactionLoadState) {
+                    case LOADED:
+                        mLoadingScreen.end();
+
+                        if (UserViewModel.getUser().getType().equals(UserType.SELLER)) {
+                            mTvSellerHeader.setVisibility(View.GONE);
+                            mTvCustomerHeader.setVisibility(View.VISIBLE);
+                        } else {
+                            mTvSellerHeader.setVisibility(View.VISIBLE);
+                            mTvCustomerHeader.setVisibility(View.GONE);
+                        }
+
+                        break;
+
+                    case NO_TRANSACTION:
+                        Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
+                        getFragmentManager().popBackStack();
+                        mLoadingScreen.end();
+                        break;
+
+                    default:
+                        mLoadingScreen.start();
                 }
             }
         });

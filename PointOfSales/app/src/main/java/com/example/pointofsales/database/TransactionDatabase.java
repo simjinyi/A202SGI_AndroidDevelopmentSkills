@@ -2,11 +2,13 @@ package com.example.pointofsales.database;
 
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.TransactionItem;
+import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,17 @@ public class TransactionDatabase {
         if (sTransactionDatabase == null)
             sTransactionDatabase = new TransactionDatabase();
         return sTransactionDatabase;
+    }
+
+    public void check(String userId, UserType userType, ValueEventListener valueEventListener) {
+        if (userType.equals(UserType.SELLER))
+            mDatabaseReference.orderByChild("storeId")
+                    .equalTo(userId)
+                    .addListenerForSingleValueEvent(valueEventListener);
+        else
+            mDatabaseReference.orderByChild("userId")
+                    .equalTo(userId)
+                    .addListenerForSingleValueEvent(valueEventListener);
     }
 
     public void get(String userId, UserType userType, ChildEventListener childEventListener) {
@@ -88,6 +101,7 @@ public class TransactionDatabase {
             }
 
             transaction.setStoreId(map.get("storeId").toString());
+            transaction.setStoreName(map.get("storeName").toString());
 
             transaction.setTimestamp(Long.parseLong(map.get("timestamp").toString()));
             transaction.setSubtotal(Float.parseFloat(map.get("subTotal").toString()));
