@@ -29,7 +29,7 @@ import com.example.pointofsales.viewmodel.TransactionViewModel;
 
 import java.util.ArrayList;
 
-public class TransactionFragment extends Fragment {
+public class TransactionFragment extends Fragment implements ViewDetailsButtonClick {
 
     private TransactionViewModel mTransactionViewModel;
     private TransactionAdapter mTransactionAdapter;
@@ -58,7 +58,7 @@ public class TransactionFragment extends Fragment {
 
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
 
-        mTransactionAdapter = new TransactionAdapter(getActivity(), mTransactionViewModel);
+        mTransactionAdapter = new TransactionAdapter(getActivity(), mTransactionViewModel, this);
         mTransactionAdapter.setHasStableIds(true);
         mRvTransaction.addItemDecoration(new TransactionDecoration(getResources().getDimension(R.dimen.default_dimen), mTransactionViewModel));
         mRvTransaction.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -112,5 +112,10 @@ public class TransactionFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onViewDetailsButtonClick(Transaction transaction) {
+
     }
 }

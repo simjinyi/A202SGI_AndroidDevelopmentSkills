@@ -30,6 +30,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private TransactionViewModel mTransactionViewModel;
 
     private ArrayList<Transaction> mTransactions;
+    private ViewDetailsButtonClick mViewDetailsButtonClick;
 
     public class TransactionHolder extends RecyclerView.ViewHolder {
 
@@ -47,7 +48,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             mIbViewDetails = itemView.findViewById(R.id.ibViewDetails);
         }
 
-        public void bindData(Transaction transaction) {
+        public void bindData(Transaction transaction, final int position) {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -62,17 +63,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             mIbViewDetails.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    Toast.makeText(mContext, "Image Button Clicked", Toast.LENGTH_SHORT).show();
+                    mViewDetailsButtonClick.onViewDetailsButtonClick(mTransactions.get(position));
                 }
             });
         }
     }
 
-    public TransactionAdapter(Context context, TransactionViewModel transactionViewModel) {
+    public TransactionAdapter(Context context, TransactionViewModel transactionViewModel, ViewDetailsButtonClick viewDetailsButtonClick) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mTransactionViewModel = transactionViewModel;
         mTransactions = mTransactionViewModel.getTransactions().getValue();
+        mViewDetailsButtonClick = viewDetailsButtonClick;
     }
 
     @NonNull
@@ -83,7 +85,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull TransactionHolder holder, int position) {
-        holder.bindData(mTransactions.get(position));
+        holder.bindData(mTransactions.get(position), position);
     }
 
     @Override
