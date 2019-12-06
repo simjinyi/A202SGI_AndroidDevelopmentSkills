@@ -82,6 +82,11 @@ public class UserDatabase {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (userId.matches(".*[.#$\\[\\]]+.*")) {
+                    scanListener.getUser(null);
+                    return;
+                }
+
                 if (dataSnapshot.hasChild(userId)) {
                     mDatabaseReference.child(userId).addValueEventListener(new ValueEventListener() {
                         @Override

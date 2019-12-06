@@ -297,7 +297,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
             if (point.getUserId().equals(user.getId()))
                 return point;
 
-        Point point = new Point(user.getName(), user.getId(), mStore.getName(), mStore.getId(), 0);
+        Point point = new Point(user.getName(), user.getId(), mStore.getName(), mStore.getId(), mStore.getAddress(), mStore.getPointsPerPrice(), 0);
         mPointRepository.insert(point, null);
         return point;
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.pointofsales.database.PointDatabase;
 import com.example.pointofsales.model.Point;
 import com.example.pointofsales.model.PointsRedeemedAndAwarded;
+import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.view.checkout.UpdatePointInterface;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,6 +64,14 @@ public class PointRepository implements ChildEventListener {
         PointDatabase.getInstance().update(PointDatabase.Converter.pointToMap(point), onSuccessListener);
     }
 
+    public static void updateUserName(String userId, String userName) {
+        PointDatabase.getInstance().updateUserName(userId, userName);
+    }
+
+    public static void updateStoreDetails(String storeId, Store storeDetails) {
+        PointDatabase.getInstance().updateStoreDetails(storeId, storeDetails);
+    }
+
     public void notifyObservers() {
         mPoints.setValue(mPoints.getValue());
     }
@@ -80,26 +89,33 @@ public class PointRepository implements ChildEventListener {
 
     @Override
     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
         Point changedPoint = PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
 
-        if (changedPoint.getPointId().equals(mPoint.getValue().getPointId()))
-            mPoint.setValue(changedPoint);
+        if (mPoint.getValue() != null) {
+            if (changedPoint.getPointId().equals(mPoint.getValue().getPointId()))
+                mPoint.setValue(changedPoint);
 
-        if (mPoint.getValue().getPoints() < mPointsRedeemedAndAwarded.getValue().getRedeemedPoint()) {
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPoint.getValue().getPoints(), mPointsRedeemedAndAwarded.getValue().getPointAwarded()));
-            mUpdatePointInterface.onPointChanged(changedPoint);
+            if (mPoint.getValue().getPoints() < mPointsRedeemedAndAwarded.getValue().getRedeemedPoint()) {
+                mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPoint.getValue().getPoints(), mPointsRedeemedAndAwarded.getValue().getPointAwarded()));
+                mUpdatePointInterface.onPointChanged(changedPoint);
+            }
+
+            mPoints.getValue().set(getPointIndexFromPointId(changedPoint.getPointId()), changedPoint);
+            notifyObservers();
         }
-
-        mPoints.getValue().set(getPointIndexFromPointId(changedPoint.getPointId()), changedPoint);
-        notifyObservers();
     }
 
     @Override
     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
         Point removedPoint = PointDatabase.Converter.mapToPoint(dataSnapshot.getKey(), (Map<String, Object>) dataSnapshot.getValue());
-        mPoints.getValue().remove(getPointIndexFromPointId(removedPoint.getPointId()));
-        notifyObservers();
-        mUpdatePointInterface.onPointDeleted();
+
+        if (mPoint.getValue() != null) {
+            mPoints.getValue().remove(getPointIndexFromPointId(removedPoint.getPointId()));
+            notifyObservers();
+            mUpdatePointInterface.onPointDeleted();
+        }
     }
 
     @Override

@@ -47,7 +47,6 @@ import java.util.ArrayList;
 public class ProductFragment extends Fragment implements EditButtonClick {
 
     public static final String PRODUCT_INDEX_FRAGMENT_ARG = "com.example.pointofsales.view.product.PRODUCT_INDEX_FRAGMENT_ARG";
-    public static final String STORE_ID_FRAGMENT_ARG = "com.example.pointofsales.view.product.STORE_ID_FRAGMENT_ARG";
 
     private ProductViewModel mProductViewModel;
     private UserViewModel mUserViewModel;
@@ -245,9 +244,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
         mIbAccount.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString(STORE_ID_FRAGMENT_ARG, mProductViewModel.getStoreId());
-                Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_manage_store, bundle);
+                Navigation.findNavController(getView()).navigate(R.id.action_navigation_product_to_navigation_manage_store);
             }
         });
 

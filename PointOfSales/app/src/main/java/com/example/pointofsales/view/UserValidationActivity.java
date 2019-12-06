@@ -1,7 +1,10 @@
 package com.example.pointofsales.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,4 +32,21 @@ public abstract class UserValidationActivity extends ValidationActivity {
     }
 
     protected abstract void onCreateLoginValidated(@Nullable Bundle savedInstanceState);
+
+    public void invalidateLoginState() {
+        SharedPreferences sp = getSharedPreferences(LoginActivity.SP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().apply();
+        editor.commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getSupportFragmentManager().popBackStack();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

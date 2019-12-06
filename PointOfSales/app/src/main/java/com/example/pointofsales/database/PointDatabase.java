@@ -1,12 +1,18 @@
 package com.example.pointofsales.database;
 
+import androidx.annotation.NonNull;
+
 import com.example.pointofsales.model.Point;
+import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +59,43 @@ public class PointDatabase {
                 .addOnSuccessListener(onSuccessListener);
     }
 
+    public void updateUserName(String userId, final String userName) {
+        mDatabaseReference.orderByChild("userId")
+                .equalTo(userId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot user : dataSnapshot.getChildren())
+                            mDatabaseReference.child(user.getKey()).child("userName").setValue(userName);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    public void updateStoreDetails(String storeId, final Store storeDetails) {
+        mDatabaseReference.orderByChild("storeId")
+                .equalTo(storeId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot store : dataSnapshot.getChildren()) {
+                            mDatabaseReference.child(store.getKey()).child("storeName").setValue(storeDetails.getName());
+                            mDatabaseReference.child(store.getKey()).child("storeAddress").setValue(storeDetails.getAddress());
+                            mDatabaseReference.child(store.getKey()).child("storePointsPerPrice").setValue(storeDetails.getPointsPerPrice());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     public static class Converter {
         public static Map<String, Object> pointToMap(Point point) {
 
@@ -63,6 +106,8 @@ public class PointDatabase {
             hashMap.put("userName", point.getUserName());
             hashMap.put("storeId", point.getStoreId());
             hashMap.put("storeName", point.getStoreName());
+            hashMap.put("storeAddress", point.getStoreAddress());
+            hashMap.put("storePointsPerPrice", point.getStorePointsPerPrice());
             hashMap.put("points", point.getPoints());
 
             return hashMap;
@@ -77,6 +122,8 @@ public class PointDatabase {
             point.setUserName(map.get("userName").toString());
             point.setStoreId(map.get("storeId").toString());
             point.setStoreName(map.get("storeName").toString());
+            point.setStoreAddress(map.get("storeAddress").toString());
+            point.setStorePointsPerPrice(Integer.parseInt(map.get("storePointsPerPrice").toString()));
             point.setPoints(Integer.parseInt(map.get("points").toString()));
 
             return point;

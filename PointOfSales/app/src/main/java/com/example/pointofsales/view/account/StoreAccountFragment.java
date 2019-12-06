@@ -25,6 +25,7 @@ import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.UserValidationActivity;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
@@ -193,7 +194,7 @@ public class StoreAccountFragment extends AccountFormFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_logout) {
 
-            ((MainActivity) getActivity()).invalidateLoginState();
+            ((UserValidationActivity) getActivity()).invalidateLoginState();
             UserViewModel.logout();
 
             Intent i = new Intent(getActivity(), LoginActivity.class);

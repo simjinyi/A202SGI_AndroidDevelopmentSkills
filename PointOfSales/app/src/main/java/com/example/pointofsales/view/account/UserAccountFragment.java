@@ -22,8 +22,10 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
 import com.example.pointofsales.model.state.UserAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
+import com.example.pointofsales.view.CustomerActivity;
 import com.example.pointofsales.view.MainActivity;
 import com.example.pointofsales.view.OnSingleClickListener;
+import com.example.pointofsales.view.UserValidationActivity;
 import com.example.pointofsales.view.login.LoginActivity;
 import com.example.pointofsales.viewmodel.CheckoutViewModel;
 import com.example.pointofsales.viewmodel.CheckoutViewModelFactory;
@@ -35,16 +37,12 @@ import com.example.pointofsales.viewmodel.UserViewModel;
 public class UserAccountFragment extends AccountFormFragment {
 
     private UserAccountViewModel mUserAccountViewModel;
-    private ProductViewModel mProductViewModel;
-    private CheckoutViewModel mCheckoutViewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
-        mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
-        mUserAccountViewModel = ViewModelProviders.of(this, new UserAccountViewModelFactory(mCheckoutViewModel)).get(UserAccountViewModel.class);
+        mUserAccountViewModel = ViewModelProviders.of(this, new UserAccountViewModelFactory(UserViewModel.getUserId())).get(UserAccountViewModel.class);
 
         mSwChangePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -180,7 +178,7 @@ public class UserAccountFragment extends AccountFormFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_logout) {
 
-            ((MainActivity) getActivity()).invalidateLoginState();
+            ((UserValidationActivity) getActivity()).invalidateLoginState();
             UserViewModel.logout();
 
             Intent i = new Intent(getActivity(), LoginActivity.class);

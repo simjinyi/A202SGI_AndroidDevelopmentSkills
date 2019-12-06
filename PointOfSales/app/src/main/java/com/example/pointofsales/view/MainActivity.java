@@ -33,21 +33,4 @@ public class MainActivity extends UserValidationActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
-
-    @Override
-    public boolean onOptionsItemSelected (MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            getSupportFragmentManager().popBackStack();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void invalidateLoginState() {
-        SharedPreferences sp = getSharedPreferences(LoginActivity.SP_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.clear().apply();
-        editor.commit();
-    }
 }

@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_product"
+        android:id="@+id/navigation_qr"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_product" />
+        android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_transaction"
-        android:icon="@drawable/ic_view_list_black_24dp"
-        android:title="@string/title_transaction" />
+        android:id="@+id/navigation_membership"
+        android:icon="@drawable/ic_card_membership_black_24dp"
+        android:title="@string/title_membership" />
 
 </menu>

@@ -15,6 +15,7 @@ import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
+import com.example.pointofsales.repository.PointRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.register.RegisterInterface;
@@ -58,7 +59,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         mStoreAccountFormState.setValue(new StoreAccountFormState(false));
 
         mAccountFormEnableState = new MutableLiveData<>();
-        mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, true, true, true, false));
+        mAccountFormEnableState.setValue(new AccountFormEnableState(true, false, false, true, true, true, false));
 
         mUnmatchedPassword = new MutableLiveData<>();
         mUnmatchedPassword.setValue(false);
@@ -114,6 +115,9 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                 });
             }
         }
+
+        if (!oriStore.getName().equals(store.getName()) || !oriStore.getAddress().equals(store.getAddress()) || oriStore.getPointsPerPrice() != store.getPointsPerPrice())
+            PointRepository.updateStoreDetails(store.getId(), store);
     }
 
     public void insertStore(final Store store) {
@@ -189,9 +193,9 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
     public void setEnableChangePassword(boolean changePasswordEnabled) {
         if (mStoreId != null && changePasswordEnabled)
-            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, true, true, true, true));
+            mAccountFormEnableState.setValue(new AccountFormEnableState(true, false, false, true, true, true, true));
         else
-            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, true, true, true, false));
+            mAccountFormEnableState.setValue(new AccountFormEnableState(true, false, false, true, true, true, false));
     }
 
     private boolean isEmailValid(String username) {

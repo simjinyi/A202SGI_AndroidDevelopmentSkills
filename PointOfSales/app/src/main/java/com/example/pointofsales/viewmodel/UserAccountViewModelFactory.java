@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class UserAccountViewModelFactory implements ViewModelProvider.Factory {
 
-    private CheckoutViewModel mCheckoutViewModel;
+    private String mUserId;
 
-    public UserAccountViewModelFactory(CheckoutViewModel checkoutViewModel) {
-        mCheckoutViewModel = checkoutViewModel;
+    public UserAccountViewModelFactory(String userId) {
+        mUserId = userId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new UserAccountViewModel(mCheckoutViewModel);
+        return (T) new UserAccountViewModel(mUserId);
     }
 }

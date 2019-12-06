@@ -7,6 +7,8 @@ public class Point {
     private String mUserId;
     private String mStoreName;
     private String mStoreId;
+    private String mStoreAddress;
+    private int mStorePointsPerPrice;
     private int mPoints;
 
     public Point() {
@@ -14,11 +16,13 @@ public class Point {
         mPoints = 0;
     }
 
-    public Point(String userName, String userId, String storeName, String storeId, int points) {
+    public Point(String userName, String userId, String storeName, String storeId, String storeAddress, int storePointsPerPrice, int points) {
         mUserName = userName;
         mUserId = userId;
         mStoreName = storeName;
         mStoreId = storeId;
+        mStoreAddress = storeAddress;
+        mStorePointsPerPrice = storePointsPerPrice;
         mPoints = points;
     }
 
@@ -55,6 +59,20 @@ public class Point {
     }
     public void setStoreId(String storeId) {
         mStoreId = storeId;
+    }
+
+    public String getStoreAddress() {
+        return mStoreAddress;
+    }
+    public void setStoreAddress(String storeAddress) {
+        mStoreAddress = storeAddress;
+    }
+
+    public int getStorePointsPerPrice() {
+        return mStorePointsPerPrice;
+    }
+    public void setStorePointsPerPrice(int storePointsPerPrice) {
+        mStorePointsPerPrice = storePointsPerPrice;
     }
 
     public int getPoints() {

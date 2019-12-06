@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pointofsales.R;
+import com.example.pointofsales.database.PointDatabase;
 import com.example.pointofsales.database.UserDatabase;
 import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.User;
@@ -15,6 +16,7 @@ import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
+import com.example.pointofsales.repository.PointRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.register.RegisterInterface;
@@ -30,7 +32,6 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
     private MutableLiveData<User> mUserData;
 
     private UserRepository mUserRepository;
-    private CheckoutViewModel mCheckOutViewModel;
 
     public UserAccountViewModel() {
         mUserRepository = UserRepository.getInstance();
@@ -48,9 +49,8 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUserUpdated.setValue(UserUpdatedState.NONE);
     }
 
-    public UserAccountViewModel(CheckoutViewModel checkoutViewModel) {
+    public UserAccountViewModel(String userId) {
         mUserRepository = UserRepository.getInstance();
-        mCheckOutViewModel = checkoutViewModel;
 
         mUserId = UserViewModel.getUserId();
 
@@ -58,7 +58,7 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
         mUserAccountFormState.setValue(new StoreAccountFormState(false));
 
         mAccountFormEnableState = new MutableLiveData<>();
-        mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, false, true, false));
+        mAccountFormEnableState.setValue(new AccountFormEnableState(true, false, false, false, false, true, false));
 
         mUnmatchedPassword = new MutableLiveData<>();
         mUnmatchedPassword.setValue(false);
@@ -95,6 +95,9 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
                 mUserRepository.update(user, this);
             }
         }
+
+        if (!oriUser.getName().equals(user.getName()))
+            PointRepository.updateUserName(user.getId(), user.getName());
     }
 
     public void insertUser(final User user) {
@@ -148,9 +151,9 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
 
     public void setEnableChangePassword(boolean changePasswordEnabled) {
         if (mUserId != null && changePasswordEnabled)
-            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, false, true, true));
+            mAccountFormEnableState.setValue(new AccountFormEnableState(true, false, false, false, false, true, true));
         else
-            mAccountFormEnableState.setValue(new AccountFormEnableState(false, false, false, false, false, true, false));
+            mAccountFormEnableState.setValue(new AccountFormEnableState(true, false, false, false, false, true, false));
     }
 
     private boolean isEmailValid(String username) {
