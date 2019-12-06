@@ -28,7 +28,8 @@ public class ProductFilter extends Filter {
             filteredProducts = allProducts;
         else
             for (Product product : allProducts)
-                if (product.getName().toLowerCase().contains(searchString.toLowerCase()) || String.valueOf(product.getPrice()).contains(searchString))
+                if (product.getName().toLowerCase().contains(searchString.toLowerCase()) ||
+                        String.format("%.2f", product.getPrice()).contains(searchString))
                     filteredProducts.add(product);
 
         FilterResults filterResults = new FilterResults();

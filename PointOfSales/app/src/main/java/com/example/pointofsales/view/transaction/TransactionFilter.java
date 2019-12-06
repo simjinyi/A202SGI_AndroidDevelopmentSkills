@@ -33,7 +33,7 @@ public class TransactionFilter extends Filter {
         else
             for (Transaction transaction : transactions)
                 if (simpleDateFormat.format(new Date(transaction.getTimestamp())).contains(searchString.toLowerCase()) ||
-                        String.valueOf(transaction.getTotal()).contains(searchString) ||
+                        String.format("%.2f", transaction.getTotal()).contains(searchString) ||
                         (transaction.getUserName() == null ? "-" : transaction.getUserName()).toLowerCase().contains(searchString.toLowerCase()) ||
                         transaction.getStoreName().toLowerCase().contains(searchString.toLowerCase()))
                     filteredTransactions.add(transaction);

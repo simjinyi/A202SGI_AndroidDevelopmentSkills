@@ -110,7 +110,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                         if (mCheckOutViewModel != null)
                             mCheckOutViewModel.updatePoint(null, true);
 
-                        this.onSuccess(o);
+                        StoreAccountViewModel.this.onSuccess(o);
                     }
                 });
             }
@@ -172,7 +172,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         try {
             pointsPerPriceParsed = Integer.parseInt(pointsPerPrice);
 
-            if (pointsPerPriceParsed <= 0)
+            if (pointsPerPriceParsed <= 0 || pointsPerPriceParsed > 9999)
                 isPointsPerPriceValid = false;
         } catch (Exception e) {
             isPointsPerPriceValid = false;

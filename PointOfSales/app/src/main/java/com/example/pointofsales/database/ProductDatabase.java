@@ -17,6 +17,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ProductDatabase Singleton Class
+ */
 public class ProductDatabase {
 
     private static final String PRODUCT_COLLECTION = "product";
@@ -38,6 +41,10 @@ public class ProductDatabase {
         return sProductDatabase;
     }
 
+    /**
+     *
+     * @param valueEventListener
+     */
     public void check(ValueEventListener valueEventListener) {
         mDatabaseReference.orderByChild("storeId")
                 .equalTo(mStoreId)

@@ -30,7 +30,7 @@ public class ProductFormViewModel extends ViewModel {
         try {
             productPriceParsed = Float.parseFloat(productPrice);
 
-            if (productPriceParsed <= 0)
+            if (productPriceParsed <= 0 || productPriceParsed > 9999)
                 isProductPriceValid = false;
         } catch (Exception e) {
             isProductPriceValid = false;
@@ -39,7 +39,7 @@ public class ProductFormViewModel extends ViewModel {
         try {
             productInventoryParsed = Integer.parseInt(productInventory);
 
-            if (productInventoryParsed < 0)
+            if (productInventoryParsed < 0 || productInventoryParsed > 99999)
                 isProductInventoryValid = false;
         } catch (Exception e) {
             isProductInventoryValid = false;
@@ -48,7 +48,7 @@ public class ProductFormViewModel extends ViewModel {
         try {
             productPointsParsed = Integer.parseInt(productPoints);
 
-            if (productPointsParsed < 0)
+            if (productPointsParsed < 0 || productPointsParsed > 99999)
                 isProductPointsValid = false;
         } catch (Exception e) {
             isProductPointsValid = false;
