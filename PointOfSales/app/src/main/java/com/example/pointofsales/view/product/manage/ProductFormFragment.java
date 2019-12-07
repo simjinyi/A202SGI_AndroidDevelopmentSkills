@@ -33,13 +33,20 @@ import com.example.pointofsales.viewmodel.ProductFormViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+/**
+ * Abstract class for the product form fragment, since the same view can be shared between both edit and add product
+ * This class will be used in registration for edit and add product feature
+ */
 public abstract class ProductFormFragment extends Fragment {
 
+    // Constants as the key for the iamge selection operation
     private static final int SELECT_IMAGE = 1;
     private static final int IMAGE_HEIGHT_SCALE = 300;
 
+    // ViewModel
     private ProductFormViewModel mProductFormViewModel;
 
+    // View components
     private Bitmap mBitmap;
     private ImageView mIvProductImage;
     private ImageButton mIbEditProductImage;
@@ -65,6 +72,7 @@ public abstract class ProductFormFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Assign the reference to the view components
         mBitmap = null;
         mIvProductImage = getView().findViewById(R.id.ivProductImage);
         mIbEditProductImage = getView().findViewById(R.id.ibEditProductImage);
@@ -85,8 +93,10 @@ public abstract class ProductFormFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Get the ViewModel from the ViewModelProviders
         mProductFormViewModel = ViewModelProviders.of(getActivity()).get(ProductFormViewModel.class);
 
+        // ImageButton opens the file manager for the user to select the image to be added
         mIbEditProductImage.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -97,6 +107,7 @@ public abstract class ProductFormFragment extends Fragment {
             }
         });
 
+        // Cancels and goes back to the home fragment
         mBtnCancel.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -104,6 +115,8 @@ public abstract class ProductFormFragment extends Fragment {
             }
         });
 
+        // Submit button calls the abstract "submit" method which will be implemented by the child classes
+        // Product submission will be handled differently for adding and editing product
         mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -111,6 +124,7 @@ public abstract class ProductFormFragment extends Fragment {
             }
         });
 
+        // Observe the ProductFormState for validation
         mProductFormViewModel.getProductFormState().observe(getViewLifecycleOwner(), new Observer<ProductFormState>() {
             @Override
             public void onChanged(ProductFormState productFormState) {
@@ -119,20 +133,25 @@ public abstract class ProductFormFragment extends Fragment {
 
                 mBtnSubmit.setEnabled(productFormState.isDataValid());
 
+                // Prompt name error
                 if (productFormState.getNameError() != null)
                     mEtProductName.setError(getString(productFormState.getNameError()));
 
+                // Prompt price error
                 if (productFormState.getPriceError() != null)
                     mEtProductPrice.setError(getString(productFormState.getPriceError()));
 
+                // Prompt inventory error
                 if (productFormState.getInventoryError() != null)
                     mEtProductInventoryQuantity.setError(getString(productFormState.getInventoryError()));
 
+                // Prompt points error
                 if (productFormState.getPointsError() != null)
                     mEtProductPoints.setError(getString(productFormState.getPointsError()));
             }
         });
 
+        // Declare a textwatcher to call for validation when the form fields was changed by the user
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -146,10 +165,13 @@ public abstract class ProductFormFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                // Calls the ViewModel for validation
                 mProductFormViewModel.productFormDataChanged(mEtProductName.getText().toString(), mEtProductPrice.getText().toString(), mEtProductInventoryQuantity.getText().toString(), mEtProductPoints.getText().toString());
             }
         };
 
+        // Add the textwatcher to all the editTexts in the form
         mEtProductName.addTextChangedListener(afterTextChangedListener);
         mEtProductPrice.addTextChangedListener(afterTextChangedListener);
         mEtProductInventoryQuantity.addTextChangedListener(afterTextChangedListener);
@@ -158,22 +180,29 @@ public abstract class ProductFormFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // Ensure that the intent returns a valid result
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_IMAGE) {
                 try {
 
+                    // Get the image with picasso and resize the image to the height of 100dp
                     Picasso.with(getActivity())
                             .load(data.getData())
                             .resize(0, IMAGE_HEIGHT_SCALE)
                             .into(new Target() {
                                 @Override
                                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                                    // Load the image into the view
                                     mBitmap = bitmap;
                                     mIvProductImage.setImageBitmap(bitmap);
                                 }
 
                                 @Override
                                 public void onBitmapFailed(Drawable errorDrawable) {
+
+                                    // Prompt an error if the image failed to be obtained
                                     Toast.makeText(getActivity(), getResources().getString(R.string.error_set_image), Toast.LENGTH_SHORT).show();
                                 }
 
@@ -184,12 +213,18 @@ public abstract class ProductFormFragment extends Fragment {
                             });
 
                 } catch (Exception e) {
+
+                    // Prompt an error if the image failed to be obtained
                     Toast.makeText(getActivity(), getResources().getString(R.string.error_set_image), Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
 
+    /**
+     * Get the product object from the form data entered by the user
+     * @return a product object holding the form data
+     */
     public Product getProductObject() {
 
         Product product = new Product();
@@ -205,6 +240,10 @@ public abstract class ProductFormFragment extends Fragment {
         return product;
     }
 
+    /**
+     * Set the product data into the form
+     * @param product product object to be used in setting the data
+     */
     public void setData(Product product) {
 
         if (product.getImage() != null) {
@@ -219,5 +258,6 @@ public abstract class ProductFormFragment extends Fragment {
         mSwEnabled.setEnabled(!product.isDisabled());
     }
 
+    // Abstract method submit
     public abstract void submit();
 }

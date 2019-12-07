@@ -31,13 +31,19 @@ import com.example.pointofsales.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * TransactionFragment handles the transaction page
+ */
 public class TransactionFragment extends Fragment implements ViewDetailsButtonClick {
 
+    // Constant for the transaction index fragment argument
     public static final String TRANSACTION_INDEX_FRAGMENT_ARG = "com.example.pointofsales.view.transaction.TRANSACTION_ID_FRAGMENT_ARG";
 
+    // ViewModel
     private TransactionViewModel mTransactionViewModel;
     private TransactionAdapter mTransactionAdapter;
 
+    // View components
     private TextView mTvSellerHeader;
     private TextView mTvCustomerHeader;
     private RecyclerView mRvTransaction;
@@ -57,6 +63,7 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Assign reference to the View components
         mTvSellerHeader = getView().findViewById(R.id.tvSellerHeader);
         mTvCustomerHeader = getView().findViewById(R.id.tvCustomerHeader);
         mRvTransaction = getView().findViewById(R.id.rvTransaction);
@@ -70,29 +77,39 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Get the ViewModel
         mTransactionViewModel = ViewModelProviders.of(getActivity()).get(TransactionViewModel.class);
 
+        // Set the transaction adapter
+        // Populate the RecyclerView by setting the transaction adapter
         mTransactionAdapter = new TransactionAdapter(getActivity(), mTransactionViewModel, this);
         mTransactionAdapter.setHasStableIds(true);
         mRvTransaction.addItemDecoration(new TransactionDecoration(getResources().getDimension(R.dimen.default_dimen), mTransactionViewModel));
         mRvTransaction.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvTransaction.setAdapter(mTransactionAdapter);
 
+        // Observes the changes to the list of transactions
         mTransactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
             @Override
             public void onChanged(ArrayList<Transaction> transactions) {
+
+                // Notify the dataset changed and calculate the total transaction
                 mTransactionAdapter.notifyDataSetChanged();
                 mTransactionViewModel.calculateTotalTransaction(transactions);
             }
         });
 
+        // Observes the transaction load state
         mTransactionViewModel.getTransactionLoadState().observe(getViewLifecycleOwner(), new Observer<TransactionLoadState>() {
             @Override
             public void onChanged(TransactionLoadState transactionLoadState) {
+
+                // Update the view according to the transaction load state
                 switch (transactionLoadState) {
                     case LOADED:
                         mLoadingScreen.end();
 
+                        // Update the view header visibility
                         if (UserViewModel.getUser().getType().equals(UserType.SELLER)) {
                             mTvSellerHeader.setVisibility(View.GONE);
                             mTvCustomerHeader.setVisibility(View.VISIBLE);
@@ -104,6 +121,7 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
                         break;
 
                     case NO_TRANSACTION:
+                        // Prompt no transaction message and navigate back
                         Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
                         getFragmentManager().popBackStack();
                         mLoadingScreen.end();
@@ -115,9 +133,11 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
             }
         });
 
+        // Observe the changes in the total transaction
         mTransactionViewModel.getTotalTransaction().observe(getViewLifecycleOwner(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
+                // Update the total transaction
                 mTvTotalTransaction.setText(getString(R.string.tvTotalTransaction, aFloat));
             }
         });
@@ -127,10 +147,12 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.seach_sort_menu, menu);
 
+        // Handle the actionbar search feature
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getResources().getString(R.string.transaction_query_hint));
 
+        // Apply the filter
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -149,6 +171,8 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_sort) {
+
+            // Sort the transaction and prompt the message on the way the items were sorted
             String sortText = getString(mTransactionViewModel.sort());
             item.setTitle(sortText);
             Toast.makeText(getActivity(), getString(R.string.sorting_by, sortText), Toast.LENGTH_SHORT).show();
@@ -159,6 +183,8 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
 
     @Override
     public void onViewDetailsButtonClick(Transaction transaction) {
+
+        // Navigate to the transaction details page with the transaction index in the dataset passed as the fragment argument
         Bundle bundle = new Bundle();
         bundle.putInt(TRANSACTION_INDEX_FRAGMENT_ARG, mTransactionViewModel.getTransactionIndexFromTransactionId(transaction.getTransactionId()));
         Navigation.findNavController(getView()).navigate(R.id.action_navigation_transaction_to_navigation_transaction_details, bundle);

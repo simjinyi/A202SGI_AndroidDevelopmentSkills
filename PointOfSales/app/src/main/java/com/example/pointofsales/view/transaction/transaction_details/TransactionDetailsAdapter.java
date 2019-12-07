@@ -13,6 +13,9 @@ import com.example.pointofsales.R;
 import com.example.pointofsales.model.TransactionItem;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 
+/**
+ * TransactionDetailsAdapter to populate the TransactionDetails RecyclerView
+ */
 public class TransactionDetailsAdapter extends RecyclerView.Adapter<TransactionDetailsAdapter.TransactionDetailsHolder> {
 
     private Context mContext;
@@ -20,8 +23,12 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<TransactionD
     private TransactionViewModel mTransactionViewModel;
     private int mIndex;
 
+    /**
+     * ViewHolder of the TransactionDetails
+     */
     public class TransactionDetailsHolder extends RecyclerView.ViewHolder {
 
+        // View components
         private TextView mTvProductName;
         private TextView mTvProductPrice;
         private TextView mTvProductQuantity;
@@ -30,12 +37,17 @@ public class TransactionDetailsAdapter extends RecyclerView.Adapter<TransactionD
         public TransactionDetailsHolder(@NonNull View itemView) {
             super(itemView);
 
+            // Assign the reference to the view components
             mTvProductName = itemView.findViewById(R.id.tvProductName);
             mTvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             mTvProductQuantity = itemView.findViewById(R.id.tvProductQuantity);
             mTvProductPriceExtension = itemView.findViewById(R.id.tvProductPriceExtension);
         }
 
+        /**
+         * Bind the TransactionItem object to the view components
+         * @param transactionItem transactionItem object to be assigned to the view
+         */
         public void bindItem(TransactionItem transactionItem) {
             mTvProductName.setText(transactionItem.getName());
             mTvProductPrice.setText(String.format("%.2f", transactionItem.getPrice()));

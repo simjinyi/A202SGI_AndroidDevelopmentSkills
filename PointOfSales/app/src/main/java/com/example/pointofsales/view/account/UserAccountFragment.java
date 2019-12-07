@@ -29,16 +29,23 @@ import com.example.pointofsales.viewmodel.UserAccountViewModel;
 import com.example.pointofsales.viewmodel.UserAccountViewModelFactory;
 import com.example.pointofsales.viewmodel.UserViewModel;
 
+/**
+ * UserAccountFragment inherits from the AccountFormFragment
+ * Handles the edit profile of the Customer
+ */
 public class UserAccountFragment extends AccountFormFragment {
 
+    // ViewModel object
     private UserAccountViewModel mUserAccountViewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Obtain the ViewModel from the ViewModelProviders and provide the ViewModel persistence scope
         mUserAccountViewModel = ViewModelProviders.of(this, new UserAccountViewModelFactory(UserViewModel.getUserId())).get(UserAccountViewModel.class);
 
+        // Enable change password fields when the switch is checked
         mSwChangePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -46,10 +53,15 @@ public class UserAccountFragment extends AccountFormFragment {
             }
         });
 
+        // Observes the unmatched password event from the ViewModel
         mUserAccountViewModel.getUnmatchedPassword().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
+                // If the original password was unmatched
                 if (aBoolean) {
+
+                    // Prompt the error and clear the error flag in the ViewModel
                     Toast.makeText(getActivity(), getString(R.string.unmatched_original_password), Toast.LENGTH_SHORT).show();
                     mUserAccountViewModel.clearUnmatchedPasswordFlag();
                     mLoadingScreen.end();
@@ -57,6 +69,7 @@ public class UserAccountFragment extends AccountFormFragment {
             }
         });
 
+        // Observes the change on the UserAccountFormState from the ViewModel for form validation
         mUserAccountViewModel.getUserAccountFormState().observe(getViewLifecycleOwner(), new Observer<UserAccountFormState>() {
             @Override
             public void onChanged(UserAccountFormState userAccountFormState) {
@@ -65,23 +78,29 @@ public class UserAccountFragment extends AccountFormFragment {
 
                 mBtnSubmit.setEnabled(userAccountFormState.isDataValid());
 
+                // Name error
                 if (userAccountFormState.getNameError() != null)
                     mEtName.setError(getString(userAccountFormState.getNameError()));
 
+                // Email error
                 if (userAccountFormState.getEmailError() != null)
                     mEtEmail.setError(getString(userAccountFormState.getEmailError()));
 
+                // Password error
                 if (userAccountFormState.getPasswordError() != null)
                     mEtPassword.setError(getString(userAccountFormState.getPasswordError()));
 
+                // Original password error
                 if (userAccountFormState.getOriginalPasswordError() != null)
                     mEtOriginalPassword.setError(getString(userAccountFormState.getOriginalPasswordError()));
 
+                // New password error
                 if (userAccountFormState.getNewPasswordError() != null)
                     mEtNewPassword.setError(getString(userAccountFormState.getNewPasswordError()));
             }
         });
 
+        // Create a textwatcher that updates the ViewModel with the latest form details when the form was changed
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,6 +114,8 @@ public class UserAccountFragment extends AccountFormFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                // Calls the ViewModel for validation
                 mUserAccountViewModel.userAccountFormChanged(mEtName.getText().toString(),
                         mEtEmail.getText().toString(),
                         mEtPassword.getText().toString(),
@@ -103,14 +124,20 @@ public class UserAccountFragment extends AccountFormFragment {
             }
         };
 
+        // Observes the changes made to the user
         mUserAccountViewModel.getUserUpdated().observe(getViewLifecycleOwner(), new Observer<UserUpdatedState>() {
             @Override
             public void onChanged(UserUpdatedState userUpdatedState) {
                 if (userUpdatedState.equals(UserUpdatedState.SUCCESS)) {
+
+                    // Successful update
                     Toast.makeText(getActivity(), getString(R.string.user_details_updated), Toast.LENGTH_SHORT).show();
                     mUserAccountViewModel.clearUserUpdatedFlag();
                     getFragmentManager().popBackStack();
+
                 } else if (userUpdatedState.equals(UserUpdatedState.FAILED)) {
+
+                    // Failed update as the email exists
                     Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
                 }
 
@@ -118,6 +145,7 @@ public class UserAccountFragment extends AccountFormFragment {
             }
         });
 
+        // Add the textwatcher for all the editTexts in the form
         mEtName.addTextChangedListener(afterTextChangedListener);
         mEtEmail.addTextChangedListener(afterTextChangedListener);
         mEtPassword.addTextChangedListener(afterTextChangedListener);
@@ -126,6 +154,7 @@ public class UserAccountFragment extends AccountFormFragment {
         mEtOriginalPassword.addTextChangedListener(afterTextChangedListener);
         mEtNewPassword.addTextChangedListener(afterTextChangedListener);
 
+        // Go back to the previous fragment
         mBtnCancel.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -133,23 +162,34 @@ public class UserAccountFragment extends AccountFormFragment {
             }
         });
 
+        // Observes changes made to the user data
         mUserAccountViewModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
+
+                // Update the form with the new data accordingly
                 setData(user);
             }
         });
 
+        // Set form fields enable status based on the AccountFormEnableState object returned
         mUserAccountViewModel.getAccountFormEnableState().observe(getViewLifecycleOwner(), this);
         setData(UserViewModel.getUser());
     }
 
+    /**
+     * Start loading and update the user details
+     */
     @Override
     public void submit() {
         mLoadingScreen.start();
         mUserAccountViewModel.updateUser(getData());
     }
 
+    /**
+     * Get the details of the form entered by the user
+     * @return a pair of the new Store object with the original password passed for validation
+     */
     @Override
     public Pair<User, String> getData() {
 
@@ -173,9 +213,11 @@ public class UserAccountFragment extends AccountFormFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_logout) {
 
+            // Handle logout
             ((UserValidationActivity) getActivity()).invalidateLoginState();
             UserViewModel.logout();
 
+            // Navigate to the LoginActivity without history to prevent backpress from coming back to this page
             Intent i = new Intent(getActivity(), LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);

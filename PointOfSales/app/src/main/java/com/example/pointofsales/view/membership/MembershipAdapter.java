@@ -19,6 +19,9 @@ import com.example.pointofsales.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * MembershipAdapter to populate the RecyclerView
+ */
 public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private Context mContext;
@@ -26,8 +29,12 @@ public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private MembershipViewModel mMembershipViewModel;
     private ArrayList<Point> mPoints;
 
+    /**
+     * MembershipCustomerHolder holds the membership list item for the customer
+     */
     public class MembershipCustomerHolder extends RecyclerView.ViewHolder implements CommonViewHolder {
 
+        // View components
         private TextView mTvStoreName;
         private TextView mTvPoints;
         private TextView mTvStoreAddress;
@@ -36,12 +43,18 @@ public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public MembershipCustomerHolder(@NonNull View itemView) {
             super(itemView);
 
+            // Assign the reference to the view components
             mTvStoreName = itemView.findViewById(R.id.tvStoreName);
             mTvPoints = itemView.findViewById(R.id.tvPoints);
             mTvStoreAddress = itemView.findViewById(R.id.tvStoreAddress);
             mTvPointsPerPrice = itemView.findViewById(R.id.tvPointsPerPrice);
         }
 
+        /**
+         * Bind the point (membership) data to the view
+         * @param point point object to be assigned
+         * @param position position of the adapter
+         */
         public void bindData(Point point, final int position) {
             mTvStoreName.setText(point.getStoreName());
             mTvPoints.setText(mContext.getString(R.string.tvPoints, point.getPoints()));
@@ -50,6 +63,9 @@ public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    /**
+     * MembershipSellerHolder holds the membership list item for the seller
+     */
     public class MembershipSellerHolder extends RecyclerView.ViewHolder implements CommonViewHolder {
 
         private TextView mTvMemberName;
@@ -58,10 +74,16 @@ public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public MembershipSellerHolder(@NonNull View itemView) {
             super(itemView);
 
+            // Assign the reference to the view components
             mTvMemberName = itemView.findViewById(R.id.tvMemberName);
             mTvPoints = itemView.findViewById(R.id.tvPoints);
         }
 
+        /**
+         * Bind the point (membership) data to the view
+         * @param point point object to be assigned
+         * @param position position of the adapter
+         */
         public void bindData(Point point, final int position) {
             mTvMemberName.setText(point.getUserName());
             mTvPoints.setText(mContext.getString(R.string.tvPoints, point.getPoints()));
@@ -79,13 +101,16 @@ public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (UserViewModel.getUser().getType().equals(UserType.SELLER))
+            // Return MembershipSellerHolder object if the logged in user is a seller
             return new MembershipSellerHolder(mLayoutInflater.inflate(R.layout.list_item_membership_store, parent, false));
         else
+            // Return MembershipCustomerHolder object if the logged in user is a customer
             return new MembershipCustomerHolder(mLayoutInflater.inflate(R.layout.list_item_membership, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        // Bind the data to the view components
         ((CommonViewHolder) holder).bindData(mPoints.get(position), position);
     }
 
@@ -101,6 +126,7 @@ public class MembershipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public Filter getFilter() {
+        // Return a MembershipFilter object to filter the membership based on the query string provided
         return new MembershipFilter(mMembershipViewModel, this);
     }
 

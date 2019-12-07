@@ -10,6 +10,10 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.pointofsales.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * MainActivity class handles all the fragments for the Seller
+ * Extends UserValidationActivtity to ensure that the user was logged in before proceeding
+ */
 public class MainActivity extends UserValidationActivity {
 
     @Override
@@ -25,6 +29,7 @@ public class MainActivity extends UserValidationActivity {
                 // R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
 
+        // Setup the NavController
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);

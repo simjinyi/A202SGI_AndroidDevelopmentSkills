@@ -23,8 +23,14 @@ import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.utility.LoadingScreen;
 import com.example.pointofsales.view.OnSingleClickListener;
 
+/**
+ * Abstract class for the account (profile) form fragment, since the same view can be shared between both Customer and Seller
+ * Implements the Observer<AccountFormEnableState> to listen to any changes on the form fields enable status, and update the view components respectively
+ * This class will be used in registration for both Seller and Customer and the profile update for both Seller and Customer
+ */
 public abstract class AccountFormFragment extends Fragment implements Observer<AccountFormEnableState> {
 
+    // View components
     protected EditText mEtName;
     protected EditText mEtEmail;
     private TextView mTvPasswordLabel;
@@ -54,6 +60,7 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get the reference to the view components
         mEtName = getView().findViewById(R.id.etName);
         mEtEmail = getView().findViewById(R.id.etEmail);
         mTvPasswordLabel = getView().findViewById(R.id.tvPasswordLabel);
@@ -79,6 +86,8 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
         mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                // Calls the abstract method overloaded by the child classes to handle the form submission
+                // As the form should be handled differently for the customer and the seller
                 submit();
             }
         });
@@ -86,24 +95,30 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
 
     @Override
     public void onChanged(AccountFormEnableState accountFormEnableState) {
+
+        // Check and set the enable status of the name field based on the value from the accountFormEnableState object
         mEtName.setEnabled(accountFormEnableState.isNameEnabled());
         mEtEmail.setEnabled(accountFormEnableState.isEmailEnabled());
 
+        // Check and set the enable and visibility status of the password field based on the value from the accountFormEnableState object
         mTvPasswordLabel.setVisibility(accountFormEnableState.isPasswordVisible() ? View.VISIBLE : View.GONE);
         mEtPassword.setVisibility(accountFormEnableState.isPasswordVisible() ? View.VISIBLE : View.GONE);
         if (!accountFormEnableState.isPasswordVisible())
             mEtPassword.setText(null);
 
+        // Check and set the enable and visibility status of the address field based on the value from the accountFormEnableState object
         mTvAddressLabel.setVisibility(accountFormEnableState.isAddressVisible() ? View.VISIBLE : View.GONE);
         mEtAddress.setVisibility(accountFormEnableState.isAddressVisible() ? View.VISIBLE : View.GONE);
         if (!accountFormEnableState.isAddressVisible())
             mEtAddress.setText(null);
 
+        // Check and set the enable and visibility status of the points per price field based on the value from the accountFormEnableState object
         mTvPointsPerPriceLabel.setVisibility(accountFormEnableState.isPointsPerPriceVisible() ? View.VISIBLE : View.GONE);
         mEtPointsPerPrice.setVisibility(accountFormEnableState.isPointsPerPriceVisible() ? View.VISIBLE : View.GONE);
         if (!accountFormEnableState.isPointsPerPriceVisible())
             mEtPointsPerPrice.setText(null);
 
+        // Check and set the enable status of the change password field based on the value from the accountFormEnableState object
         mCvStorePasswordHolder.setVisibility(accountFormEnableState.isChangePasswordVisible() ? View.VISIBLE : View.GONE);
         mEtOriginalPassword.setEnabled(accountFormEnableState.isChangePasswordEnabled());
         mEtNewPassword.setEnabled(accountFormEnableState.isChangePasswordEnabled());
@@ -115,6 +130,10 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
         }
     }
 
+    /**
+     * Set the user details into the form
+     * @param user user details to be set into the form
+     */
     public void setData(User user) {
 
         mEtName.setText(user.getName());
@@ -126,6 +145,8 @@ public abstract class AccountFormFragment extends Fragment implements Observer<A
         }
     }
 
+    // ABSTRACT METHODS
     public abstract void submit();
     public abstract Object getData();
+    // END ABSTRACT METHODS
 }

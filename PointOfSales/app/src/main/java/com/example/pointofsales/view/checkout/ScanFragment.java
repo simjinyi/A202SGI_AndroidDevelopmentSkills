@@ -36,8 +36,12 @@ import com.example.pointofsales.viewmodel.ProductViewModel;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+/**
+ * ScanFragment to add membership to a transaction
+ */
 public class ScanFragment extends Fragment {
 
+    // View components
     private EditText mEtName;
     private EditText mEtAvailablePoints;
     private EditText mEtPointsRedeem;
@@ -52,8 +56,10 @@ public class ScanFragment extends Fragment {
 
     private LoadingScreen mLoadingScreen;
 
+    // Scanner IntentIntegrator
     private IntentIntegrator mIntentIntegrator;
 
+    // ViewModels
     private CheckoutViewModel mCheckoutViewModel;
     private ProductViewModel mProductViewModel;
 
@@ -67,6 +73,7 @@ public class ScanFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Assign reference to the view components
         mEtName = getView().findViewById(R.id.etName);
         mEtAvailablePoints = getView().findViewById(R.id.etAvailablePoints);
         mEtPointsRedeem = getView().findViewById(R.id.etPointsRedeem);
@@ -86,9 +93,11 @@ public class ScanFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Get the ViewModels from the ViewModelProviders and specify the scope of data persistence
         mProductViewModel = ViewModelProviders.of(getActivity()).get(ProductViewModel.class);
         mCheckoutViewModel = ViewModelProviders.of(getActivity(), new CheckoutViewModelFactory(mProductViewModel)).get(CheckoutViewModel.class);
 
+        // Form the IntentIntegrator for the ZXing Scanner Activity
         mIntentIntegrator = IntentIntegrator.forSupportFragment(this);
         mIntentIntegrator.setBeepEnabled(false);
         mIntentIntegrator.setOrientationLocked(false);
@@ -96,10 +105,13 @@ public class ScanFragment extends Fragment {
 
         mCheckoutViewModel.updateEditText();
 
+        // Check if the redeemed point enter is valid
         mCheckoutViewModel.getPointsRedeemedError().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if (integer != null) {
+
+                    // Prompt the error if the point is invalid
                     mBtnSubmit.setEnabled(false);
                     mEtPointsRedeem.setError(getString(R.string.point_redeem_error, integer));
                 } else {
@@ -108,6 +120,7 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Initiate the scanner activity
         mBtnScanQRCode.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -115,9 +128,12 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observe if the membership was added to the transaction
         mCheckoutViewModel.getPoint().observe(getViewLifecycleOwner(), new Observer<Point>() {
             @Override
             public void onChanged(Point point) {
+
+                // Assign the view based on the membership added
                 if (point != null) {
 
                     mClNoMember.setVisibility(View.GONE);
@@ -139,6 +155,7 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observe the points redeemed, and set the value in the EditText
         mCheckoutViewModel.getEditTextValue().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
@@ -146,10 +163,13 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observe if the QR Code scanned was invalid
         mCheckoutViewModel.getScanUserNotFound().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
+
+                    // Prompt an error on the invalid user (not found in the database)
                     Toast.makeText(getActivity(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
                     mCheckoutViewModel.clearScanUserNotFoundFlag();
                 }
@@ -158,6 +178,7 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observe the changes on the cart details and update the view accordingly
         mProductViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<Cart>() {
             @Override
             public void onChanged(Cart cart) {
@@ -167,10 +188,13 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observes and check if the cart quantity changed due to a change in the product inventory quantity
         mProductViewModel.getProductInventoryQuantityChangeState().observe(getViewLifecycleOwner(), new Observer<ProductInventoryQuantityChangeState>() {
             @Override
             public void onChanged(ProductInventoryQuantityChangeState productInventoryQuantityChangeState) {
                 if (productInventoryQuantityChangeState.getProductNames().size() > 0) {
+
+                    // Prompt a notification on the cart changed
                     new AlertDialog.Builder(getActivity())
                             .setTitle(getString(R.string.product_quantity_changed))
                             .setMessage(getString(R.string.product_quantity_changed_description, productInventoryQuantityChangeState.toString()))
@@ -187,10 +211,13 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observes and check if the cart product removed due to product removal
         mProductViewModel.getCartRemovalState().observe(getViewLifecycleOwner(), new Observer<CartRemovalState>() {
             @Override
             public void onChanged(CartRemovalState cartRemovalState) {
                 if (cartRemovalState.getProductNames().size() > 0) {
+
+                    // Prompt a notification on the cart removal
                     new AlertDialog.Builder(getActivity())
                             .setTitle(getString(R.string.product_removed_from_cart))
                             .setMessage(getString(R.string.product_removed_from_cart_description, cartRemovalState.toString()))
@@ -207,9 +234,12 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Observe if the cart can be opened (at least one product exists in the cart)
         mProductViewModel.getCartOpenableState().observe(getViewLifecycleOwner(), new Observer<CartOpenableState>() {
             @Override
             public void onChanged(CartOpenableState cartOpenableState) {
+
+                // If not openable navigate back to home
                 if (cartOpenableState.equals(CartOpenableState.DISABLED)) {
                     mCheckoutViewModel.clearPoint();
                     getFragmentManager().popBackStack();
@@ -217,11 +247,12 @@ public class ScanFragment extends Fragment {
             }
         });
 
-
-
+        // Clear the added membership
         mBtnClearMember.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+
+                // Prompt a confirmation
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getString(R.string.clear_member))
                         .setMessage(getString(R.string.clear_member_description))
@@ -229,6 +260,8 @@ public class ScanFragment extends Fragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                // Clear the membership and navigate back to the checkout fragment
                                 mCheckoutViewModel.clearPoint();
                                 Toast.makeText(getActivity(), getResources().getString(R.string.member_cleared_successfully), Toast.LENGTH_SHORT).show();
                                 getFragmentManager().popBackStack();
@@ -238,6 +271,7 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Validate if the points to redeem entered by the seller is valid
         mEtPointsRedeem.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -255,6 +289,7 @@ public class ScanFragment extends Fragment {
             }
         });
 
+        // Save and goes back to the checkout fragment
         mBtnSubmit.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -265,11 +300,16 @@ public class ScanFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        // Check if the result is valid
         if (resultCode == Activity.RESULT_OK) {
 
+            // Get the result
             IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
             if (result != null) {
+
+                // Assign the membership based on the UserId scanned
                 mCheckoutViewModel.assignPoint(result.getContents());
                 mLoadingScreen.start();
             }

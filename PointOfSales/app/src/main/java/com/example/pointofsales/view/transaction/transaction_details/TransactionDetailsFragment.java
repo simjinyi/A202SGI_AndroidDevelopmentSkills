@@ -25,13 +25,18 @@ import com.example.pointofsales.viewmodel.TransactionViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * TransactionDetailsFragment shows the transaction details with the items purchased
+ */
 public class TransactionDetailsFragment extends Fragment {
 
     private int mIndex;
 
+    // ViewModel object
     private TransactionViewModel mTransactionViewModel;
     private TransactionDetailsAdapter mTransactionDetailsAdapter;
 
+    // View components
     private RecyclerView mRvCart;
     private TextView mTvTransactionDate;
     private TextView mTvSubTotal;
@@ -54,6 +59,7 @@ public class TransactionDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Assign the reference to the view components
         mRvCart = getView().findViewById(R.id.rvCart);
         mTvTransactionDate = getView().findViewById(R.id.tvTransactionDate);
         mTvSubTotal = getView().findViewById(R.id.tvSubtotal);
@@ -71,44 +77,61 @@ public class TransactionDetailsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Get the transaction index from the fragment argument
         mIndex = getArguments().getInt(TransactionFragment.TRANSACTION_INDEX_FRAGMENT_ARG);
+
+        // Get the ViewModel from the ViewModelProviders and specify the data persistence scope
         mTransactionViewModel = ViewModelProviders.of(getActivity()).get(TransactionViewModel.class);
         mTransactionDetailsAdapter = new TransactionDetailsAdapter(getActivity(), mTransactionViewModel, mIndex);
 
+        // Set the data from the transaction object
         setData(mTransactionViewModel.getTransactions().getValue().get(mIndex));
 
+        // Observe if the transaction was removed
         mTransactionViewModel.getTransactionIndexDeleted().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if (integer != -1 && integer == mIndex) {
+
+                    // If removed navigate back to the Transaction fragment
                     Toast.makeText(getActivity(), getString(R.string.transaction_deleted), Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();
                 }
             }
         });
 
+        // Observe if the transaction was loaded
         mTransactionViewModel.getTransactionLoadState().observe(getViewLifecycleOwner(), new Observer<TransactionLoadState>() {
             @Override
             public void onChanged(TransactionLoadState transactionLoadState) {
                 if (transactionLoadState.equals(TransactionLoadState.NO_TRANSACTION)) {
+
+                    // Navigate back to the home fragment
                     Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
                     getFragmentManager().popBackStack();
                 }
             }
         });
 
+        // Populate the Cart RecyclerView containing the Transaction Items by setting the adapter
         mRvCart.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvCart.setAdapter(mTransactionDetailsAdapter);
     }
 
+    /**
+     * Set the transaction details
+     * @param transaction transaction object containing the data to be set
+     */
     public void setData(Transaction transaction) {
 
+        // Update the view components
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         mTvTransactionDate.setText(simpleDateFormat.format(new Date(transaction.getTimestamp())));
         mTvSellerName.setText(transaction.getStoreName());
 
         mTvSubTotal.setText(getString(R.string.tvSubtotal, transaction.getSubtotal()));
 
+        // If a member was added to the transaction, show the membership details
         if (transaction.getUserName() != null && transaction.getPointsAwarded() != null && transaction.getPointsRedeemed() != null) {
             mTvNoMemberAdded.setVisibility(View.GONE);
 
@@ -122,6 +145,7 @@ public class TransactionDetailsFragment extends Fragment {
 
         } else {
 
+            // Hide the membership details
             mTvNoMemberAdded.setVisibility(View.VISIBLE);
 
             mTvMemberName.setVisibility(View.GONE);

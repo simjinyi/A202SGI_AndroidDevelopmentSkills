@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.viewmodel.MembershipViewModel;
 
+/**
+ * MembershipDecoration to decorate the list items for the Membership RecyclerView
+ */
 public class MembershipDecoration extends RecyclerView.ItemDecoration {
 
     private int mDimen;
@@ -19,6 +22,7 @@ public class MembershipDecoration extends RecyclerView.ItemDecoration {
 
         int position = parent.getChildAdapterPosition(view);
 
+        // Check if the position of the list item was the last, add a bottom margin
         if (position == mMembershipViewModel.getPoints().getValue().size() - 1)
             outRect.bottom = mDimen;
     }

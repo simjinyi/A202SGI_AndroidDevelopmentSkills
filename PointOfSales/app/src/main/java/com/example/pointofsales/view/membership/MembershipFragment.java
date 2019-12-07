@@ -28,11 +28,15 @@ import com.example.pointofsales.viewmodel.MembershipViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * MembershipFragment to handle the membership page
+ */
 public class MembershipFragment extends Fragment {
 
     private MembershipViewModel mMembershipViewModel;
     private MembershipAdapter mMembershipAdapter;
 
+    // View components
     private RecyclerView mRvMembership;
     private CardView mCvNoMembership;
     private ProgressBar mPbLoading;
@@ -50,6 +54,7 @@ public class MembershipFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Assign the reference to the view components
         mRvMembership = getView().findViewById(R.id.rvMembership);
         mCvNoMembership = getView().findViewById(R.id.cvNoMembership);
         mPbLoading = getView().findViewById(R.id.pbLoading);
@@ -61,24 +66,31 @@ public class MembershipFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Get the ViewModel
         mMembershipViewModel = ViewModelProviders.of(getActivity()).get(MembershipViewModel.class);
         mMembershipAdapter = new MembershipAdapter(getActivity(), mMembershipViewModel);
         mMembershipAdapter.setHasStableIds(true);
 
+        // Populate the RecyclerView by assigning the adapter
         mRvMembership.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvMembership.addItemDecoration(new MembershipDecoration(getResources().getDimension(R.dimen.default_dimen), mMembershipViewModel));
         mRvMembership.setAdapter(mMembershipAdapter);
 
+        // Observe the changes on the ArrayList of Point object (Membership)
         mMembershipViewModel.getPoints().observe(getViewLifecycleOwner(), new Observer<ArrayList<Point>>() {
             @Override
             public void onChanged(ArrayList<Point> points) {
+                // Update the RecyclerView
                 mMembershipAdapter.notifyDataSetChanged();
             }
         });
 
+        // Observe if the membership was currenly being loaded from the database
         mMembershipViewModel.getPointLoadState().observe(getViewLifecycleOwner(), new Observer<PointLoadState>() {
             @Override
             public void onChanged(PointLoadState pointLoadState) {
+
+                // Update the view accordingly
                 switch (pointLoadState) {
                     case LOADED:
                         mLoadingScreen.end();
@@ -101,10 +113,12 @@ public class MembershipFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.seach_sort_menu, menu);
 
+        // Handle the actionbar search feature
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getResources().getString(R.string.membership_query_hint));
 
+        // Apply the filter
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -123,6 +137,8 @@ public class MembershipFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_sort) {
+
+            // Sort the membership and prompt the message on the way the items were sorted
             String sortText = getString(mMembershipViewModel.sort());
             item.setTitle(sortText);
             Toast.makeText(getActivity(), getString(R.string.sorting_by, sortText), Toast.LENGTH_SHORT).show();

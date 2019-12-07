@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 
+/**
+ * TransactionDecoration class to decorate the items in the RecyclerView
+ */
 public class TransactionDecoration extends RecyclerView.ItemDecoration {
 
     private int mDimen;
@@ -19,6 +22,7 @@ public class TransactionDecoration extends RecyclerView.ItemDecoration {
 
         int position = parent.getChildAdapterPosition(view);
 
+        // Add a bottom margin if the item is the last in the RecyclerVIew
         if (position == mTransactionViewModel.getTransactions().getValue().size() - 1)
             outRect.bottom = mDimen;
     }

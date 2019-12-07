@@ -23,6 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * TransactionAdapter extends from the RecyclerView.Adapter
+ *
+ */
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> implements Filterable {
 
     private Context mContext;
@@ -32,8 +36,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private ArrayList<Transaction> mTransactions;
     private ViewDetailsButtonClick mViewDetailsButtonClick;
 
+    /**
+     * ViewHolder of the transaction data
+     */
     public class TransactionHolder extends RecyclerView.ViewHolder {
 
+        // View components
         private TextView mTvTransactionDate;
         private TextView mTvTransactionPrice;
         private TextView mTvCustomer;
@@ -43,6 +51,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         public TransactionHolder(@NonNull View itemView) {
             super(itemView);
 
+            // Assign the reference to the view components
             mTvTransactionDate = itemView.findViewById(R.id.tvTransactionDate);
             mTvTransactionPrice = itemView.findViewById(R.id.tvTransactionPrice);
             mTvCustomer = itemView.findViewById(R.id.tvCustomer);
@@ -50,6 +59,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             mIbViewDetails = itemView.findViewById(R.id.ibViewDetails);
         }
 
+        /**
+         * Bind the transaction data to the view
+         * @param transaction transaction object to be assigned to the view
+         * @param position position of the adapter
+         */
         public void bindData(Transaction transaction, final int position) {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -57,6 +71,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             mTvTransactionDate.setText(simpleDateFormat.format(new Date(transaction.getTimestamp())));
             mTvTransactionPrice.setText(mContext.getString(R.string.tvTransactionPrice, transaction.getTotal()));
 
+            // Set the user name if exists
             if (transaction.getUserName() != null)
                 mTvCustomer.setText(transaction.getUserName());
             else
@@ -64,13 +79,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
             mTvSeller.setText(transaction.getStoreName());
 
+            // View details button clicked
             mIbViewDetails.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+
+                    // Callback the interface with the transaction object passed
                     mViewDetailsButtonClick.onViewDetailsButtonClick(mTransactions.get(position));
                 }
             });
 
+            // Show or hide the seller or customer based on the type of the user logged in
             if (UserViewModel.getUser().getType().equals(UserType.SELLER)) {
                 mTvSeller.setVisibility(View.GONE);
                 mTvCustomer.setVisibility(View.VISIBLE);
@@ -114,6 +133,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         mTransactions = transactions;
     }
 
+    /**
+     * Filters the transaction items
+     * @return TransactionFilter to filter the transactions based on the query string
+     */
     @Override
     public Filter getFilter() {
         return new TransactionFilter(mTransactionViewModel, this);

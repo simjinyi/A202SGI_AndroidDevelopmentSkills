@@ -7,6 +7,9 @@ import com.example.pointofsales.viewmodel.MembershipViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * MembershipFilter class filters the Membership in the RecyclerView
+ */
 public class MembershipFilter extends Filter {
 
     private MembershipViewModel mMembershipViewModel;
@@ -28,16 +31,20 @@ public class MembershipFilter extends Filter {
             filteredPoints = points;
         else
             for (Point point : points)
+                // Check if the query string matches the user name, store name, store address, points or points per price
                 if (point.getStoreName().toLowerCase().contains(searchString.toLowerCase()) ||
                         point.getUserName().toLowerCase().contains(searchString.toLowerCase()) ||
                         point.getStoreAddress().toLowerCase().contains(searchString.toLowerCase()) ||
                         searchString.toLowerCase().contains(String.format("%.2f", point.getPoints())) ||
                         searchString.toLowerCase().contains(String.format("%.2f", point.getStorePointsPerPrice())))
+
+                    // Add the matching points
                     filteredPoints.add(point);
 
         FilterResults filterResults = new FilterResults();
         filterResults.values = filteredPoints;
 
+        // Return the filter result
         return filterResults;
     }
 
@@ -46,6 +53,8 @@ public class MembershipFilter extends Filter {
         @SuppressWarnings("unchecked")
         ArrayList<Point> points = (ArrayList<Point>) results.values;
         mMembershipAdapter.setPoints(points);
+
+        // Publish the result to the Membership RecyclerView
         mMembershipAdapter.notifyDataSetChanged();
     }
 }

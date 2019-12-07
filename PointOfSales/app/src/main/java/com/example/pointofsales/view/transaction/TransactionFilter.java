@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * TransactionFilter class to filter the Transactions in the Transaction RecyclerView
+ */
 public class TransactionFilter extends Filter {
 
     private TransactionViewModel mTransactionViewModel;
@@ -22,6 +25,7 @@ public class TransactionFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
 
+        // Get the query string
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String searchString = constraint.toString();
         ArrayList<Transaction> transactions = mTransactionViewModel.getTransactions().getValue();
@@ -31,6 +35,7 @@ public class TransactionFilter extends Filter {
             filteredTransactions = transactions;
         else
             for (Transaction transaction : transactions)
+                // If the date, total price, user name or store name contains the query string, add it to the filtredProduct list
                 if (simpleDateFormat.format(new Date(transaction.getTimestamp())).contains(searchString.toLowerCase()) ||
                         String.format("%.2f", transaction.getTotal()).contains(searchString) ||
                         (transaction.getUserName() == null ? "-" : transaction.getUserName()).toLowerCase().contains(searchString.toLowerCase()) ||
@@ -40,6 +45,7 @@ public class TransactionFilter extends Filter {
         FilterResults filterResults = new FilterResults();
         filterResults.values = filteredTransactions;
 
+        // Return the result
         return filterResults;
     }
 
@@ -48,6 +54,8 @@ public class TransactionFilter extends Filter {
         @SuppressWarnings("unchecked")
         ArrayList<Transaction> transactions = (ArrayList<Transaction>) results.values;
         mTransactionAdapter.setTransactions(transactions);
+
+        // Notify the RecyclerView on the data changed and calculate the total transaction
         mTransactionAdapter.notifyDataSetChanged();
         mTransactionViewModel.calculateTotalTransaction(transactions);
     }

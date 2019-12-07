@@ -18,6 +18,9 @@ import com.example.pointofsales.viewmodel.ProductViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * CartAdapter extends from the RecyclerView.Adapter
+ */
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     private Context mContext;
@@ -26,8 +29,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
     private CheckoutViewModel mCheckoutViewModel;
     private ArrayList<Product> mCartList;
 
+    /**
+     * CartHolder of the cart item
+     */
     public class CartHolder extends RecyclerView.ViewHolder {
 
+        // View components
         private TextView mTvProductName;
         private TextView mTvProductPrice;
         private Button mBtnMinusProductQuantity;
@@ -38,6 +45,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
         public CartHolder(@NonNull View itemView) {
             super(itemView);
 
+            // Assign reference to the view components
             mTvProductName = itemView.findViewById(R.id.tvProductName);
             mTvProductPrice = itemView.findViewById(R.id.tvProductPrice);
             mBtnMinusProductQuantity = itemView.findViewById(R.id.btnMinusProductQuantity);
@@ -46,6 +54,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
             mTvProductPriceExtension = itemView.findViewById(R.id.tvProductPriceExtension);
         }
 
+        /**
+         * Bind the cart details to the view
+         * @param product product object containing details to be updated
+         * @param position adapter position
+         */
         public void bindCart(Product product, final int position) {
 
             mTvProductName.setText(product.getName());
@@ -53,17 +66,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
             mTvProductQuantity.setText(String.valueOf(product.getCartQuantity()));
             mTvProductPriceExtension.setText(String.format("%.2f", product.getCartExtension()));
 
+            // OnClickListener for the add product quantity operation
             mBtnAddProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+
+                    // Calls the ViewModels for data and view update
                     mProductViewModel.addCartQuantity(mCartList.get(position));
                     mCheckoutViewModel.updatePoint(null, false);
                 }
             });
 
+            // OnClickListener for the minus product quantity operation
             mBtnMinusProductQuantity.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+
+                    // Calls the ViewModels for data and view update
                     mProductViewModel.minusCartQuantity(mCartList.get(position));
                     mCheckoutViewModel.updatePoint(null, false);
                 }
