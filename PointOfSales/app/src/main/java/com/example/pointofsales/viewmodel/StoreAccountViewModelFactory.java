@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+/**
+ * StoreAccountViewModelFactory class constructs StoreAccountViewModel without default constructor
+ */
 public class StoreAccountViewModelFactory implements ViewModelProvider.Factory {
 
     private CheckoutViewModel mCheckoutViewModel;

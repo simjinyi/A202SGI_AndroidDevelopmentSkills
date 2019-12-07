@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+/**
+ * UserAccountViewModelFactory class constructs UserAccountViewModel without default constructor
+ */
 public class UserAccountViewModelFactory implements ViewModelProvider.Factory {
 
     private String mUserId;

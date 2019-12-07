@@ -18,8 +18,13 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
+/**
+ * MembershipViewModel class
+ * Implements PointInterface and ChildEventListener to callback on point (membership) changed or deleted
+ */
 public class MembershipViewModel extends ViewModel implements PointInterface, ChildEventListener {
 
+    // Data to be observed by the view
     private MutableLiveData<ArrayList<Point>> mPoints;
     private MutableLiveData<PointLoadState> mPointLoadState;
 
@@ -31,6 +36,7 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
         mMembershipRepository = MembershipRepository.getInstance(UserViewModel.getUser(), this);
         mPoints = mMembershipRepository.getPoints();
 
+        // Instantiate the sort
         mMembershipSort = new MembershipSort();
 
         mPointLoadState = new MutableLiveData<>();
@@ -38,22 +44,29 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
         checkPointExists();
     }
 
+    /**
+     * Check and return if at least one membership exists
+     */
     private void checkPointExists() {
         mMembershipRepository.checkPointExists(UserViewModel.getUser(), this);
     }
 
+    // GETTER METHODS
     public LiveData<ArrayList<Point>> getPoints() {
         return mPoints;
     }
     public LiveData<PointLoadState> getPointLoadState() {
         return mPointLoadState;
     }
+    // END GETTER METHODS
 
     @Override
     public void pointExistCallback(boolean existence) {
         mPointLoadState.setValue(existence ? PointLoadState.LOADED : PointLoadState.NO_POINT);
     }
 
+    // Child Event Listeners
+    // On any change check if the point exists
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         checkPointExists();
@@ -71,14 +84,19 @@ public class MembershipViewModel extends ViewModel implements PointInterface, Ch
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        // ignore
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+        // ignore
     }
+    // END Child Event Listener
 
+    /**
+     * Sort the membership RecyclerView
+     * @return the String resource denoting the way the memberships are sorted
+     */
     public int sort() {
         switch (mMembershipSort.next()) {
             case STORE_NAME_ASC:

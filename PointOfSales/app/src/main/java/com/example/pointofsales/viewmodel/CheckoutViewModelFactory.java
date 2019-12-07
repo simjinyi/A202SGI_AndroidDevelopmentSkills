@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+/**
+ * Instantiate the CheckoutViewModel without default constructor
+ */
 public class CheckoutViewModelFactory implements ViewModelProvider.Factory  {
 
     private ProductViewModel mProductViewModel;

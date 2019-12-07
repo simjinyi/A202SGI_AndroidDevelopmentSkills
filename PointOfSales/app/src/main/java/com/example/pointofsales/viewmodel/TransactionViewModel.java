@@ -18,22 +18,38 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
+/**
+ * TransactionViewModel to handle the transaction operations
+ * Implements the transaction interface to check if at least one transaction exists
+ * Implements the child event listener to listen to changes in the transactions
+ */
 public class TransactionViewModel extends ViewModel implements TransactionInterface, ChildEventListener {
 
     private TransactionSort mTransactionSort;
+
+    // MutableLiveData observed by the View components
     private MutableLiveData<ArrayList<Transaction>> mTransactions;
     private MutableLiveData<Float> mTotalTransaction;
     private MutableLiveData<Integer> mTransactionIndexDeleted;
     private MutableLiveData<TransactionLoadState> mTransactionLoadState;
 
+    // Repository
     private TransactionRepository mTransactionRepository;
 
     public TransactionViewModel() {
+
+        // Get the transaction repository instance
         mTransactionRepository = TransactionRepository.getInstance(UserViewModel.getUser(), this, this);
+
+        // Set this object as the TransactionInterface and ChildEventListener
         mTransactionRepository.setTransactionInterface(this);
         mTransactionRepository.setChildEventListener(this);
+
+        // Get the transactions
         mTransactions = mTransactionRepository.getTransactions();
         mTransactionSort = new TransactionSort();
+
+        // Instantiate the MutableLiveData objects
         mTotalTransaction = new MutableLiveData<>();
         mTotalTransaction.setValue(0.0f);
 
@@ -42,9 +58,15 @@ public class TransactionViewModel extends ViewModel implements TransactionInterf
 
         mTransactionLoadState = new MutableLiveData<>();
         mTransactionLoadState.setValue(TransactionLoadState.LOADING);
+
+        // Check if at least one transaction exists
         checkTransactionExists();
     }
 
+    /**
+     * Sort function used in sorting the transactions in the Transaction RecyclerView
+     * @return the String resource containing the way the transactions are sorted
+     */
     public int sort() {
         switch (mTransactionSort.next()) {
             case DATE_ASC:
@@ -74,6 +96,10 @@ public class TransactionViewModel extends ViewModel implements TransactionInterf
         }
     }
 
+    /**
+     * Calculate the total transaction price and update to the MutableLiveData
+     * @param transactions list of transactions to be calculated
+     */
     public void calculateTotalTransaction(ArrayList<Transaction> transactions) {
         float total = 0.0f;
 
@@ -83,18 +109,25 @@ public class TransactionViewModel extends ViewModel implements TransactionInterf
         mTotalTransaction.setValue(total);
     }
 
+    /**
+     * Get the transaction index in the ArrayList given the transactionId
+     * @param transactionId transactionId to be searched
+     * @return the transaction index in the ArrayList
+     */
     public int getTransactionIndexFromTransactionId(String transactionId) {
+        // Call to the repository to search for the transactionId
         return mTransactionRepository.getTransactionIndexByTransactionId(transactionId);
     }
 
-    public void clearTransactionIndexDeleted() {
-        mTransactionIndexDeleted.setValue(-1);
-    }
-
+    /**
+     * Check if at least one transaction exists
+     */
     private void checkTransactionExists() {
+        // Call to the repository to check if the transaction exists
         mTransactionRepository.check(UserViewModel.getUserId(), UserViewModel.getUser().getType(), this);
     }
 
+    // GETTER METHODS
     public LiveData<ArrayList<Transaction>> getTransactions() {
         return mTransactions;
     }
@@ -107,17 +140,28 @@ public class TransactionViewModel extends ViewModel implements TransactionInterf
     public LiveData<TransactionLoadState> getTransactionLoadState() {
         return mTransactionLoadState;
     }
+    // END GETTER METHODS
 
+    /**
+     * Get and set the transaction deleted index to the MutableLiveData
+     * @param index index of the transaction deleted
+     */
     @Override
     public void getDeletedIndex(int index) {
         mTransactionIndexDeleted.setValue(index);
     }
 
+    /**
+     * Update the transaction load state based on the existence of the transaction
+     * @param existence if at least one transaction exists
+     */
     @Override
     public void transactionExistCallback(boolean existence) {
         mTransactionLoadState.setValue(existence ? TransactionLoadState.LOADED : TransactionLoadState.NO_TRANSACTION);
     }
 
+    // Child Event Listeners
+    // Check if the transaction exists for any changes in the dataset
     @Override
     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
         checkTransactionExists();
@@ -135,11 +179,12 @@ public class TransactionViewModel extends ViewModel implements TransactionInterf
 
     @Override
     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+        // ignore
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+        // ignore
     }
+    // END Child Event Listeners
 }
