@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RealTime POS</string>
+    <string name="app_name">RT POS</string>
     <string name="title_product">Products</string>
     <string name="app_bar_image">Main header background</string>
     <string name="tvGreeting">Welcome</string>
