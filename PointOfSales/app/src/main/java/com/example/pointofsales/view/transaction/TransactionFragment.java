@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -48,6 +49,7 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
     private TextView mTvCustomerHeader;
     private RecyclerView mRvTransaction;
     private TextView mTvTotalTransaction;
+    private CardView mCvNoTransaction;
     private ProgressBar mPbLoading;
 
     private LoadingScreen mLoadingScreen;
@@ -68,6 +70,7 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
         mTvCustomerHeader = getView().findViewById(R.id.tvCustomerHeader);
         mRvTransaction = getView().findViewById(R.id.rvTransaction);
         mTvTotalTransaction = getView().findViewById(R.id.tvTotalTransaction);
+        mCvNoTransaction = getView().findViewById(R.id.cvNoTransaction);
         mPbLoading = getView().findViewById(R.id.pbLoading);
 
         mLoadingScreen = new LoadingScreen(getActivity(), mPbLoading);
@@ -104,26 +107,24 @@ public class TransactionFragment extends Fragment implements ViewDetailsButtonCl
             @Override
             public void onChanged(TransactionLoadState transactionLoadState) {
 
+                // Update the view header visibility
+                if (UserViewModel.getUser().getType().equals(UserType.SELLER)) {
+                    mTvSellerHeader.setVisibility(View.GONE);
+                    mTvCustomerHeader.setVisibility(View.VISIBLE);
+                } else {
+                    mTvSellerHeader.setVisibility(View.VISIBLE);
+                    mTvCustomerHeader.setVisibility(View.GONE);
+                }
+
                 // Update the view according to the transaction load state
                 switch (transactionLoadState) {
                     case LOADED:
                         mLoadingScreen.end();
-
-                        // Update the view header visibility
-                        if (UserViewModel.getUser().getType().equals(UserType.SELLER)) {
-                            mTvSellerHeader.setVisibility(View.GONE);
-                            mTvCustomerHeader.setVisibility(View.VISIBLE);
-                        } else {
-                            mTvSellerHeader.setVisibility(View.VISIBLE);
-                            mTvCustomerHeader.setVisibility(View.GONE);
-                        }
-
+                        mCvNoTransaction.setVisibility(View.GONE);
                         break;
 
                     case NO_TRANSACTION:
-                        // Prompt no transaction message and navigate back
-                        Toast.makeText(getActivity(), getString(R.string.no_transaction_available), Toast.LENGTH_SHORT).show();
-                        getFragmentManager().popBackStack();
+                        mCvNoTransaction.setVisibility(View.VISIBLE);
                         mLoadingScreen.end();
                         break;
 

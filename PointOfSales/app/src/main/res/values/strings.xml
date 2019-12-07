@@ -214,4 +214,7 @@
     <string name="sellerDescending">Seller (Descending)</string>
     <string name="customerNameAscending">Customer Name (Ascending)</string>
     <string name="customerNameDescending">Customer Name (Descending)</string>
+    <string name="tvNoTransaction">No Transaction</string>
+    <string name="tvAddTransaction">Perform some transactions</string>
+    <string name="ivNoTransactionBackground">No transaction background</string>
 </resources>
