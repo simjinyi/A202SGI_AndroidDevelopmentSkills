@@ -38,6 +38,9 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
     private MutableLiveData<PointsRedeemedAndAwarded> mPointsRedeemedAndAwarded;
     private MutableLiveData<Boolean> mMemberPointChangedState;
 
+    // Should the member point change state changed be observed
+    private boolean mObservePointChangedState;
+
     private Store mStore;
 
     // Repositories
@@ -57,6 +60,8 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
      * @param productViewModel productViewModel to be used in the initialization
      */
     private void init(ProductViewModel productViewModel) {
+
+        mObservePointChangedState = true;
 
         // Get the repositories instance
         mPointRepository = PointRepository.getInstance(UserViewModel.getUser(), this);
@@ -112,7 +117,10 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
             // Update the points redeemed and awarded, discount, changeState to true and notify the observers
             mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
-            mMemberPointChangedState.setValue(true);
+
+            if (mObservePointChangedState)
+                mMemberPointChangedState.setValue(true);
+
             mProductViewModel.notifyCartObservers();
 
         } else if (pointsPerPriceChanged) {
@@ -120,7 +128,10 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
             // Update the points redeemed and awarded, discount, changeState to true and notify the observers
             mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint(), calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
-            mMemberPointChangedState.setValue(true);
+
+            if (mObservePointChangedState)
+                mMemberPointChangedState.setValue(true);
+
             mProductViewModel.notifyCartObservers();
         }
 
@@ -283,6 +294,9 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         // Don't observe product inventory quantity state change until the operation is done to prevent unnecessary notification being made
         mProductViewModel.setObserveProductInventoryQuantityChangeState(false);
 
+        // Don't observe member point change state change until the operation is done to prevent unnecessary notification being made
+        mObservePointChangedState = false;
+
         ArrayList<Product> cartList = mProductViewModel.getCartList().getValue();
         Transaction transaction = new Transaction();
 
@@ -365,6 +379,9 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
                 // Observe the product inventory quantity state change again
                 mProductViewModel.setObserveProductInventoryQuantityChangeState(true);
+
+                // Observe the member point change state change again
+                mObservePointChangedState = false;
             }
         });
     }
