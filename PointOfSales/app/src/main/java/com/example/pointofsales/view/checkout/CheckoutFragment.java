@@ -177,7 +177,7 @@ public class CheckoutFragment extends Fragment {
             public void onChanged(CartOpenableState cartOpenableState) {
 
                 // If not openable navigate back to home
-                if (cartOpenableState.equals(CartOpenableState.DISABLED)) {
+                if (cartOpenableState.equals(CartOpenableState.DISABLED) && mCheckoutViewModel.getCheckoutLoading().getValue().equals(false)) {
                     mCheckoutViewModel.clearPoint();
                     getFragmentManager().popBackStack();
                 }

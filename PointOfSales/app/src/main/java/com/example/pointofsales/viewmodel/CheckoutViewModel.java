@@ -280,6 +280,9 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
         mCheckoutLoading.setValue(true);
 
+        // Don't observe product inventory quantity state change until the operation is done to prevent unnecessary notification being made
+        mProductViewModel.setObserveProductInventoryQuantityChangeState(false);
+
         ArrayList<Product> cartList = mProductViewModel.getCartList().getValue();
         Transaction transaction = new Transaction();
 
@@ -334,9 +337,6 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         }
         // End forming the transaction item objects
 
-        // Reset the cart
-        mProductViewModel.resetCart();
-
         // Set and update the point (membership) in the database through the repository for the transaction
         if (mPoint.getValue() != null) {
             Point point = mPoint.getValue();
@@ -344,7 +344,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
             mPointRepository.update(point, new OnSuccessListener() {
                 @Override
                 public void onSuccess(Object o) {
-
+                    // ignore
                 }
             });
         }
@@ -358,8 +358,13 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
                 mCheckoutLoading.setValue(false);
                 mCheckoutDone.setValue(true);
                 init(mProductViewModel);
+
+                // Reset the cart
                 mProductViewModel.resetCart();
                 clearPoint();
+
+                // Observe the product inventory quantity state change again
+                mProductViewModel.setObserveProductInventoryQuantityChangeState(true);
             }
         });
     }

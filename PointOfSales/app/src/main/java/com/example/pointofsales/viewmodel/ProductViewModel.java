@@ -40,6 +40,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private String mStoreId;
     private ProductSort mProductSort;
 
+    // Should the product quantity state changed be observed
+    private boolean mObserveProductInventoryQuantityChangeState;
+
     // MutableLiveData to be observed by the View components
     private MutableLiveData<ProductLoadState> mProductLoadState;
     private MutableLiveData<CartOpenableState> mCartOpenableState;
@@ -59,6 +62,8 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     private CartRepository mCartRepository;
 
     public ProductViewModel() {
+
+        mObserveProductInventoryQuantityChangeState = true;
 
         mStoreId = UserViewModel.getUserId();
         mProductSort = new ProductSort();
@@ -180,7 +185,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
         }
 
         calculateCartDetails();
-        mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState(productNames));
+
+        if (mObserveProductInventoryQuantityChangeState)
+            mProductInventoryQuantityChangeState.setValue(new ProductInventoryQuantityChangeState(productNames));
     }
 
     /**
@@ -504,6 +511,14 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
      */
     public String getStoreId() {
         return mStoreId;
+    }
+
+    /**
+     * Set if the productInventoryQuantityStateChange should be observed
+     * @param observeProductInventoryQuantityChangeState if the productInventoryQuantityStateChange should be observed
+     */
+    public void setObserveProductInventoryQuantityChangeState(boolean observeProductInventoryQuantityChangeState) {
+        mObserveProductInventoryQuantityChangeState = observeProductInventoryQuantityChangeState;
     }
 
     /**
