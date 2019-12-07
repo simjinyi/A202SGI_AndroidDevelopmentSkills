@@ -76,9 +76,16 @@ public class PointDatabase {
      * @param point point object to be inserted
      * @param onSuccessListener callback from the database to indicate that the operation is successful
      */
-    public void insert(Map<String, Object> point, OnSuccessListener onSuccessListener) {
-        mDatabaseReference.push()
-                .setValue(point)
+    public void insert(Point point, OnSuccessListener onSuccessListener) {
+
+        // Get database key to be assigned to the Point object
+        String key = mDatabaseReference.push().getKey();
+        point.setPointId(key);
+
+        Map<String, Object> map = PointDatabase.Converter.pointToMap(point);
+
+        mDatabaseReference.child(key)
+                .setValue(map)
                 .addOnSuccessListener(onSuccessListener);
     }
 

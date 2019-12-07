@@ -71,13 +71,15 @@ public class PointRepository implements ChildEventListener {
      * @param onSuccessListener callback on response from the database
      */
     public void insert(final Point point, final OnSuccessListener onSuccessListener) {
-        PointDatabase.getInstance().insert(PointDatabase.Converter.pointToMap(point), new OnSuccessListener() {
+        PointDatabase.getInstance().insert(point, new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
 
                 // Set the user inserted as the current member
                 mPoint.setValue(point);
-                onSuccessListener.onSuccess(o);
+
+                if (onSuccessListener != null)
+                    onSuccessListener.onSuccess(o);
             }
         });
     }
