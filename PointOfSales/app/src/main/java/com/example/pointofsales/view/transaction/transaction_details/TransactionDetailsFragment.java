@@ -23,6 +23,7 @@ import com.example.pointofsales.view.transaction.TransactionFragment;
 import com.example.pointofsales.viewmodel.TransactionViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -86,6 +87,14 @@ public class TransactionDetailsFragment extends Fragment {
 
         // Set the data from the transaction object
         setData(mTransactionViewModel.getTransactions().getValue().get(mIndex));
+
+        mTransactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<ArrayList<Transaction>>() {
+            @Override
+            public void onChanged(ArrayList<Transaction> transactions) {
+                if (mIndex < transactions.size())
+                    setData(transactions.get(mIndex));
+            }
+        });
 
         // Observe if the transaction was removed
         mTransactionViewModel.getTransactionIndexDeleted().observe(getViewLifecycleOwner(), new Observer<Integer>() {
