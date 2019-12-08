@@ -1,5 +1,6 @@
 package com.example.pointofsales.view.membership;
 
+import android.util.Log;
 import android.widget.Filter;
 
 import com.example.pointofsales.model.Point;
@@ -35,8 +36,8 @@ public class MembershipFilter extends Filter {
                 if (point.getStoreName().toLowerCase().contains(searchString.toLowerCase()) ||
                         point.getUserName().toLowerCase().contains(searchString.toLowerCase()) ||
                         point.getStoreAddress().toLowerCase().contains(searchString.toLowerCase()) ||
-                        searchString.toLowerCase().contains(String.format("%.2f", point.getPoints())) ||
-                        searchString.toLowerCase().contains(String.format("%.2f", point.getStorePointsPerPrice())))
+                        searchString.toLowerCase().contains(String.valueOf(point.getPoints())) ||
+                        searchString.toLowerCase().contains(String.valueOf(point.getStorePointsPerPrice())))
 
                     // Add the matching points
                     filteredPoints.add(point);
