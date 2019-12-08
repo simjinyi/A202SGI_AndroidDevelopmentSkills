@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.pointofsales.database.PointDatabase;
 import com.example.pointofsales.database.TransactionDatabase;
+import com.example.pointofsales.model.Store;
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.User;
 import com.example.pointofsales.model.UserType;
@@ -105,6 +107,24 @@ public class TransactionRepository implements ChildEventListener {
     public void insert(Transaction transaction, OnSuccessListener onSuccessListener) {
         TransactionDatabase.getInstance()
                 .insert(TransactionDatabase.Converter.transactionToMap(transaction), onSuccessListener);
+    }
+
+    /**
+     * Update the user name in the Transaction database
+     * @param userId userId to be updated
+     * @param userName new name to be updated
+     */
+    public static void updateUserName(String userId, String userName) {
+        TransactionDatabase.getInstance().updateUserName(userId, userName);
+    }
+
+    /**
+     * Updates the store name in the Transaction database
+     * @param storeId storeId to update
+     * @param storeName new name to be updated
+     */
+    public static void updateStoreName(String storeId, String storeName) {
+        TransactionDatabase.getInstance().updateStoreName(storeId, storeName);
     }
 
     // SORTER METHODS

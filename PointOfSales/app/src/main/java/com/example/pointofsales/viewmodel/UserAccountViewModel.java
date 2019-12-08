@@ -14,6 +14,7 @@ import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.repository.PointRepository;
+import com.example.pointofsales.repository.TransactionRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.register.RegisterInterface;
@@ -118,9 +119,11 @@ public class UserAccountViewModel extends ViewModel implements OnSuccessListener
             }
         }
 
-        // If the name was changed, update to the Point (Membership) repository and database
-        if (!oriUser.getName().equals(user.getName()))
+        // If the name was changed, update to the Point (Membership) and Transaction repository and database
+        if (!oriUser.getName().equals(user.getName())) {
             PointRepository.updateUserName(user.getId(), user.getName());
+            TransactionRepository.updateUserName(user.getId(), user.getName());
+        }
     }
 
     /**

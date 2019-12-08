@@ -119,7 +119,7 @@ public class PointDatabase {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        // ignore
                     }
                 });
     }
@@ -146,7 +146,7 @@ public class PointDatabase {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        // ignore
                     }
                 });
     }

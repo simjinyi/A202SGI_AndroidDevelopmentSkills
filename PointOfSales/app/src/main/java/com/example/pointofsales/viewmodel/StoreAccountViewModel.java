@@ -14,6 +14,7 @@ import com.example.pointofsales.model.state.AccountFormEnableState;
 import com.example.pointofsales.model.state.StoreAccountFormState;
 import com.example.pointofsales.model.state.UserUpdatedState;
 import com.example.pointofsales.repository.PointRepository;
+import com.example.pointofsales.repository.TransactionRepository;
 import com.example.pointofsales.repository.UserRepository;
 import com.example.pointofsales.utility.PasswordHasher;
 import com.example.pointofsales.view.register.RegisterInterface;
@@ -140,8 +141,13 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
         }
 
         // If the name, address or points per price was changed, update to the Point (Membership) repository and database
-        if (!oriStore.getName().equals(store.getName()) || !oriStore.getAddress().equals(store.getAddress()) || oriStore.getPointsPerPrice() != store.getPointsPerPrice())
+        if (!oriStore.getName().equals(store.getName()) || !oriStore.getAddress().equals(store.getAddress()) || oriStore.getPointsPerPrice() != store.getPointsPerPrice()) {
             PointRepository.updateStoreDetails(store.getId(), store);
+
+            // If the name was changed, update to the Transaction repository and database
+            if (!oriStore.getName().equals(store.getName()))
+                TransactionRepository.updateStoreName(store.getId(), store.getName());
+        }
     }
 
     /**

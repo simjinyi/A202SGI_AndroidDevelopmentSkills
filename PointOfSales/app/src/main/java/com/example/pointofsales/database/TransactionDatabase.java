@@ -1,10 +1,14 @@
 package com.example.pointofsales.database;
 
+import androidx.annotation.NonNull;
+
 import com.example.pointofsales.model.Transaction;
 import com.example.pointofsales.model.TransactionItem;
 import com.example.pointofsales.model.UserType;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -78,6 +82,54 @@ public class TransactionDatabase {
         mDatabaseReference.push()
                 .setValue(transaction)
                 .addOnSuccessListener(onSuccessListener);
+    }
+
+    /**
+     * Update the user name in the point objects when the user name was changed
+     * @param userId userId of the user with the user name changed
+     * @param userName updated name
+     */
+    public void updateUserName(String userId, final String userName) {
+        mDatabaseReference.orderByChild("userId")
+                .equalTo(userId) // Compare against the userId passed
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        // Loop through to update all the data points
+                        for (DataSnapshot user : dataSnapshot.getChildren())
+                            mDatabaseReference.child(user.getKey()).child("userName").setValue(userName);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // ignore
+                    }
+                });
+    }
+
+    /**
+     * Update the store name in the point objects when the store name was changed
+     * @param storeId storeId of the store with the store name changed
+     * @param storeName updated name
+     */
+    public void updateStoreName(String storeId, final String storeName) {
+        mDatabaseReference.orderByChild("storeId")
+                .equalTo(storeId) // Compare against the userId passed
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        // Loop through to update all the data points
+                        for (DataSnapshot user : dataSnapshot.getChildren())
+                            mDatabaseReference.child(user.getKey()).child("storeName").setValue(storeName);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // ignore
+                    }
+                });
     }
 
     /**
