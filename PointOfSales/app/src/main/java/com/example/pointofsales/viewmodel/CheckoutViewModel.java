@@ -123,7 +123,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
             mProductViewModel.notifyCartObservers();
 
-        } else if (pointsPerPriceChanged) {
+        } else if (pointsPerPriceChanged && discount > subTotal) {
 
             // Update the points redeemed and awarded, discount, changeState to true and notify the observers
             mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint(), calculatePointAwarded()));

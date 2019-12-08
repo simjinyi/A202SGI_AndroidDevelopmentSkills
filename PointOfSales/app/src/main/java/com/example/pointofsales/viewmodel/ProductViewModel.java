@@ -427,15 +427,9 @@ public class ProductViewModel extends ViewModel implements ChildEventListener, P
     // END PRODUCT HANDLER
 
     // GETTER METHODS
-    public LiveData<ArrayList<Product>> getProductList() {
-        return mProductList;
-    }
-    public LiveData<ArrayList<Product>> getCartList() {
-        return mCartList;
-    }
-    public LiveData<Cart> getCart() {
-        return mCart;
-    }
+    public LiveData<ArrayList<Product>> getProductList() { return mProductList; }
+    public LiveData<ArrayList<Product>> getCartList() { return mCartList; }
+    public LiveData<Cart> getCart() { return mCart; }
     public LiveData<ProductLoadState> getProductLoadState() {
         return mProductLoadState;
     }
