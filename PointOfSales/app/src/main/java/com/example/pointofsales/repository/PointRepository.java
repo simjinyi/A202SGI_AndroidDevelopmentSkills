@@ -166,11 +166,8 @@ public class PointRepository implements ChildEventListener {
             if (changedPoint.getPointId().equals(mPoint.getValue().getPointId()))
                 mPoint.setValue(changedPoint);
 
-            // Update the point if the point to be redeemed was greater than the maximum available point for the user
-            if (mPoint.getValue().getPoints() < mPointsRedeemedAndAwarded.getValue().getRedeemedPoint()) {
-                mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPoint.getValue().getPoints(), mPointsRedeemedAndAwarded.getValue().getPointAwarded()));
-                mUpdatePointInterface.onPointChanged(changedPoint);
-            }
+            // Callback onPointChanged to notify the classes that the point was changed
+            mUpdatePointInterface.onPointChanged(changedPoint);
 
             // Update the local storage
             mPoints.getValue().set(getPointIndexFromPointId(changedPoint.getPointId()), changedPoint);

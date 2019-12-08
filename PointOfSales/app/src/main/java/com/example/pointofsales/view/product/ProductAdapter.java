@@ -88,7 +88,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
                     // Calls the ViewModels to update the product quantity and membership points
                     mProductViewModel.addCartQuantity(mProducts.get(position));
-                    mCheckoutViewModel.updatePoint(null, false);
+                    mCheckoutViewModel.updatePoint(null);
                 }
             });
 
@@ -99,7 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
                     // Calls the ViewModels to update the product quantity and membership points
                     mProductViewModel.minusCartQuantity(mProducts.get(position));
-                    mCheckoutViewModel.updatePoint(null, false);
+                    mCheckoutViewModel.updatePoint(null);
                 }
             });
 

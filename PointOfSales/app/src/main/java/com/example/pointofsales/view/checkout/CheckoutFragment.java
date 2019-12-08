@@ -167,7 +167,7 @@ public class CheckoutFragment extends Fragment {
 
                 // Notify the changes on the cart adapter and update the point redeemed
                 mCartAdapter.notifyDataSetChanged();
-                mCheckoutViewModel.updatePoint(null, false);
+                mCheckoutViewModel.updatePoint(null);
             }
         });
 

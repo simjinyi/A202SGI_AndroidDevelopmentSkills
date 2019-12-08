@@ -100,18 +100,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
 
             store.setPasswordSalt(oriStore.getPasswordSalt());
             store.setPassword(oriStore.getPassword());
-            mUserRepository.update(store, new OnSuccessListener() {
-                @Override
-                public void onSuccess(Object o) {
-
-                    // Update the store details without changing the password
-                    if (mCheckOutViewModel != null)
-                        if (oriStore.getPointsPerPrice() != store.getPointsPerPrice())
-                            mCheckOutViewModel.updatePoint(null, true);
-
-                    StoreAccountViewModel.this.onSuccess(o);
-                }
-            });
+            mUserRepository.update(store, this);
 
         } else {
 
@@ -127,16 +116,7 @@ public class StoreAccountViewModel extends ViewModel implements OnSuccessListene
                 store.setPassword(PasswordHasher.hash(store.getPassword(), store.getPasswordSalt()));
 
                 // Update the store details with and change the password in the database
-                mUserRepository.update(store, new OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object o) {
-
-                        if (mCheckOutViewModel != null)
-                            mCheckOutViewModel.updatePoint(null, true);
-
-                        StoreAccountViewModel.this.onSuccess(o);
-                    }
-                });
+                mUserRepository.update(store, this);
             }
         }
 

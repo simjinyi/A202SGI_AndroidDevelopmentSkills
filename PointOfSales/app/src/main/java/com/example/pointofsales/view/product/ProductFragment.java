@@ -139,7 +139,7 @@ public class ProductFragment extends Fragment implements EditButtonClick {
 
                 // Update the view and update the membership points if necessary
                 mProductAdapter.notifyDataSetChanged();
-                mCheckoutViewModel.updatePoint(null, false);
+                mCheckoutViewModel.updatePoint(null);
             }
         });
 

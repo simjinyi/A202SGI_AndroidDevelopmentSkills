@@ -97,14 +97,28 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
 
     /**
      * Update the point (membership) through the repository into the database
-     * @param point point object to be updated
-     * @param pointsPerPriceChanged if the pointsPerPrice of the store was changed
+     * @param point point object changed to be updated
      */
-    public void updatePoint(Point point, boolean pointsPerPriceChanged) {
+    public void updatePoint(Point point) {
 
         // If no member was added, shouldn't update
         if (mPointsRedeemedAndAwarded.getValue() == null)
             return;
+
+        if (point != null) {
+            // Update the point if the point to be redeemed was greater than the maximum available point for the user
+            if (point.getPoints() < mPointsRedeemedAndAwarded.getValue().getRedeemedPoint()) {
+
+                mEditTextValue.setValue(point.getPoints());
+                mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(point.getPoints(), mPointsRedeemedAndAwarded.getValue().getPointAwarded()));
+
+                if (mObservePointChangedState)
+                    mMemberPointChangedState.setValue(true);
+
+                notifyPointChanged();
+                return;
+            }
+        }
 
         // Calculate the needed values
         int pointsPerPrice = ((Store) UserViewModel.getUser()).getPointsPerPrice();
@@ -112,22 +126,12 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         float discount = (float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice;
 
         // If discount is greater than subtotal or the point (membership) is not equal to null
-        if (discount > subTotal || point != null) {
+        if (discount > subTotal) {
 
             // Update the points redeemed and awarded, discount, changeState to true and notify the observers
             mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded((int) subTotal * pointsPerPrice, calculatePointAwarded()));
             mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
-
-            if (mObservePointChangedState)
-                mMemberPointChangedState.setValue(true);
-
-            mProductViewModel.notifyCartObservers();
-
-        } else if (pointsPerPriceChanged && discount > subTotal) {
-
-            // Update the points redeemed and awarded, discount, changeState to true and notify the observers
-            mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint(), calculatePointAwarded()));
-            mProductViewModel.getCart().getValue().setDiscount((float) mPointsRedeemedAndAwarded.getValue().getRedeemedPoint() / pointsPerPrice);
+            mEditTextValue.setValue(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint());
 
             if (mObservePointChangedState)
                 mMemberPointChangedState.setValue(true);
@@ -136,6 +140,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
         }
 
         mPointsRedeemedAndAwarded.setValue(new PointsRedeemedAndAwarded(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint(), calculatePointAwarded()));
+        updateDiscount(mPointsRedeemedAndAwarded.getValue().getRedeemedPoint());
         notifyPointChanged();
     }
 
@@ -440,8 +445,7 @@ public class CheckoutViewModel extends ViewModel implements UpdatePointInterface
      */
     @Override
     public void onPointChanged(Point point) {
-        updatePoint(point, false);
-        mEditTextValue.setValue(point.getPoints());
+        updatePoint(point);
     }
 
     /**

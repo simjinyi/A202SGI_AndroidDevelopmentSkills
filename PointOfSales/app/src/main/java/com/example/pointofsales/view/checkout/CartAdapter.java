@@ -73,7 +73,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
                     // Calls the ViewModels for data and view update
                     mProductViewModel.addCartQuantity(mCartList.get(position));
-                    mCheckoutViewModel.updatePoint(null, false);
+                    mCheckoutViewModel.updatePoint(null);
                 }
             });
 
@@ -84,7 +84,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
                     // Calls the ViewModels for data and view update
                     mProductViewModel.minusCartQuantity(mCartList.get(position));
-                    mCheckoutViewModel.updatePoint(null, false);
+                    mCheckoutViewModel.updatePoint(null);
                 }
             });
         }
